@@ -1,0 +1,10 @@
+ARTICLE: idArt, titreArt, contenu, nbClics, dateArt
+APPARTENIR, 01 ARTICLE, ON> CATEGORIE
+CATEGORIE: idCat, nomCat
+
+COMPETITION: idComp, dateComp, titreComp
+CLASSER, 0N COMPETITION, 0N ADHERANT: rang
+ADHERANT: idAd, nomAd, prenomAd, emailAd, sportAd, ageAd
+
+HISTOIRE: annee, trivia
+PARTENAIRE: idP, nomP, logo
