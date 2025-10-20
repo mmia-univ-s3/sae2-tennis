@@ -1,10 +1,19 @@
-ARTICLE: idArt, titreArt, contenu, nbClics, dateArt
-APPARTENIR, 01 ARTICLE, ON> CATEGORIE
-CATEGORIE: idCat, nomCat
-
-COMPETITION: idComp, dateComp, titreComp
-CLASSER, 0N COMPETITION, 0N ADHERANT: rang
-ADHERANT: idAd, nomAd, prenomAd, emailAd, sportAd, ageAd
-
+ARTICLE: idArt, titreArt, contenu, nbClics, dateArt, typeArt
 HISTOIRE: annee, trivia
 PARTENAIRE: idP, nomP, logo
+
+COMPETITION: idComp, dateComp, titreComp
+CLASSER, 0N COMPETITION, 0N JOUEUR: rang
+JOUEUR: idJ, nomJ, prenomJ
+
+SOUS_CATEGORIE, 0N> CATEGORIE, 01 CATEGORIE
+CATEGORIE: idCat, sport, intituleCat
+UTILISATEUR: idU, mdp
+
+APPARTENIR, 0N> CATEGORIE, 01 TARIF
+
+TARIF: idT, intituleT
+
+RESERVATION: montant
+/T\ TARIF -> REDUCTION, RESERVATION
+REDUCTION: taux, estCumulable
