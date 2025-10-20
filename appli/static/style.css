@@ -1,0 +1,23 @@
+#navbar-main-logo, #navbar-om86-logo {
+    width: 32px;
+    height: 32px;
+}
+
+#navbar-om86-items .nav-link {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#main {
+    margin-top: 96px;
+}
+
+.navbar#navbar-main {
+    background-color: rgba(1, 132, 56, .4) !important;
+    backdrop-filter: blur(50px);
+}
+
+.navbar#navbar-om86 {
+    background-color: rgba(253, 220, 22, .4) !important;
+    backdrop-filter: blur(10px);
+}
