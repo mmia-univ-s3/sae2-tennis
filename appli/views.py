@@ -1,42 +1,11 @@
 from flask import render_template, redirect, url_for
+from flask_login import logout_user
 
 from .app import app
 
 @app.route('/')
 def index():
     return render_template('index.html', title="")
-
-@app.route('/om86/')
-def om86():
-    return render_template('om86.html', title="Open Masculin 86")
-
-@app.route('/om86/presentation/')
-def presentation():
-    return render_template('presentation.html', title="Présentation - Open Masculin 86")
-
-@app.route('/om86/animation/')
-def animation():
-    return render_template('animation.html', title="Animation - Open Masculin 86")
-
-@app.route('/om86/programme-du-jour/')
-def programme():
-    return render_template('programme.html', title="Programme du jour - Open Masculin 86")
-
-@app.route('/om86/editos/')
-def editos():
-    return render_template('editos.html', title="Éditos - Open Masculin 86")
-
-@app.route('/om86/tableaux/')
-def tableaux():
-    return render_template('tableaux.html', title="Tableaux - Open Masculin 86")
-
-@app.route('/om86/partenaires/')
-def partenaires_om86():
-    return render_template('partenaires_om86.html', title="Partenaires - Open Masculin 86")
-
-@app.route('/om86/infos-pratiques/')
-def informations():
-    return render_template('informations.html', title="Infos pratiques - Open Masculin 86")
 
 @app.route('/club/')
 def club():
@@ -102,6 +71,15 @@ def contacts():
 def autre():
     return render_template('autre.html', title="Autres sports sur le stade")
 
+@app.route('/connexion/')
+def connexion():
+    return render_template('connexion.html', title="Se connecter")
+
+@app.route('/deconnexion/')
+def deconnexion():
+    logout_user()
+    return redirect(url_for("index"))
+
 @app.errorhandler(404)
 def e404(_):
     return render_template('error.html', error_code=404, error_message="La page est introuvable.")
@@ -112,7 +90,8 @@ def e500(_):
 
 @app.errorhandler(428)
 def e428(_):
-    return render_template('error.html', error_code=428, error_message="Cette méthode n'est pas autorisée.")
+    return render_template('error.html', error_code=428,
+                           error_message="Cette méthode n'est pas autorisée.")
 
 if __name__ == "__main__":
     app.run()
