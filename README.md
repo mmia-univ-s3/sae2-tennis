@@ -1,8 +1,8 @@
-# Spécifications fonctionnelles
+# SAE Stade Poitevin Tennis
 
 ## Description générale du projet
 
-Le projet consiste à créer un site web pour un club sportif. Il y a donc qu'un acteur **visiteur**, c'est-à-dire une personne du public qui visite le site pour y consulter des informations, ainsi qu'un acteur **administrateur** qui permet de gérer le site et son contenu.
+Le projet consiste à créer un site web pour un club sportif. Il y a donc un acteur **visiteur**, c'est-à-dire une personne du public qui visite le site pour y consulter des informations, ainsi qu'un acteur **administrateur** qui permet de gérer le site et son contenu.
 
 ## Exigences fonctionnelles
 
