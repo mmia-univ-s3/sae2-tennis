@@ -1,5 +1,4 @@
 from appli.app import db
-from appli.models import *
 
 class Tarif(db.Model):
     __tablename__ = "TARIF"
@@ -8,7 +7,8 @@ class Tarif(db.Model):
     intitule:str = db.Column("intituleT", db.String)
     id_cat:int = db.Column("idCat", db.Integer, db.ForeignKey("CATEGORIE.idCat"))
 
-    categorie = db.relationship("Categorie", backref=db.backref("tarif", lazy="dynamic", cascade="all, delete-orphan"))
+    categorie = db.relationship("Categorie", backref=db.backref("tarif",
+                                lazy="dynamic", cascade="all, delete-orphan"))
 
     def __init__(self, intitule:str, id_cat:int):
         self.intitule = intitule

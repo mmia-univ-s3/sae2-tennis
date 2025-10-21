@@ -1,6 +1,5 @@
-from appli.app import db
-from appli.models import *
 from datetime import date
+from appli.app import db
 
 class Article(db.Model):
     __tablename__ = "ARTICLE"
@@ -10,17 +9,17 @@ class Article(db.Model):
     contenu:str = db.Column("contenu", db.String)
     clics:int = db.Column("nbClics", db.Integer)
     date_publi:date = db.Column("dateArt", db.Date)
-    type:str = db.Column("typeArt", db.String)
+    type_article:str = db.Column("typeArt", db.String)
 
-    def __init__(self, titre:str, contenu:str, clics:int, date_publi:date, type:str):
+    def __init__(self, titre:str, contenu:str, date_publi:date, type_article:str):
         self.titre = titre
         self.contenu = contenu
-        self.clics = clics
+        self.clics = 0
         self.date_publi = date_publi
-        self.type = type
+        self.type_article = type_article
 
     def __str__(self):
         return f"<Article({self.id}) {self.titre}>"
-    
+
     def __repr__(self):
         return self.__str__()

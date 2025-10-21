@@ -1,6 +1,5 @@
-from appli.app import db
-from appli.models import *
 from datetime import date
+from appli.app import db
 
 class Competition(db.Model):
     __tablename__ = "COMPETITION"

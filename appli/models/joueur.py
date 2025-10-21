@@ -1,5 +1,4 @@
 from appli.app import db
-from appli.models import *
 
 class Joueur(db.Model):
     __tablename__ = "JOUEUR"
@@ -14,6 +13,6 @@ class Joueur(db.Model):
 
     def __str__(self):
         return f"<Joueur({self.id}) {self.nom} {self.prenom}>"
-    
+
     def __repr__(self):
         return self.__str__()

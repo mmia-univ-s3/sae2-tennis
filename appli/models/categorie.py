@@ -1,5 +1,4 @@
 from appli.app import db
-from appli.models import *
 
 class Categorie(db.Model):
     __tablename__ = "CATEGORIE"
@@ -9,7 +8,8 @@ class Categorie(db.Model):
     intitule:str = db.Column("intituleCat", db.String)
     id_parent:int = db.Column("idCatParent", db.Integer, db.ForeignKey("CATEGORIE.idCat"))
 
-    parent = db.relationship("Categorie", backref=db.backref("enfant", lazy="dynamic", cascade="all, delete-orphan"))
+    parent = db.relationship("Categorie", backref=db.backref("enfant", 
+                            lazy="dynamic", cascade="all, delete-orphan"))
 
     def __init__(self, sport:str, intitule:str, id_parent:int=None):
         self.sport = sport

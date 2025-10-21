@@ -1,5 +1,4 @@
 from appli.app import db
-from appli.models import *
 
 class Partenaire(db.Model):
     __tablename__ = "PARTENAIRE"
