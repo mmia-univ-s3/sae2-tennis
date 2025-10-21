@@ -10,7 +10,7 @@ class Reduction(db.Model):
     tarif = db.relationship("Tarif", backref=db.backref("tarif",
                             lazy="dynamic", cascade="all, delete-orphan"))
 
-    def __init__(self, id_tarif: int, taux: str, cumulable:bool):
+    def __init__(self, id_tarif: int, taux: str, cumulable: bool):
         self.id_tarif = id_tarif
         self.taux = taux
         self.cumulable = cumulable
