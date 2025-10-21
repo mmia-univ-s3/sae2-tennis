@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField
-from wtforms.fields.numeric import FloatField
+# from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
-from wtforms.validators import DataRequired
-from hashlib import sha256
+# from wtforms.validators import DataRequired
+# from hashlib import sha256
 
 # class FormAuteur(FlaskForm):
 #     idA = HiddenField()

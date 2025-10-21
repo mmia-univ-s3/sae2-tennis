@@ -90,7 +90,8 @@ def e500(_):
 
 @app.errorhandler(428)
 def e428(_):
-    return render_template('error.html', error_code=428, error_message="Cette méthode n'est pas autorisée.")
+    return render_template('error.html', error_code=428,
+                           error_message="Cette méthode n'est pas autorisée.")
 
 if __name__ == "__main__":
     app.run()
