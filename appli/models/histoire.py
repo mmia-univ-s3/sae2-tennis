@@ -12,6 +12,6 @@ class Histoire(db.Model):
 
     def __str__(self):
         return f"<Histoire({self.annee}) {self.trivia}>"
-    
+
     def __repr__(self):
         return self.__repr__()

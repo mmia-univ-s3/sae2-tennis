@@ -11,7 +11,7 @@ class Classer(db.Model):
     joueur = db.relationship("Joueur", backref=db.backref("classer",
                             lazy="dynamic", cascade="all, delete-orphan"))
     rang:int = db.Column("rang", db.Integer)
-    
+
     def __init__(self, id_comp:int, id_j:int, rang:int):
         self.id_comp = id_comp
         self.id_j = id_j

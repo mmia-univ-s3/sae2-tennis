@@ -8,7 +8,7 @@ class Categorie(db.Model):
     intitule:str = db.Column("intituleCat", db.String)
     id_parent:int = db.Column("idCatParent", db.Integer, db.ForeignKey("CATEGORIE.idCat"))
 
-    parent = db.relationship("Categorie", backref=db.backref("enfant", 
+    parent = db.relationship("Categorie", backref=db.backref("enfant",
                             lazy="dynamic", cascade="all, delete-orphan"))
 
     def __init__(self, sport:str, intitule:str, id_parent:int=None):
@@ -18,6 +18,6 @@ class Categorie(db.Model):
 
     def __str__(self):
         return f"<Categorie({self.id}) {self.intitule}>"
-    
+
     def __repr__(self):
         return self.__str__()
