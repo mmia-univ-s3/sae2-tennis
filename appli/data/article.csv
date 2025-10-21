@@ -1,0 +1,11 @@
+﻿idArt,titreArt,contenu,nbClics,dateArt,typeArt
+1,Michel a gagné,<p>Bonjour</p>,0,5/17/2025,stade
+2,Stephane a perdu,<p>Hi</p>,1,5/18/2025,stade
+3,Décé de Martine,<p>Hello</p>,2,5/19/2025,stade
+4,art1,<p>Halo</p>,3,5/20/2025,stade
+5,art2,<p>Hola</p>,4,5/21/2025,stade
+6,art3,<p>Gutten Tag</p>,5,5/22/2025,club
+7,art4,<p>Bonjour</p>,6,5/23/2025,club
+8,art5,<p>Hi</p>,7,5/24/2025,club
+9,art6,<p>Hello</p>,8,5/25/2025,club
+10,art7,<p>Halo</p>,9,5/26/2025,club
