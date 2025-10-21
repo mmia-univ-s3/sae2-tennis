@@ -3,11 +3,11 @@ from appli.app import db
 class Joueur(db.Model):
     __tablename__ = "JOUEUR"
 
-    id:int = db.Column("idJ", db.Integer, primary_key=True)
-    nom:str = db.Column("nomJ", db.String)
-    prenom:str = db.Column("prenomJ", db.String)
+    id: int = db.Column("idJ", db.Integer, primary_key=True)
+    nom: str = db.Column("nomJ", db.String)
+    prenom: str = db.Column("prenomJ", db.String)
 
-    def __init__(self, nom:str, prenom:str):
+    def __init__(self, nom: str, prenom: str):
         self.nom = nom
         self.prenom = prenom
 

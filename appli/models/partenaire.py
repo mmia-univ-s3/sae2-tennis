@@ -3,11 +3,11 @@ from appli.app import db
 class Partenaire(db.Model):
     __tablename__ = "PARTENAIRE"
 
-    id:int = db.Column("idP", db.Integer, primary_key = True)
-    nom:str = db.Column("nomP", db.String)
-    logo:str = db.Column("logo", db.String)
+    id: int = db.Column("idP", db.Integer, primary_key = True)
+    nom: str = db.Column("nomP", db.String)
+    logo: str = db.Column("logo", db.String)
 
-    def __init__(self, nom:str, logo:str):
+    def __init__(self, nom: str, logo: str):
         self.nom = nom
         self.logo = logo
 

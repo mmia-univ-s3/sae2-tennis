@@ -4,11 +4,11 @@ from appli.app import db
 class Competition(db.Model):
     __tablename__ = "COMPETITION"
 
-    id:int = db.Column("idComp", db.Integer, primary_key=True)
-    date_comp:date = db.Column("dateComp", db.Date)
-    titre:str = db.Column("titreComp", db.String)
+    id: int = db.Column("idComp", db.Integer, primary_key=True)
+    date_comp: date = db.Column("dateComp", db.Date)
+    titre: str = db.Column("titreComp", db.String)
 
-    def __init__(self, date_comp:date, titre:str):
+    def __init__(self, date_comp: date, titre: str):
         self.date_comp = date_comp
         self.titre = titre
 

@@ -4,14 +4,14 @@ from appli.app import db
 class Article(db.Model):
     __tablename__ = "ARTICLE"
 
-    id:int = db.Column("idArt", db.Integer, primary_key=True)
-    titre:str = db.Column("titreArt", db.String)
-    contenu:str = db.Column("contenu", db.String)
-    clics:int = db.Column("nbClics", db.Integer)
-    date_publi:date = db.Column("dateArt", db.Date)
-    type_article:str = db.Column("typeArt", db.String)
+    id: int = db.Column("idArt", db.Integer, primary_key=True)
+    titre: str = db.Column("titreArt", db.String)
+    contenu: str = db.Column("contenu", db.String)
+    clics: int = db.Column("nbClics", db.Integer)
+    date_publi: date = db.Column("dateArt", db.Date)
+    type_article: str = db.Column("typeArt", db.String)
 
-    def __init__(self, titre:str, contenu:str, date_publi:date, type_article:str):
+    def __init__(self, titre: str, contenu: str, date_publi: date, type_article: str):
         self.titre = titre
         self.contenu = contenu
         self.clics = 0
