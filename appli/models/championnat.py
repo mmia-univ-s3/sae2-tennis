@@ -33,7 +33,7 @@ class ChampionnatEquipe(db.Model):
     titre: str = db.Column("titreCha", db.String)
     categorie : str = db.Column("categorieSport", db.String)
     serie : str = db.Column("serie", db.String)
-    id_div : int = db.Column("idDiv", db.Integer, db.ForeignKey("DIVISION.idDiv"))
+    _id_div : int = db.Column("idDiv", db.Integer, db.ForeignKey("DIVISION.idDiv"))
 
     division = db.relationship("Division", backref=db.backref("championnat",
                                lazy="dynamic", cascade="all, delete-orphan"))
@@ -44,7 +44,7 @@ class ChampionnatEquipe(db.Model):
         self.titre = titre
         self.categorie = categorie
         self.serie = serie
-        self.id_div = id_div
+        self._id_div = id_div
 
     def __str__(self):
         return f"<ChampionnatEquipe({self.id}) {self.titre}>"

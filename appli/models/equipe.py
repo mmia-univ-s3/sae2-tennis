@@ -6,7 +6,7 @@ class Equipe(db.Model):
     id: int = db.Column("idE", db.Integer, primary_key=True)
     nom: str = db.Column("nomE", db.String)
     categorie: str = db.Column("categorieE", db.String)
-    id_div: int = db.Column("idDiv", db.Integer, db.ForeignKey("DIVISION.idDiv"))
+    _id_div: int = db.Column("idDiv", db.Integer, db.ForeignKey("DIVISION.idDiv"))
     rang: int = db.Column("rang", db.Integer)
 
     division = db.relationship("Division", backref=db.backref("equipe",
@@ -15,7 +15,7 @@ class Equipe(db.Model):
     def __init__(self, nom: str, categorie: str, id_div: int, rang: int):
         self.nom = nom
         self.categorie = categorie
-        self.id_div = id_div
+        self._id_div = id_div
         self.rang = rang
 
     def __str__(self):

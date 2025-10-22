@@ -5,11 +5,11 @@ from appli.app import db
 class Affronter(db.Model):
     __tablename__ = "AFFRONTER"
 
-    id_championnat: int = db.Column("idCha", db.Integer,
+    _id_championnat: int = db.Column("idCha", db.Integer,
                                     db.ForeignKey("CHAMP_EQUIPE.idCha", primary_key=True))
-    id_equipe1: int = db.Column("idE1", db.Integer,
+    _id_equipe1: int = db.Column("idE1", db.Integer,
                                 db.ForeignKey("EQUIPE.idE", primary_key=True))
-    id_equipe2: int = db.Column("idE2", db.Integer,
+    _id_equipe2: int = db.Column("idE2", db.Integer,
                                 db.ForeignKey("EQUIPE.idE", primary_key=True))
     score1: int = db.Column("score1", db.Integer)
     score2: int = db.Column("score2", db.Integer)
@@ -27,13 +27,13 @@ class Affronter(db.Model):
     )
 
     def __init__(self, id_championnat: int, ids_equipe: tuple[int], scores: tuple[int]):
-        self.id_championnat = id_championnat
-        self.id_equipe1, self.equipe2 = ids_equipe
+        self._id_championnat = id_championnat
+        self._id_equipe1, self.equipe2 = ids_equipe
         self.score1, self.score2 = scores
 
     def __str__(self):
-        texte = f"<Affronter({self.id_championnat}) {self.equipe1} ({self.score1})" + \
-                 f" vs {self.equipe2} ({self.score2})>"
+        texte = f"<Affronter({self._id_championnat}) {self.equipe1} ({self.score1})" + \
+                f" vs {self.equipe2} ({self.score2})>"
         return texte
 
     def __repr__(self):

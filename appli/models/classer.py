@@ -3,9 +3,9 @@ from appli.app import db
 class Classer(db.Model):
     __tablename__ = "CLASSER"
 
-    id_championnat: int = db.Column("idCha", db.Integer, db.ForeignKey("CHAMP_INDIV.idCha"),
+    _id_championnat: int = db.Column("idCha", db.Integer, db.ForeignKey("CHAMP_INDIV.idCha"),
                              primary_key=True)
-    id_j: int = db.Column("idJ", db.Integer, db.ForeignKey("JOUEUR.idJ"), primary_key=True)
+    _id_j: int = db.Column("idJ", db.Integer, db.ForeignKey("JOUEUR.idJ"), primary_key=True)
     rang: int = db.Column("rang", db.Integer)
 
     competition = db.relationship("ChampionnatIndividuel", backref=db.backref("classer",
@@ -14,8 +14,8 @@ class Classer(db.Model):
                              lazy="dynamic", cascade="all, delete-orphan"))
 
     def __init__(self, id_championnat: int, id_j: int, rang: int):
-        self.id_championnat = id_championnat
-        self.id_j = id_j
+        self._id_championnat = id_championnat
+        self._id_j = id_j
         self.rang = rang
 
     def __str__(self):
