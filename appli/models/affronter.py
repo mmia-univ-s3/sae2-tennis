@@ -1,4 +1,5 @@
 from datetime import date
+from sqlalchemy import CheckConstraint
 from appli.app import db
 
 class Affronter(db.Model):
@@ -21,6 +22,17 @@ class Affronter(db.Model):
     equipe2 = db.relationship("Equipe", backref=db.backref("affronter2",
                               lazy="dynamic", cascade="all, delete-orphan"))
 
-    # pylint: disable=too-many-arguments,too-many-positional-arguments
+    __table_args__ = (
+        CheckConstraint("idE1 != idE2", name="equipes_differentes"),
+    )
+
     def __init__(self, id_cha: int, ids_equipe: tuple[int], scores: tuple[int]):
-        
+        self.id_championnat = id_cha
+        self.id_equipe1, self.equipe2 = ids_equipe
+        self.score1, self.score2 = scores
+
+    def __str__(self):
+        return f"<Affronter({self.id_championnat}, ({self.id_equipe1}, {self.id_equipe2})) ({self.score1}, {self.score2})>"
+
+    def __repr__(self):
+        return self.__str__()

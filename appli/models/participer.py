@@ -22,7 +22,7 @@ class Participer(db.Model):
         self.poule = poule
 
     def __str__(self):
-        return f"<Participer({self.id_championnat} {self.id_equipe}) {self.poule} {self.rang}>"
+        return f"<Participer({self.id_championnat}, {self.id_equipe}) {self.poule} {self.rang}>"
 
     def __repr__(self):
         return self.__str__()
