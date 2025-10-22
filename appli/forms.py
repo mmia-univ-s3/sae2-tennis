@@ -2,6 +2,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField
 # from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
+from wtforms.validators import DataRequired
+
+
 # from wtforms.validators import DataRequired
 # from hashlib import sha256
 
@@ -10,8 +13,8 @@ from wtforms.fields.simple import PasswordField
 #     nom = StringField('Nom', validators=[DataRequired()])
 
 class LoginForm(FlaskForm):
-    login = StringField('Identifiant')
-    password = PasswordField('Mot de passe')
+    login = StringField('Identifiant', validators=[DataRequired()])
+    password = PasswordField('Mot de passe', validators=[DataRequired()])
     next = HiddenField()
 
     def get_authenticated_user(self):
