@@ -10,6 +10,7 @@
 
 #main {
     margin-top: 96px;
+    min-height: calc(100vh - 64px);
 }
 
 .navbar#navbar-main {
@@ -20,4 +21,12 @@
 .navbar#navbar-om86 {
     background-color: rgba(253, 220, 22, .4) !important;
     backdrop-filter: blur(10px);
+}
+
+body {
+    background-image: var(--background-image);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: 50%;
 }
