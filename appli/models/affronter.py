@@ -28,7 +28,7 @@ class Affronter(db.Model):
 
     def __init__(self, id_championnat: int, ids_equipe: tuple[int], scores: tuple[int]):
         self._id_championnat = id_championnat
-        self._id_equipe1, self.equipe2 = ids_equipe
+        self._id_equipe1, self._id_equipe2 = ids_equipe
         self.score1, self.score2 = scores
 
     def __str__(self):
