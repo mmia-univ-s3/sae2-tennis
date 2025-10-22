@@ -26,14 +26,14 @@ class Affronter(db.Model):
         CheckConstraint("idE1 != idE2", name="equipes_differentes"),
     )
 
-    def __init__(self, id_cha: int, ids_equipe: tuple[int], scores: tuple[int]):
-        self.id_championnat = id_cha
+    def __init__(self, id_championnat: int, ids_equipe: tuple[int], scores: tuple[int]):
+        self.id_championnat = id_championnat
         self.id_equipe1, self.equipe2 = ids_equipe
         self.score1, self.score2 = scores
 
     def __str__(self):
-        texte = f"<Affronter({self.id_championnat}, ({self.id_equipe1}, {self.id_equipe2}))"
-        texte = texte + f" ({self.score1}, {self.score2})>"
+        texte = f"<Affronter({self.id_championnat}) {self.equipe1} ({self.score1})" +
+                 " vs {self.equipe2} ({self.score2})>"
         return texte
 
     def __repr__(self):

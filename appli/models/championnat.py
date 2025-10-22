@@ -7,9 +7,9 @@ class ChampionnatIndividuel(db.Model):
     id: int = db.Column("idCha", db.Integer, primary_key=True)
     date_comp: date = db.Column("dateCha", db.Date)
     titre: str = db.Column("titreCha", db.String)
-    categorie : str = db.Column("categorieSport", db.String)
-    serie : str = db.Column("serie", db.String)
-    niveau : str = db.Column("niveau", db.String)
+    categorie: str = db.Column("categorieSport", db.String)
+    serie: str = db.Column("serie", db.String)
+    niveau: str = db.Column("niveau", db.String)
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, date_comp: date, titre: str, categorie: str, serie: str, niveau: str):
