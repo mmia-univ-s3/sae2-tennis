@@ -32,8 +32,8 @@ class Affronter(db.Model):
         self.score1, self.score2 = scores
 
     def __str__(self):
-        texte = f"<Affronter({self.id_championnat}) {self.equipe1} ({self.score1})" +
-                 " vs {self.equipe2} ({self.score2})>"
+        texte = f"<Affronter({self.id_championnat}) {self.equipe1} ({self.score1})" + \
+                 f" vs {self.equipe2} ({self.score2})>"
         return texte
 
     def __repr__(self):
