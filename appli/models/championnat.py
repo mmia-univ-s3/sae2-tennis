@@ -1,7 +1,7 @@
 from datetime import date
 from appli.app import db
 
-class Championnat_Individuel(db.Model):
+class ChampionnatIndividuel(db.Model):
     __tablename__ = "CHAMP_INDIV"
 
     id: int = db.Column("idCha", db.Integer, primary_key=True)
@@ -20,12 +20,12 @@ class Championnat_Individuel(db.Model):
         self.niveau = niveau
 
     def __str__(self):
-        return f"<Championnat_Individuel({self.id}) {self.titre}>"
+        return f"<ChampionnatIndividuel({self.id}) {self.titre}>"
 
     def __repr__(self):
         return self.__str__()
 
-class Championnat_Equipe(db.Model):
+class ChampionnatEquipe(db.Model):
     __tablename__ = "CHAMP_EQUIPE"
 
     id: int = db.Column("idCha", db.Integer, primary_key=True)
@@ -47,7 +47,7 @@ class Championnat_Equipe(db.Model):
         self.id_div = id_div
 
     def __str__(self):
-        return f"<Championnat_Equipe({self.id}) {self.titre}>"
+        return f"<ChampionnatEquipe({self.id}) {self.titre}>"
 
     def __repr__(self):
         return self.__str__()

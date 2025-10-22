@@ -5,7 +5,7 @@ from appli.app import db
 class Affronter(db.Model):
     __tablename__ = "AFFRONTER"
 
-    id_championnat: int = db.Column("idCha", db.Integer, 
+    id_championnat: int = db.Column("idCha", db.Integer,
                                     db.ForeignKey("CHAMP_EQUIPE.idCha", primary_key=True))
     id_equipe1: int = db.Column("idE1", db.Integer,
                                 db.ForeignKey("EQUIPE.idE", primary_key=True))
@@ -15,7 +15,7 @@ class Affronter(db.Model):
     score2: int = db.Column("score2", db.Integer)
     date_match: date = db.Column("dateMatch", db.Date)
 
-    championnat = db.relationship("Championnat_Equipe", backref=db.backref("affronter",
+    championnat = db.relationship("ChampionnatEquipe", backref=db.backref("affronter",
                                   lazy="dynamic", cascade="all, delete-orphan"))
     equipe1 = db.relationship("Equipe", backref=db.backref("affronter1",
                               lazy="dynamic", cascade="all, delete-orphan"))
@@ -32,7 +32,8 @@ class Affronter(db.Model):
         self.score1, self.score2 = scores
 
     def __str__(self):
-        return f"<Affronter({self.id_championnat}, ({self.id_equipe1}, {self.id_equipe2})) ({self.score1}, {self.score2})>"
+        texte = f"<Affronter({self.id_championnat}, ({self.id_equipe1}, {self.id_equipe2}))"
+        texte = texte + f" ({self.score1}, {self.score2})>"
 
     def __repr__(self):
         return self.__str__()
