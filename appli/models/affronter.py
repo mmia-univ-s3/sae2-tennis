@@ -1,8 +1,8 @@
 from datetime import date
-from sqlalchemy import CheckConstraint
 from appli.app import db
 
 class Affronter(db.Model):
+    # pylint: too-many-instance-attributes
     __tablename__ = "AFFRONTER"
 
     _id_championnat: int = db.Column("idCha", db.Integer,
@@ -22,7 +22,8 @@ class Affronter(db.Model):
                               lazy="dynamic", cascade="all, delete-orphan"))
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
-    def __init__(self, id_championnat: int, id_equipe: int, adversaire: str, resultat: str, score: str, stade: str, domicile: bool, date_match: date):
+    def __init__(self, id_championnat: int, id_equipe: int, adversaire: str, resultat: str, score: str,
+                 stade: str, domicile: bool, date_match: date):
         self._id_championnat = id_championnat
         self._id_equipe = id_equipe
         self.adversaire = adversaire
