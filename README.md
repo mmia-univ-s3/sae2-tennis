@@ -12,7 +12,7 @@ Le projet consiste à créer un site web pour un club sportif. Il y a donc un ac
 * Site web adaptable à tous les écrans
 * Modification facile sans modifier le code
 
-Voir le MCD, MLD et scripts SQL pour la base de données.
+Voir le MCD, MLD et scripts Python (`models`) pour la base de données.
 
 ## Règles de gestion
 
