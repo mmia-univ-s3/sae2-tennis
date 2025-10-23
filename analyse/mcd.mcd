@@ -1,5 +1,5 @@
 ARTICLE: idArt, titreArt, contenu, nbClics, dateArt, typeArt
-HISTOIRE: annee, trivia
+HISTOIRE: idH, annee, trivia
 PARTENAIRE: idP, nomP, logo
 UTILISATEUR: idU, mdp
 
@@ -13,10 +13,11 @@ DIVISION: idDiv, intituleDiv
 
 CLASSER, 0N CHAMP_INDIV, 0N JOUEUR: rang
 PARTICIPER, 0N CHAMP_EQUIPE, 0N EQUIPE: rang, poule
-AFFRONTER, 0N CHAMP_EQUIPE, 0N EQUIPE, 0N EQUIPE: score1, score2, dateMatch
+AFFRONTER, 0N CHAMP_EQUIPE, 0N EQUIPE: nomAdv, resultat, score, stade, dateMatch
 CONCOURIR, 01 EQUIPE, 0N> DIVISION: rang
 
 JOUEUR: idJ, nomJ, prenomJ
+REJOINDRE, 01 JOUEUR, 0N> EQUIPE
 EQUIPE: idE, nomE, categorieE
 
 CATEGORIE_TARIF: idCat, sport, intituleCat
