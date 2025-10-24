@@ -1,11 +1,11 @@
-﻿idCha,idE1,idE2,score1,score2,dateMatch
-1,1,10,2,7,2025-02-12
-2,2,9,7,5,2025-02-13
-3,3,8,7,-1,2025-02-14
-4,4,7,4,7,2025-02-15
-5,5,6,12,14,2025-02-16
-6,6,5,7,5,2025-02-16
-7,7,4,-1,7,2025-02-15
-8,8,3,3,7,2025-02-14
-9,9,2,7,5,2025-02-13
-10,10,1,1,7,2025-02-12
+﻿idCha,idE,nomAdv,resultat,score,stade,estDomicile,dateMatch
+1,1,equipe 10,victoire,7-2,stade1,True,2025-10-05
+2,2,equipe 3,défaite,4-7,stade1,False,2025-10-06
+3,3,equipe 2,victoire,7-4,stade1,True,2025-10-06
+4,4,equipe 5,défaite,10-12,stade1,False,2025-10-08
+5,5,equipe 4,victoire,12-10,stade1,True,2025-10-08
+6,6,equipe 7,défaite,0-7,stade1,False,2025-10-10
+7,7,equipe 6,victoire,7-0,stade1,True,2025-10-10
+8,8,equipe 9,défaite,9-11,stade1,False,2025-10-12
+9,9,equipe 8,victoire,11-9,stade1,True,2025-10-12
+10,10,equipe10,défaite,45695,stade1,False,2025-10-05
