@@ -5,9 +5,9 @@ class Tarif(db.Model):
 
     id: int = db.Column("idT", db.Integer, primary_key=True)
     intitule: str = db.Column("intituleT", db.String)
-    _id_cat: int = db.Column("idCat", db.Integer, db.ForeignKey("CATEGORIE.idCat"))
+    _id_cat: int = db.Column("idCat", db.Integer, db.ForeignKey("CATEGORIE_TARIF.idCat"))
 
-    categorie = db.relationship("Categorie", backref=db.backref("tarif",
+    categorie = db.relationship("CategorieTarif", backref=db.backref("tarif",
                                 lazy="dynamic", cascade="all, delete-orphan"))
 
     def __init__(self, intitule: str, id_cat: int):
