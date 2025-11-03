@@ -1,12 +1,12 @@
+import csv
 import click
 import logging as lg
+from datetime import date
 from .app import app, db
+from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Tarif, Reservation, Reduction, Division, ChampionnatEquipe, Equipe, Participer, Affronter, Joueur, ChampionnatIndividuel, Classer
 
 def _importer_articles(filename):
     """Permet d'importer les articles"""
-    import csv
-    from datetime import date
-    from .models import Article
     with open(filename, newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
@@ -18,8 +18,6 @@ def _importer_articles(filename):
 
 def _importer_trivias(filename):
     """Permet d'importer les trivias liés à l'histoire du club"""
-    import csv
-    from .models import Histoire
     with open(filename, newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
@@ -29,8 +27,6 @@ def _importer_trivias(filename):
 
 def _importer_partenaires(filename):
     """Permet d'importer les partenaires du club"""
-    import csv
-    from .models import Partenaire
     with open(filename, newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
@@ -40,8 +36,6 @@ def _importer_partenaires(filename):
 
 def _importer_users(filename):
     """Permet d'importer les utilisateurs"""
-    import csv
-    from .models import Utilisateur
     with open(filename, newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
@@ -51,8 +45,6 @@ def _importer_users(filename):
 
 def _importer_tarifs(filepath):
     """Permet d'importer les tarifs"""
-    import csv
-    from .models import CategorieTarif, Tarif, Reservation, Reduction
     with open(filepath+"/categorie.csv", newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
@@ -85,9 +77,6 @@ def _importer_tarifs(filepath):
 
 def _importer_championnats_equipes(filepath):
     """Permet d'importer les données relatives aux championnats par équipes"""
-    import csv
-    from datetime import date
-    from .models import Division, ChampionnatEquipe, Equipe, Participer, Affronter
     with open(filepath+"/division.csv", newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
@@ -129,9 +118,6 @@ def _importer_championnats_equipes(filepath):
 
 def _importer_championnats_individuels(filepath):
     """Permet d'importer les données relatives aux championnats par équipes"""
-    import csv
-    from datetime import date
-    from .models import Joueur, ChampionnatIndividuel, Classer
     with open(filepath+"/joueur.csv", newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
