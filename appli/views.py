@@ -99,7 +99,7 @@ def e500(_):
     return render_template('error.html', error_code=500, error_message="Une erreur s'est produite.")
 
 @app.errorhandler(405)
-def e428(_):
+def e405(_):
     return render_template('error.html', error_code=405,
                            error_message="Cette méthode n'est pas autorisée.")
 
