@@ -6,13 +6,13 @@ class Affronter(db.Model):
     __tablename__ = "AFFRONTER"
 
     _id_championnat: int = db.Column("idCha", db.Integer,
-                                    db.ForeignKey("CHAMP_EQUIPE.idCha", primary_key=True))
+                                    db.ForeignKey("CHAMP_EQUIPE.idCha", ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
     _id_equipe: int = db.Column("idE", db.Integer,
-                                db.ForeignKey("EQUIPE.idE", primary_key=True))
-    adversaire: str = db.Column("nomAdv", db.String)
-    resultat: str = db.Column("resultat", db.String)
-    score: int = db.Column("score", db.String)
-    stade: str = db.Column("stade", db.String)
+                                db.ForeignKey("EQUIPE.idE"), primary_key=True)
+    adversaire: str = db.Column("nomAdv", db.Text)
+    resultat: str = db.Column("resultat", db.Text)
+    score: int = db.Column("score", db.Text)
+    stade: str = db.Column("stade", db.Text)
     domicile: bool = db.Column("estDomicile", db.Boolean)
     date_match: date = db.Column("dateMatch", db.Date)
 

@@ -4,8 +4,8 @@ class Partenaire(db.Model):
     __tablename__ = "PARTENAIRE"
 
     id: int = db.Column("idP", db.Integer, primary_key = True)
-    nom: str = db.Column("nomP", db.String)
-    logo: str = db.Column("logo", db.String)
+    nom: str = db.Column("nomP", db.Text)
+    logo: str = db.Column("logo", db.Text)
 
     def __init__(self, nom: str, logo: str):
         self.nom = nom

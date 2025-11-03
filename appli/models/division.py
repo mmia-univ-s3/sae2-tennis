@@ -4,7 +4,7 @@ class Division(db.Model):
     __tablename__ = "DIVISION"
 
     id: int = db.Column("idDiv", db.Integer, primary_key=True)
-    intitule: str = db.Column("intituleDiv", db.String)
+    intitule: str = db.Column("intituleDiv", db.Text)
 
     def __init__(self, intitule: str):
         self.intitule = intitule

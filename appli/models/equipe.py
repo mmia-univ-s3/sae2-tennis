@@ -4,8 +4,8 @@ class Equipe(db.Model):
     __tablename__ = "EQUIPE"
 
     id: int = db.Column("idE", db.Integer, primary_key=True)
-    nom: str = db.Column("nomE", db.String)
-    categorie: str = db.Column("categorieE", db.String)
+    nom: str = db.Column("nomE", db.Text)
+    categorie: str = db.Column("categorieE", db.Text)
     _id_div: int = db.Column("idDiv", db.Integer, db.ForeignKey("DIVISION.idDiv"))
     rang: int = db.Column("rang", db.Integer)
 
