@@ -1,4 +1,4 @@
-﻿idCha,idE,nomAdv,resultat,score,stade,estDomicile,dateMatch
+idCha,idE,nomAdv,resultat,score,stade,estDomicile,dateMatch
 1,1,equipe 10,victoire,7-2,stade1,True,2025-10-05
 2,2,equipe 3,défaite,4-7,stade1,False,2025-10-06
 3,3,equipe 2,victoire,7-4,stade1,True,2025-10-06

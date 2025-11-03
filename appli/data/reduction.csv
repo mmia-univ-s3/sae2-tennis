@@ -1,10 +1,10 @@
-﻿idT,taux,estCumulable
-1,50% de reduction,True 
-2,50% de reduction,True 
-3,50% de reduction,True 
-4,50% de reduction,True 
-5,50% de reduction,True 
-6,1 part,True 
+idT,taux,estCumulable
+1,50% de reduction,True
+2,50% de reduction,True
+3,50% de reduction,True
+4,50% de reduction,True
+5,50% de reduction,True
+6,1 part,True
 7,1 part,False
 8,1 part,False
 9,2.5 part,False

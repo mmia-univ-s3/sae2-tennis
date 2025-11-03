@@ -4,12 +4,12 @@ class CategorieTarif(db.Model):
     __tablename__ = "CATEGORIE_TARIF"
 
     id: int = db.Column("idCat", db.Integer, primary_key=True)
-    sport: str = db.Column("sport", db.String)
-    intitule: str = db.Column("intituleCat", db.String)
+    sport: str = db.Column("sport", db.Text)
+    intitule: str = db.Column("intituleCat", db.Text)
     _id_parent: int = db.Column("idCatParent", db.Integer, db.ForeignKey("CATEGORIE_TARIF.idCat"))
 
-    parent = db.relationship("CategorieTarif", backref=db.backref("enfant",
-                             lazy="dynamic", cascade="all, delete-orphan"))
+    enfants = db.relationship("CategorieTarif", backref=db.backref("parent", cascade="all",
+                                                                   remote_side=[id]))
 
     def __init__(self, sport: str, intitule: str, id_parent: int=None):
         self.sport = sport

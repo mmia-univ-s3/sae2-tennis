@@ -5,7 +5,7 @@ class Histoire(db.Model):
 
     id: int = db.Column("idH", db.Integer, primary_key = True)
     annee: int = db.Column("annee", db.Integer)
-    trivia: str = db.Column("trivia", db.String)
+    trivia: str = db.Column("trivia", db.Text)
 
     def __init__(self, annee: int, trivia: str):
         self.annee = annee

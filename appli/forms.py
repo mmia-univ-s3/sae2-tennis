@@ -28,4 +28,4 @@ class LoginForm(FlaskForm):
         m = sha256()
         m.update(self.password.data.encode())
         password = m.hexdigest()
-        return user if password == user.password else None
+        return user if password == user.mdp else None

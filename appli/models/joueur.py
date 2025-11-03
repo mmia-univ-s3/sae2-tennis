@@ -4,8 +4,8 @@ class Joueur(db.Model):
     __tablename__ = "JOUEUR"
 
     id: int = db.Column("idJ", db.Integer, primary_key=True)
-    nom: str = db.Column("nomJ", db.String)
-    prenom: str = db.Column("prenomJ", db.String)
+    nom: str = db.Column("nomJ", db.Text)
+    prenom: str = db.Column("prenomJ", db.Text)
     _id_equipe: int = db.Column("idE", db.Integer, db.ForeignKey("EQUIPE.idE"))
 
     equipe = db.relationship("Equipe", backref=db.backref("enfant",

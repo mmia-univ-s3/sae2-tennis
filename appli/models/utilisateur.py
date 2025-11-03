@@ -4,8 +4,11 @@ from appli.app import db
 class Utilisateur(db.Model, UserMixin):
     __tablename__ = "UTILISATEUR"
 
-    login: str = db.Column("idU", db.String, primary_key=True)
-    mdp: str = db.Column("mdp", db.String)
+    login: str = db.Column("idU", db.String(32), primary_key=True)
+    mdp: str = db.Column("mdp", db.Text)
+
+    def get_id(self):
+        return self.login
 
     def __init__(self, login: str, mdp: str):
         self.login = login
