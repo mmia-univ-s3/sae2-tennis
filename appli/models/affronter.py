@@ -9,7 +9,7 @@ class Affronter(db.Model):
                                     db.ForeignKey("CHAMP_EQUIPE.idCha", ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
     _id_equipe: int = db.Column("idE", db.Integer,
                                 db.ForeignKey("EQUIPE.idE"), primary_key=True)
-    adversaire: str = db.Column("nomAdv", db.Text)
+    adversaire: str = db.Column("nomAdv", db.Text, primary_key=True)
     resultat: str = db.Column("resultat", db.Text)
     score: int = db.Column("score", db.Text)
     stade: str = db.Column("stade", db.Text)
