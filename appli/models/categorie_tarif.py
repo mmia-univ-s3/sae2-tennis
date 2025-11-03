@@ -8,7 +8,8 @@ class CategorieTarif(db.Model):
     intitule: str = db.Column("intituleCat", db.Text)
     _id_parent: int = db.Column("idCatParent", db.Integer, db.ForeignKey("CATEGORIE_TARIF.idCat"))
 
-    enfants = db.relationship("CategorieTarif", backref=db.backref("parent", cascade="all", remote_side=[id]))
+    enfants = db.relationship("CategorieTarif", backref=db.backref("parent", cascade="all",
+                                                                   remote_side=[id]))
 
     def __init__(self, sport: str, intitule: str, id_parent: int=None):
         self.sport = sport

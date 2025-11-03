@@ -4,7 +4,8 @@ class Participer(db.Model):
     __tablename__ = "PARTICIPER"
 
     _id_championnat: int = db.Column("idCha", db.Integer,
-                                    db.ForeignKey("CHAMP_EQUIPE.idCha", ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
+                                    db.ForeignKey("CHAMP_EQUIPE.idCha", ondelete="CASCADE",
+                                                  onupdate="CASCADE"), primary_key=True)
     _id_equipe: int = db.Column("idE", db.Integer,
                                db.ForeignKey("EQUIPE.idE"), primary_key=True)
     rang: int = db.Column("rang", db.Integer)

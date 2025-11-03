@@ -3,7 +3,9 @@ from appli.app import db
 class Reduction(db.Model):
     __tablename__ = "REDUCTION"
 
-    _id_tarif: int = db.Column("idT", db.Integer, db.ForeignKey("TARIF.idT", ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
+    _id_tarif: int = db.Column("idT", db.Integer,
+                               db.ForeignKey("TARIF.idT", ondelete="CASCADE",onupdate="CASCADE"),
+                               primary_key=True)
     taux: str = db.Column("taux", db.Text)
     cumulable: bool = db.Column("estCumulable", db.Boolean)
 
