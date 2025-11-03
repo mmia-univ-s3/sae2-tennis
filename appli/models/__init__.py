@@ -1,4 +1,5 @@
 from appli.app import login_manager
+from appli.models.utilisateur import Utilisateur
 
 from .article import Article
 from .histoire import Histoire
@@ -17,5 +18,5 @@ from .reservation import Reservation
 from .reduction import Reduction
 
 @login_manager.user_loader
-def load_user(_: str):
-    pass
+def load_user(login: str):
+    return Utilisateur.query.get(login)

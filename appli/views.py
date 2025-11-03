@@ -1,6 +1,7 @@
-from flask import render_template, redirect, url_for
-from flask_login import logout_user
+from flask import render_template, redirect, url_for, request
+from flask_login import logout_user, login_user
 
+from appli.forms import LoginForm
 from .app import app
 
 @app.route('/')
@@ -71,9 +72,18 @@ def contacts():
 def autre():
     return render_template('autre.html', title="Autres sports sur le stade")
 
-@app.route('/connexion/')
+@app.route('/connexion/', methods=('GET', 'POST'))
 def connexion():
-    return render_template('connexion.html', title="Se connecter")
+    form = LoginForm()
+    if not form.is_submitted():
+        form.next.data = request.args.get("next")
+    elif form.validate_on_submit():
+        user = form.get_authenticated_user()
+        if user:
+            login_user(user)
+            return redirect(form.next.data or url_for("index", name=user.login))
+        return render_template("connexion.html", form=form, title="Se connecter", error=True)
+    return render_template("connexion.html", form=form, title="Se connecter", error=False)
 
 @app.route('/deconnexion/')
 def deconnexion():
@@ -88,9 +98,9 @@ def e404(_):
 def e500(_):
     return render_template('error.html', error_code=500, error_message="Une erreur s'est produite.")
 
-@app.errorhandler(428)
+@app.errorhandler(405)
 def e428(_):
-    return render_template('error.html', error_code=428,
+    return render_template('error.html', error_code=405,
                            error_message="Cette méthode n'est pas autorisée.")
 
 if __name__ == "__main__":
