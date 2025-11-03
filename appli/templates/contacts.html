@@ -3,5 +3,19 @@
 {% block main %}
     <body>
         <h1>Contacts</h1>
+        <div class="alert alert-warning">
+            <p>
+                <img src="{{ url_for('static', filename='loc.png') }}" width="32">
+                Rue de la devinière - 86000 Poitiers - France
+            </p>
+            <p>
+                <img src="{{ url_for('static', filename='tel.png') }}" width="32">
+                05 49 46 23 74
+            </p>
+            <p>
+                <img src="{{ url_for('static', filename='mail.png') }}" width="32">
+                accueil@stadepoitevintennis.fr
+            </p>
+        </div>
     </body>
 {% endblock %}
