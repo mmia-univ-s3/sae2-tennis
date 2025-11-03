@@ -32,7 +32,7 @@ class LoginForm(FlaskForm):
 
 class PageForm(FlaskForm):
     editor = StringField()
-    
+
 class RegisterForm(FlaskForm):
     login = StringField('Identifiant', validators=[DataRequired()])
     password = PasswordField('Mot de passe', validators=[DataRequired()])
