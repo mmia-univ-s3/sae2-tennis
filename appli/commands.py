@@ -187,4 +187,4 @@ def loaddb(filepath):
     except NotADirectoryError as err:
         lg.error("NotADirectoryError: %s", err)
     except PermissionError as err:
-        lg.error("PermissionError: %s" + err)
+        lg.error("PermissionError: %s", err)
