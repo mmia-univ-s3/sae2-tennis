@@ -7,6 +7,9 @@ class Utilisateur(db.Model, UserMixin):
     login: str = db.Column("idU", db.String(32), primary_key=True)
     mdp: str = db.Column("mdp", db.Text)
 
+    def get_id(self):
+        return self.login
+
     def __init__(self, login: str, mdp: str):
         self.login = login
         self.mdp = mdp

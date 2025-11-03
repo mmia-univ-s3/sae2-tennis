@@ -74,9 +74,8 @@ def _importer_tarifs(filepath):
     with open(filepath+"/reduction.csv", newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
-            print(ligne)
             reduction = Reduction(id_tarif=int(ligne["idT"]), taux=ligne["taux"],
-                                cumulable=ligne["estCumulable"] == "True")
+                                cumulable=ligne["estCumulable"].strip() == "True")
             db.session.add(reduction)
     db.session.commit()
 
@@ -129,7 +128,7 @@ def _importer_championnats_individuels(filepath):
     with open(filepath+"/joueur.csv", newline="") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile)
         for ligne in lecture:
-            joueur = Joueur(nom=ligne["nomJ"], prenom=ligne["prenomJ"], id_equipe=int(ligne["idE"]))
+            joueur = Joueur(nom=ligne["nomJ"], prenom=ligne["prenomJ"], id_equipe=int(ligne["idE"]) if ligne['idE'] != "" else None)
             db.session.add(joueur)
 
     with open(filepath+"/champ_indiv.csv", newline="") as csvfile:
@@ -160,24 +159,24 @@ def loaddb(filepath):
     try:
         # chargement de notre base
         _importer_articles(filename=filepath+"/article.csv")
+        lg.warning('Articles importés')
         _importer_trivias(filename=filepath+"/histoire.csv")
+        lg.warning('Trivias importées')
         _importer_partenaires(filename=filepath+"/partenaire.csv")
+        lg.warning('Partenaires importés')
         _importer_users(filename=filepath+"/utilisateur.csv")
+        lg.warning('Utilisateurs importés')
         _importer_tarifs(filepath=filepath)
+        lg.warning('Tarifs importés')
         _importer_championnats_equipes(filepath=filepath)
+        lg.warning('Championnats par équipes importés')
         _importer_championnats_individuels(filepath=filepath)
+        lg.warning('Championnats individuels importés')
 
-        lg.info('Database initialized!')
+        lg.warning('Base de données créée')
     except FileNotFoundError as err:
         lg.error("FileNotFoundError:", err)
     except NotADirectoryError as err:
         lg.error("NotADirectoryError:", err)
     except PermissionError as err:
         lg.error("PermissionError:", err)
-
-@app.cli.command()
-def syncdb():
-    db.create_all()
-    lg.info('Database synchronized!')
-
-
