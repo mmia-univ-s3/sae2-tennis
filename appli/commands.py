@@ -13,6 +13,7 @@ from .models.reservation import Reservation
 from .models.reduction import Reduction
 from .models.division import Division
 from .models.championnat import ChampionnatEquipe, ChampionnatIndividuel
+from .models.equipe import Equipe
 from .models.participer import Participer
 from .models.affronter import Affronter
 from .models.joueur import Joueur
@@ -182,8 +183,8 @@ def loaddb(filepath):
 
         lg.warning('Base de données créée')
     except FileNotFoundError as err:
-        lg.error("FileNotFoundError: " + str(err))
+        lg.error("FileNotFoundError: %s", err)
     except NotADirectoryError as err:
-        lg.error("NotADirectoryError: " + str(err))
+        lg.error("NotADirectoryError: %s", err)
     except PermissionError as err:
-        lg.error("PermissionError: " + str(err))
+        lg.error("PermissionError: %s" + err)

@@ -2,7 +2,7 @@ from datetime import date
 from appli.app import db
 
 class Affronter(db.Model):
-    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-instance-attributes,duplicate-code
     __tablename__ = "AFFRONTER"
 
     _id_championnat: int = db.Column("idCha", db.Integer,
