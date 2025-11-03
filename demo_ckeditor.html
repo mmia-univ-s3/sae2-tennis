@@ -1,0 +1,123 @@
+<!--
+
+Pour ajouter l'éditeur dans votre code HTML :
+
+<form>
+  ...
+  {% extends "editor.html" %}
+  {% block content %}
+    (le contenu de base de l'éditeur)
+  {% endblock %}
+  ...
+</form>
+
+Cela ajoute un élément "editor" dans votre formulaire.
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKEditor 5 - Quick start CDN</title>
+  <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/47.1.0/ckeditor5.css">
+  <style>
+      .main-container {
+          width: 795px;
+          margin-left: auto;
+          margin-right: auto;
+      }
+  </style>
+</head>
+<body>
+<div class="main-container">
+  <button onclick="save();">Afficher HTML</button>
+  <input type="hidden" id="loremipsum">
+  <textarea id="loremipsum__editor">
+    <h1>Lorem ipsum</h1>
+    <p>Lorem ipsum.</p>
+  </textarea>
+</div>
+<script src="https://cdn.ckeditor.com/ckeditor5/47.1.0/translations/fr.umd.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/47.1.0/ckeditor5.umd.js"></script>
+<script>
+    const {
+        ClassicEditor,
+        Essentials,
+        Paragraph,
+        Bold,
+        Italic,
+        Font,
+        Heading,
+        Underline,
+        Subscript,
+        Superscript,
+        Strikethrough,
+        Code,
+        Alignment,
+        Link,
+        BlockQuote,
+        Image,
+        Table,
+        MediaEmbed,
+        List,
+        Autoformat,
+        ImageInsertViaUrl,
+        ImageUpload
+    } = CKEDITOR;
+    ClassicEditor
+        .create(document.querySelector('#loremipsum__editor'), {
+            licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3OTM3NTAzOTksImp0aSI6IjllNDU4ZTVmLTkyNDAtNGJhOC1iOTJiLWYyNjliNDBmYWMyYyIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCIsIkUyUCIsIkUyVyJdLCJyZW1vdmVGZWF0dXJlcyI6WyJQQiIsIlJGIiwiU0NIIiwiVENQIiwiVEwiLCJUQ1IiLCJJUiIsIlNVQSIsIkI2NEEiLCJMUCIsIkhFIiwiUkVEIiwiUEZPIiwiV0MiLCJGQVIiLCJCS00iLCJGUEgiLCJNUkUiXSwidmMiOiJjNzQwZWUwZSJ9.5-fgvpxKWIhFRTSnoUKlE9ZmlGHe_ygg-eXpDOjZzmNmd5guxEYKv-S5i7qvSde7MIT1y3dgDFksziTcav3WkA',
+            plugins: [
+                Essentials,
+                Paragraph,
+                Bold,
+                Italic,
+                Font,
+                Heading,
+                Underline,
+                Subscript,
+                Superscript,
+                Strikethrough,
+                Code,
+                Alignment,
+                Link,
+                BlockQuote,
+                Image,
+                Table,
+                MediaEmbed,
+                List,
+                Autoformat,
+                ImageInsertViaUrl,
+                ImageUpload
+            ],
+            toolbar: [
+                "undo", "redo", "|",
+                "heading", "|",
+                "bold", "italic", "underline", "|",
+                "subscript", "superscript", "strikethrough", "code", "|",
+                "alignment", "bulletedList", "numberedList", "|",
+                "link", "blockQuote", "insertImage", "insertTable", "mediaEmbed",
+            ],
+            language: {
+                ui: 'fr',
+                content: 'fr'
+            }
+        })
+        .then(editor => {
+            window.editor = editor;
+            editor.model.document.on( 'change:data', () => {
+                document.getElementById("loremipsum").value = editor.getData();
+            });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    function save() {
+        alert(document.getElementById("loremipsum").value)
+    }
+</script>
+</body>
+</html>
