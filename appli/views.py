@@ -23,7 +23,8 @@ def histoire():
 @app.route('/club/management/', methods=('GET', 'POST'))
 def management():
     form = PageForm()
-    article = Article.query.filter(Article.titre == "_management" and Article.type_article == "pages").first()
+    article = Article.query.filter(Article.titre == "_management" and
+                                   Article.type_article == "pages").first()
     if article is None:
         article = Article("_management", "", datetime.date.today(), "pages")
         db.session.add(article)
@@ -33,7 +34,8 @@ def management():
             article.contenu = form.editor.data
             article.date = datetime.date.today()
             db.session.commit()
-    return render_template('management.html', title="Management du club - Club", contenu=article.contenu, form=form)
+    return render_template('management.html', title="Management du club - Club",
+                           contenu=article.contenu, form=form)
 
 @app.route('/club/articles/')
 def articles():
