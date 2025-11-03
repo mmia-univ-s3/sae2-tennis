@@ -45,8 +45,7 @@ class RegisterForm(FlaskForm):
             db.session.add(user)
             db.session.commit()
             return user
-        else:
-            return None
+        return None
 
 class ConfirmForm(FlaskForm):
     pass

@@ -1,4 +1,5 @@
 from hashlib import sha256
+import random
 
 from flask import render_template, redirect, url_for, request
 from flask_login import logout_user, login_user, login_required, current_user
@@ -6,8 +7,6 @@ from flask_login import logout_user, login_user, login_required, current_user
 from appli.forms import LoginForm, RegisterForm, ConfirmForm
 from appli.models import Utilisateur
 from .app import app, db
-
-import random
 
 @app.route('/')
 def index():
@@ -93,7 +92,8 @@ def connexion():
 @app.route('/utilisateurs/')
 @login_required
 def utilisateurs():
-    return render_template('utilisateurs.html', title="Gestion des utilisateurs", users=Utilisateur.query.all())
+    return render_template('utilisateurs.html', title="Gestion des utilisateurs",
+                           users=Utilisateur.query.all())
 
 @app.route('/utilisateurs/create/', methods=("GET", "POST",))
 @login_required
@@ -118,8 +118,10 @@ def utilisateurs_reset(login: str):
         m.update(mdp.encode())
         user.mdp = m.hexdigest()
         db.session.commit()
-        return render_template("utilisateurs_reset.html", form=form, title="Réinitialisation du mot de passe", user=user, mdp=mdp)
-    return render_template("utilisateurs_reset_confirm.html", form=form, title="Réinitialisation du mot de passe", user=user)
+        return render_template("utilisateurs_reset.html", form=form,
+                               title="Réinitialisation du mot de passe", user=user, mdp=mdp)
+    return render_template("utilisateurs_reset_confirm.html", form=form,
+                           title="Réinitialisation du mot de passe", user=user)
 
 
 @app.route('/utilisateurs/<login>/delete/', methods=("GET", "POST",))
@@ -133,7 +135,8 @@ def utilisateurs_delete(login: str):
         db.session.delete(user)
         db.session.commit()
         return redirect(url_for("utilisateurs"))
-    return render_template("utilisateurs_delete_confirm.html", form=form, title="Supprimer un utilisateur", user=user)
+    return render_template("utilisateurs_delete_confirm.html",
+                           form=form, title="Supprimer un utilisateur", user=user)
 
 @app.route('/deconnexion/')
 def deconnexion():
