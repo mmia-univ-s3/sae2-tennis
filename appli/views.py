@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, request
-from flask_login import logout_user
+from flask_login import logout_user, login_user
 
 from appli.forms import LoginForm
 from .app import app
@@ -80,9 +80,10 @@ def connexion():
     elif form.validate_on_submit():
         user = form.get_authenticated_user()
         if user:
-            # login_user(user)
+            login_user(user)
             return redirect(form.next.data or url_for("index", name=user.login))
-    return render_template("connexion.html", form=form, title="Se connecter")
+        return render_template("connexion.html", form=form, title="Se connecter", error=True)
+    return render_template("connexion.html", form=form, title="Se connecter", error=False)
 
 @app.route('/deconnexion/')
 def deconnexion():
