@@ -1,7 +1,8 @@
 from flask import render_template, redirect, url_for, request
-from flask_login import logout_user, login_user
+from flask_login import logout_user, login_user, login_required
 
 from appli.forms import LoginForm
+from appli.models import Utilisateur
 from .app import app
 
 @app.route('/')
@@ -84,6 +85,11 @@ def connexion():
             return redirect(form.next.data or url_for("index", name=user.login))
         return render_template("connexion.html", form=form, title="Se connecter", error=True)
     return render_template("connexion.html", form=form, title="Se connecter", error=False)
+
+@app.route('/utilisateurs/')
+@login_required
+def utilisateurs():
+    return render_template('utilisateurs.html', title="Gestion des utilisateurs", users=Utilisateur.query.all())
 
 @app.route('/deconnexion/')
 def deconnexion():
