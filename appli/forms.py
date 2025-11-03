@@ -47,3 +47,6 @@ class RegisterForm(FlaskForm):
             return user
         else:
             return None
+
+class ConfirmForm(FlaskForm):
+    pass

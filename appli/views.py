@@ -3,7 +3,7 @@ from hashlib import sha256
 from flask import render_template, redirect, url_for, request
 from flask_login import logout_user, login_user, login_required, current_user
 
-from appli.forms import LoginForm, RegisterForm
+from appli.forms import LoginForm, RegisterForm, ConfirmForm
 from appli.models import Utilisateur
 from .app import app, db
 
@@ -107,25 +107,33 @@ def utilisateurs_create():
             return redirect(form.next.data or url_for("utilisateurs"))
     return render_template("utilisateurs_create.html", form=form, title="Créer un utilisateur")
 
-@app.route('/utilisateurs/<login>/reset/')
+@app.route('/utilisateurs/<login>/reset/', methods=("GET", "POST",))
 @login_required
 def utilisateurs_reset(login: str):
     user = Utilisateur.query.get(login)
-    mdp = ''.join(chr(random.randint(45, 122)) for _ in range(10))
-    m = sha256()
-    m.update(mdp.encode())
-    user.mdp = m.hexdigest()
-    db.session.commit()
-    return render_template("utilisateurs_reset.html", title="Réinitialisation du mot de passe", user=user, mdp=mdp)
+    form = ConfirmForm()
+    if form.validate_on_submit():
+        mdp = ''.join(chr(random.randint(45, 122)) for _ in range(10))
+        m = sha256()
+        m.update(mdp.encode())
+        user.mdp = m.hexdigest()
+        db.session.commit()
+        return render_template("utilisateurs_reset.html", form=form, title="Réinitialisation du mot de passe", user=user, mdp=mdp)
+    return render_template("utilisateurs_reset_confirm.html", form=form, title="Réinitialisation du mot de passe", user=user)
 
-@app.route('/utilisateurs/<login>/delete/')
+
+@app.route('/utilisateurs/<login>/delete/', methods=("GET", "POST",))
 @login_required
 def utilisateurs_delete(login: str):
-    if login != current_user.login:
-        user = Utilisateur.query.get(login)
+    if login == current_user.login:
+        return redirect(url_for("utilisateurs"))
+    user = Utilisateur.query.get(login)
+    form = ConfirmForm()
+    if form.validate_on_submit():
         db.session.delete(user)
         db.session.commit()
-    return redirect(url_for("utilisateurs"))
+        return redirect(url_for("utilisateurs"))
+    return render_template("utilisateurs_delete_confirm.html", form=form, title="Supprimer un utilisateur", user=user)
 
 @app.route('/deconnexion/')
 def deconnexion():
