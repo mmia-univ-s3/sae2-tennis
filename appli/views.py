@@ -1,8 +1,12 @@
-from flask import render_template, redirect, url_for, request
-from flask_login import logout_user, login_user
+import datetime
 
-from appli.forms import LoginForm
-from .app import app
+from flask import render_template, redirect, url_for, request
+from flask_login import logout_user, login_user, current_user
+
+from appli.forms import LoginForm, PageForm
+from appli.models import Article
+from .app import app, db
+
 
 @app.route('/')
 def index():
@@ -16,9 +20,20 @@ def club():
 def histoire():
     return render_template('histoire.html', title="Histoire et présentation - Club")
 
-@app.route('/club/management/')
+@app.route('/club/management/', methods=('GET', 'POST'))
 def management():
-    return render_template('management.html', title="Management du club - Club")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_management" and Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_management", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('management.html', title="Management du club - Club", contenu=article.contenu, form=form)
 
 @app.route('/club/articles/')
 def articles():

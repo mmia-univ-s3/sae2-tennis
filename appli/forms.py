@@ -29,3 +29,6 @@ class LoginForm(FlaskForm):
         m.update(self.password.data.encode())
         password = m.hexdigest()
         return user if password == user.mdp else None
+
+class PageForm(FlaskForm):
+    editor = StringField()
