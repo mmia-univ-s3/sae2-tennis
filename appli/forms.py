@@ -22,7 +22,6 @@ class LoginForm(FlaskForm):
     next = HiddenField()
 
     def get_authenticated_user(self):
-        pass
         user = Utilisateur.query.get(self.login.data)
         if user is None:
             return None
