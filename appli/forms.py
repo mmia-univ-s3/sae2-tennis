@@ -1,14 +1,16 @@
+import datetime
 from hashlib import sha256
 import os
 import random
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import StringField, HiddenField
+from wtforms import RadioField, StringField, HiddenField
 # from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired
 
+from appli.models.article import Article
 from appli.models.partenaire import Partenaire
 from appli.models.utilisateur import Utilisateur
 
@@ -75,3 +77,18 @@ class RegisterForm(FlaskForm):
             db.session.commit()
             return user
         return None
+
+class ArticleForm(FlaskForm):
+    editor = StringField()
+    
+class ArticleAjoutForm(FlaskForm):
+    titre = StringField('Titre', validators=[DataRequired()])
+    editor = StringField('Contenu')
+    type_a = RadioField('Type', choices=[('club', 'Club'), ('stade', 'Stade')], default=1, coerce=str)
+    next = HiddenField()
+    
+    def creation_article(self): 
+        article = Article(self.titre.data, self.editor.data, datetime.date.today(), self.type_a.data)
+        db.session.add(article)
+        db.session.commit()
+        return article
