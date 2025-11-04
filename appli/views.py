@@ -42,7 +42,8 @@ def management():
 @app.route('/club/articles/')
 def articles():
     liste_articles = Article.query.filter(Article.type_article!="pages").all()
-    return render_template('articles.html', title="Articles du club - Club", articles = liste_articles)
+    return render_template('articles.html', title="Articles du club - Club",
+                           articles = liste_articles)
 
 @app.route('/club/articles/<int:id_article>/', methods=('GET', 'POST'))
 def article_view(id_article):

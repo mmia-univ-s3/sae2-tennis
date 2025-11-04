@@ -88,7 +88,7 @@ class ArticleAjoutForm(FlaskForm):
                         default=1, coerce=str)
     next = HiddenField()
 
-    def creation_article(self): 
+    def creation_article(self):
         article = Article(self.titre.data, self.editor.data, datetime.date.today(),
                           self.type_a.data)
         db.session.add(article)
