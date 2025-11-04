@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, request
 from flask_login import logout_user, login_user
 
 from appli.forms import LoginForm
+from appli.models.categorie_tarif import CategorieTarif
 from .app import app
 
 @app.route('/')
@@ -54,7 +55,16 @@ def formation():
 
 @app.route('/formation/tarifications/')
 def tarifications():
-    return render_template('tarifications.html', title="Tarifications - Formation")
+    list_cate_tennis = CategorieTarif.query.filter(CategorieTarif._id_parent == None, CategorieTarif.sport == "tennis").all()
+    list_cate_rese_tennis = filter(lambda x: len(x.enfants) > 0 and \
+                            len(x.enfants[0].tarifs.all()) > 0 and \
+                            len(x.enfants[0].tarifs[0].reservations.all()) > 0, list_cate_tennis)
+    list_cate_redu_tennis = filter(lambda x: len(x.enfants) > 0 and \
+                            len(x.enfants[0].tarifs.all()) > 0 and \
+                            len(x.enfants[0].tarifs[0].reductions.all()) > 0, list_cate_tennis)
+    list_cate_padel = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
+                                                  CategorieTarif.sport == "padel").all()
+    return render_template('tarifications.html', title="Tarifications - Formation", cate_rese=list_cate_rese_tennis, cate_redu=list_cate_redu_tennis, cate_padel=list_cate_padel)
 
 @app.route('/formation/ecole-de-tennis/')
 def ecole():

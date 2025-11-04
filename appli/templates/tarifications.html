@@ -3,5 +3,161 @@
 {% block main %}
     <body>
         <h1>Tarifications</h1>
+        <h2>Détail des tarifs tennis</h2>
+        {% for categorie in cate_rese %}
+            <table class="table table-bordered border-success">
+                <tbody>
+                    <tr>
+                        <th colspan="2" class="bg-success-subtle">
+                            <center>{{ categorie.intitule }}</center>
+                        </th>
+                    </tr>
+                    {% for sous_cat in categorie.enfants %}
+                        <tr>
+                            <th colspan="2" class="bg-warning-subtle">
+                                <center>{{ sous_cat.intitule }}</center>
+                            </th>
+                        </tr>
+                        {% for tarif in sous_cat.tarifs %}
+                            <tr>
+                                <td>
+                                    <center>{{ tarif.intitule }}</center>
+                                </td>
+                                <td style="width: 200px;">
+                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+        <table class="table table-bordered border-danger">
+            <tbody>
+                <tr>
+                    <th>
+                        <p><span class="text-danger">L'adhésion au club comprend la réservation de courts</span> intérieurs et extérieurs pendant 4h30/semaine ainsi que 4 heures d'invitations/an</p>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-bordered border-primary">
+            <tbody>
+                <tr>
+                    <th>
+                        <p>Le club possède 4 courts intérieurs en résine chauffés l’hiver, 3 courts extérieurs en terre artificielle ainsi que 2 courts extérieurs en béton poreux. Notre adhésion à l’école de tennis s’étend sur 32 semaines, de la 3e semaine de septembre à la dernière semaine de juin</p>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-bordered border-black">
+            <tbody>
+                <tr>
+                    <th>
+                        <center>Réservation de créneau à l’année 50€</center>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Détail des réductions tennis</h2>
+        {% for categorie in cate_redu %}
+            <table class="table table-bordered border-success">
+                <tbody>
+                    <tr>
+                        <th colspan="2" class="bg-success-subtle">
+                            <center>{{ categorie.intitule }}</center>
+                        </th>
+                    </tr>
+                    {% for sous_cat in categorie.enfants %}
+                        <tr>
+                            <th colspan="2" class="bg-warning-subtle">
+                                <center>{{ sous_cat.intitule }}</center>
+                            </th>
+                        </tr>
+                        {% for tarif in sous_cat.tarifs %}
+                            <tr>
+                                <td>
+                                    <center>{{ tarif.intitule }}</center>
+                                </td>
+                                <td style="width: 200px;">
+                                    <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+        <table class="table table-bordered border-danger">
+            <tbody>
+                <tr>
+                    <th>
+                        <center>Les différentes réductions ne se cumulent pas, seule la réduction la plus importante sera retenue.</center>
+                        <center><span class="text-danger">Ne s'applique pas sur la licence *. Ne s’applique pas sur la compétition jeune.</span></center>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-bordered border-warning">
+            <tbody>
+                <tr>
+                    <th>
+                        <center>Paiements en ligne, chèques vacances papier et connect, chèques, espèces, coupons sport, CB &<span class="text-danger"> Pass'Sport (à donner avant le 20 décembre 2025)</span></center>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Détail des tarifs padel</h2>
+        {% for categorie in cate_padel %}
+            <table class="table table-bordered border-success">
+                <tbody>
+                    <tr>
+                        <th colspan="2" class="bg-success-subtle">
+                            <center>{{ categorie.intitule }}</center>
+                        </th>
+                    </tr>
+                    {% if categorie.enfants|length == 0 %}
+                        {% for tarif in categorie.tarifs %}
+                            <tr>
+                                <td>
+                                    <center>{{ tarif.intitule }}</center>
+                                </td>
+                                <td style="width: 200px;">
+                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for sous_cat in categorie.enfants %}
+                            <tr>
+                                <th colspan="2" class="bg-warning-subtle">
+                                    <center>{{ sous_cat.intitule }}</center>
+                                </th>
+                            </tr>
+                            {% for tarif in sous_cat.tarifs %}
+                                <tr>
+                                    <td>
+                                        <center>{{ tarif.intitule }}</center>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if categorie.intitule == "Abonnement" %}
+                        <tr>
+                            <th colspan="2">
+                                <center><span class="text-danger">Date d'expiration des carnets de tickets 31 août 2027</span></center>
+                            </th>
+
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        {% endfor %}
     </body>
 {% endblock %}

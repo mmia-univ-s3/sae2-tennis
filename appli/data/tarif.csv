@@ -1,11 +1,48 @@
-idT,intituleT,idCat
-1,classique adulte,1
-2,Cours Collectifs,2
-3,Multi-clubs,3
-4,Étudiant,4
-5,classique adulte,1
-6,Cours Collectifs,2
-7,Multi-clubs,3
-8,Étudiant,4
-9,classique adulte,1
-10,Cours Collectifs,2
+idT;intituleT;idCat
+1;Classique Jeune;6
+2;Multi-clubs (sous réserve de justification);6
+3;Mini-tennis (né en 2018 et après);9
+4;Jeune 1h/semaine;9
+5;Jeune 1h30/semaine;9
+6;Jeune 1h/semaine + 1h le samedi;9
+7;Groupe COMPETITION 2 x 1h30/semaine;12
+8;Groupe Centre d'entraînement du club 3 x 1h30/semaine (sur choix de l'équipe pédagogique);12
+9;Groupe JDP en partenariat Collège Jardin des Plantes (sur choix de l'équipe pédagogique);12
+10;Groupe Centre d'entraînement en partenariat avec le groupe scolaire Isaac de l'Etoile (sur choix de l'équipe pédagogique);12
+11;Classique Adulte;7
+12;Classique Adulte;8
+13;Multi-clubs (sous réserve de justification);7
+14;Multi-clubs (sous réserve de justification);8
+15;Cours Collectifs;10
+16;Cours Collectifs;11
+17;Etudiants;10
+18;Etudiants;11
+19;Midi au féminin 1h;10
+20;Midi au féminin 1h;11
+21;Cours Prepa/Tennis au féminin (2 x 45 min physique tennis/tennis);10
+22;Cours Prepa/Tennis au féminin (2 x 45 min physique tennis/tennis);11
+23;Location terrain intérieur 1h;13
+24;Location terrain extérieur 1h;13
+25;Location terrain étudiant 1h;13
+26;Carte 10h + Carte Asso;13
+27;Carte 10h;13
+28;Carte membre CLUB : Elle permet d'accéder au bar et au restaurant du Stade Poitevin. Elle permet ni de prendre une licence au club, ni de participer aux votes de l'AG, ni de participer aux compétitions par équipe.;14
+29;Carte membre ASSOCIATION : Elle permet d'accéder au bar et au restaurant, de prendre une licence, de participer aux votes de l'AG et de jouer en équipe. Elle ne permet ni de réserver un court, ni d'utiliser les courts en dehors des matchs par équipe à l'exclusion du tournoi interne. (license comprise);14
+30;Joueuses classées entre 15/1 et 3/6 & Joueurs classées entre 5/6 et 1/6;15
+31;Joueuses classées 2/6 ou mieux & Joueurs classés 0 ou mieux;15
+32;Membre de la famille de moins de 30 ans (1997 et après);16
+33;Membre de la famille de plus de 30 ans (1996 et avant);16
+34;Les parts donnent un pourcentage de réduction sur la totalité de l'inscription;16
+35;Adhésion 1ère année : pour le parrain et le parrainé (Ne s’applique pas sur les étudiants);17
+36;Non licencié FFT;18
+37;Licencié FFT;18
+38;Licencié club;18
+39;Etudiant et -18 ans;18
+40;Illimité 6 mois (mai -> octobre 2026);19
+41;50h (soit 4,50€/h);23
+42;20h (soit 5€/h);23
+43;10h (soit 6€/h);24
+44;Annuelle né en 2007 et avant;20
+45;Annuelle né en 2008 et après;20
+46;Raquette;21
+47;Tube de 3 balles;22
