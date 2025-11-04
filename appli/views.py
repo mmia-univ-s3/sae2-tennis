@@ -1,7 +1,9 @@
 from flask import render_template, redirect, url_for, request
-from flask_login import logout_user, login_user
+from flask_login import logout_user, login_user, current_user
 
 from appli.forms import LoginForm
+from appli.models.tarif import Tarif
+from appli.models.categorie_tarif import CategorieTarif
 from .app import app
 
 @app.route('/')
@@ -54,7 +56,14 @@ def formation():
 
 @app.route('/formation/tarifications/')
 def tarifications():
-    return render_template('tarifications.html', title="Tarifications - Formation")
+    list_cate = CategorieTarif.query.filter(CategorieTarif._id_parent == None).all()
+    def test(list_cat):
+        dico = {}
+        for categorie in list_cat:
+            dico[categorie] = test(categorie.enfants)
+        return dico
+    print(test(list_cate))
+    return render_template('tarifications.html', title="Tarifications - Formation", cate = list_cate)
 
 @app.route('/formation/ecole-de-tennis/')
 def ecole():

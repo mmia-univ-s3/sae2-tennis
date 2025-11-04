@@ -3,5 +3,25 @@
 {% block main %}
     <body>
         <h1>Tarifications</h1>
+        <h2>Formulaire inscription + tarifs</h2>
+        <p>Détail des tarifs tennis 2024/2025 sur ce lien : </p>
+        <table class="table">
+        <thead>
+            <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for categorie in cate %}
+                {% for tarif in categorie.tarifs %}
+                    <tr>
+                        <td>{{ categorie.intitule }}</td>
+                        <td>{{ tarif.intitule }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+        </table>
     </body>
 {% endblock %}
