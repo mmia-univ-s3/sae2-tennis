@@ -77,7 +77,7 @@ def partenaire_delete(id_p: int):
         db.session.commit()
         os.remove('./static/' + part.logo)
         return redirect(url_for("partenaires"))
-    return render_template("partenaires_delete.html", form=form, 
+    return render_template("partenaires_delete.html", form=form,
                            title="Suppression d'un partenaire", parte = part)
 
 @app.route('/partenaire/ajout/', methods=("GET", "POST",))
