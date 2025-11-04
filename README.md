@@ -1,5 +1,44 @@
 # SAE Stade Poitevin Tennis
 
+## Installation
+
+### Sur Linux ou macOS
+
+```
+python3 -m venv venv
+source ./venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Sur Windows (PowerShell)
+
+```
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+### Pour exécuter
+
+```
+flask run
+```
+
+Ou si vous devez modifier l'URL de la base de données :
+
+#### Sur Linux ou macOS
+
+```
+DATABASE_URL=mysql://nomutilisateur:motdepasse@serveur/BaseDeDonnees flask run
+```
+
+#### Sur Windows
+
+```
+$Env:DATABASE_URL = "mysql://nomutilisateur:motdepasse@serveur/BaseDeDonnees"
+flask run
+```
+
 ## Description générale du projet
 
 Le projet consiste à créer un site web pour un club sportif. Il y a donc un acteur **visiteur**, c'est-à-dire une personne du public qui visite le site pour y consulter des informations, ainsi qu'un acteur **administrateur** qui permet de gérer le site et son contenu.
