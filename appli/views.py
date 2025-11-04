@@ -1,9 +1,13 @@
+from hashlib import sha256
+import random
+import datetime
+import os
 from flask import render_template, redirect, url_for, request
-from flask_login import logout_user, login_user
+from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import LoginForm
-from appli.models.categorie_tarif import CategorieTarif
-from .app import app
+from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm
+from appli.models import CategorieTarif, Partenaire, Article, Utilisateur
+from .app import app, db
 
 @app.route('/')
 def index():
@@ -17,9 +21,22 @@ def club():
 def histoire():
     return render_template('histoire.html', title="Histoire et présentation - Club")
 
-@app.route('/club/management/')
+@app.route('/club/management/', methods=('GET', 'POST'))
 def management():
-    return render_template('management.html', title="Management du club - Club")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_management" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_management", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('management.html', title="Management du club - Club",
+                           contenu=article.contenu, form=form)
 
 @app.route('/club/articles/')
 def articles():
@@ -74,21 +91,73 @@ def tarifications():
                            cate_rese=list_cate_rese_tennis, cate_redu=list_cate_redu_tennis,
                            cate_padel=list_cate_padel)
 
-@app.route('/formation/ecole-de-tennis/')
+@app.route('/formation/ecole-de-tennis/', methods=('GET', 'POST'))
 def ecole():
-    return render_template('ecole.html', title="École de Tennis - Formation")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_ecole" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_ecole", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('ecole.html', title="École de Tennis - Formation",
+                           contenu=article.contenu, form=form)
 
 @app.route('/partenaires/')
 def partenaires():
-    return render_template('partenaires.html', title="Partenaires")
+    parts = Partenaire.query.all()
+    return render_template('partenaires.html', title="Partenaires", partenaires = parts)
+
+@app.route('/partenaire/<id_p>/delete/', methods=("GET", "POST",))
+@login_required
+def partenaire_delete(id_p: int):
+    part = Partenaire.query.get(id_p)
+    form = ConfirmForm()
+    if form.validate_on_submit():
+        db.session.delete(part)
+        db.session.commit()
+        if os.path.exists(os.path.join("appli", "static", part.logo)):
+            os.remove(os.path.join("appli", "static", part.logo))
+        return redirect(url_for("partenaires"))
+    return render_template("partenaires_delete.html", form=form,
+                           title="Suppression d'un partenaire", parte = part)
+
+@app.route('/partenaire/ajout/', methods=("GET", "POST",))
+def partenaire_create():
+    form = PartenairesCreateForm()
+    if form.validate_on_submit():
+        filename = form.filename()
+        form.confirm(filename)
+        photo = form.logo.data
+        photo.save(os.path.join("appli", "static", filename))
+        return redirect(form.next.data or url_for("partenaires"))
+    return render_template('partenaires_ajout.html', title="Partenaires", form=form)
 
 @app.route('/contacts/')
 def contacts():
     return render_template('contacts.html', title="Contacts")
 
-@app.route('/autre-sports/')
+@app.route('/autre-sports/', methods=('GET', 'POST'))
 def autre():
-    return render_template('autre.html', title="Autres sports sur le stade")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_autre" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_autre", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('autre.html', title="Autres sports sur le stade",
+                           contenu=article.contenu, form=form)
 
 @app.route('/connexion/', methods=('GET', 'POST'))
 def connexion():
@@ -102,6 +171,55 @@ def connexion():
             return redirect(form.next.data or url_for("index", name=user.login))
         return render_template("connexion.html", form=form, title="Se connecter", error=True)
     return render_template("connexion.html", form=form, title="Se connecter", error=False)
+
+@app.route('/utilisateurs/')
+@login_required
+def utilisateurs():
+    return render_template('utilisateurs.html', title="Gestion des utilisateurs",
+                           users=Utilisateur.query.all())
+
+@app.route('/utilisateurs/create/', methods=("GET", "POST",))
+@login_required
+def utilisateurs_create():
+    form = RegisterForm()
+    if not form.is_submitted():
+        form.next.data = request.args.get("next")
+    elif form.validate_on_submit():
+        user = form.confirm()
+        if user:
+            return redirect(form.next.data or url_for("utilisateurs"))
+    return render_template("utilisateurs_create.html", form=form, title="Créer un utilisateur")
+
+@app.route('/utilisateurs/<login>/reset/', methods=("GET", "POST",))
+@login_required
+def utilisateurs_reset(login: str):
+    user = Utilisateur.query.get(login)
+    form = ConfirmForm()
+    if form.validate_on_submit():
+        mdp = ''.join(chr(random.randint(45, 122)) for _ in range(10))
+        m = sha256()
+        m.update(mdp.encode())
+        user.mdp = m.hexdigest()
+        db.session.commit()
+        return render_template("utilisateurs_reset.html", form=form,
+                               title="Réinitialisation du mot de passe", user=user, mdp=mdp)
+    return render_template("utilisateurs_reset_confirm.html", form=form,
+                           title="Réinitialisation du mot de passe", user=user)
+
+
+@app.route('/utilisateurs/<login>/delete/', methods=("GET", "POST",))
+@login_required
+def utilisateurs_delete(login: str):
+    if login == current_user.login:
+        return redirect(url_for("utilisateurs"))
+    user = Utilisateur.query.get(login)
+    form = ConfirmForm()
+    if form.validate_on_submit():
+        db.session.delete(user)
+        db.session.commit()
+        return redirect(url_for("utilisateurs"))
+    return render_template("utilisateurs_delete_confirm.html",
+                           form=form, title="Supprimer un utilisateur", user=user)
 
 @app.route('/deconnexion/')
 def deconnexion():
@@ -117,7 +235,7 @@ def e500(_):
     return render_template('error.html', error_code=500, error_message="Une erreur s'est produite.")
 
 @app.errorhandler(405)
-def e428(_):
+def e405(_):
     return render_template('error.html', error_code=405,
                            error_message="Cette méthode n'est pas autorisée.")
 

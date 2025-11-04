@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>Réinitialier le mot de passe</h1>
+
+<form action="{{ url_for('utilisateurs_reset', login=user.login) }}" method="post" class="form-horizontal mb-3">
+  {{ form.hidden_tag() }}
+  <p>Vous allez réinitialiser le mot de passe de <b>{{ user.login }}</b>. Un mot de passe aléatoire de 10 caractères sera généré automatiquement. Voulez-vous continuer ?</p>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" value="Réinitialiser" class="btn btn-danger">
+      <a href="{{ url_for('utilisateurs') }}" class="btn btn-secondary">Annuler</a>
+    </div>
+  </div>
+</form>
+{% endblock %}
