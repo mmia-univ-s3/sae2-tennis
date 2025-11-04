@@ -25,8 +25,7 @@
         MediaEmbed,
         List,
         Autoformat,
-        ImageInsertViaUrl,
-        ImageUpload
+        ImageInsertViaUrl
     } = CKEDITOR;
     ClassicEditor
         .create(document.querySelector('#editor__ckeditor'), {
@@ -51,8 +50,7 @@
                 MediaEmbed,
                 List,
                 Autoformat,
-                ImageInsertViaUrl,
-                ImageUpload
+                ImageInsertViaUrl
             ],
             toolbar: [
                 "undo", "redo", "|",
@@ -65,7 +63,10 @@
             language: {
                 ui: 'fr',
                 content: 'fr'
-            }
+            },
+            simpleUpload: {
+                uploadUrl: '/upload/'
+            },
         })
         .then(editor => {
             window.editor = editor;
@@ -77,4 +78,16 @@
         .catch(error => {
             console.error(error);
         });
+
+    function uploadImage() {
+        document.getElementById("file").value = "";
+        document.getElementById("file").onchange = () => {
+            if (document.getElementById("file").files[0]) {
+                document.getElementById("file-upload-btn").classList.add("disabled");
+            }
+        }
+        document.getElementById("file").click();
+    }
 </script>
+<input type="file" id="file" style="opacity: 0; pointer-events: none; top: 0; position: fixed; left: 0;">
+<span onclick="uploadImage();" class="btn btn-secondary mt-2" id="file-upload-btn">Envoyer une image</span>
