@@ -35,13 +35,12 @@ class LoginForm(FlaskForm):
 class ConfirmForm(FlaskForm):
     pass
 
-class PartenairesCreateForm(FlaskForm): 
+class PartenairesCreateForm(FlaskForm):
     nom = StringField('Nom du partenaire', validators=[DataRequired()])
     logo = StringField('url du logo', validators=[DataRequired()])
-    
+
     def confirm(self):
         partenaire = Partenaire(self.nom.data, self.logo.data)
         db.session.add(partenaire)
         db.session.commit()
         return partenaire
-    
