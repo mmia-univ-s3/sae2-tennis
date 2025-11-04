@@ -3,11 +3,11 @@ import os
 import random
 
 from flask_wtf import FlaskForm
-from wtforms import FileField, StringField, HiddenField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import StringField, HiddenField
 # from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired
-from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 from appli.models.partenaire import Partenaire
 from appli.models.utilisateur import Utilisateur
@@ -40,7 +40,8 @@ class ConfirmForm(FlaskForm):
 
 class PartenairesCreateForm(FlaskForm):
     nom = StringField('Nom du partenaire', validators=[DataRequired()])
-    logo = FileField('image du logo en jpg ou png seulement', validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
+    logo = FileField('image du logo en jpg ou png seulement', 
+                     validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
     next = HiddenField()
 
     def confirm(self, filename):
@@ -49,7 +50,7 @@ class PartenairesCreateForm(FlaskForm):
         db.session.commit()
         return partenaire
 
-    def filename(self): 
+    def filename(self):
         _, ext = os.path.splitext(self.logo.data.filename)
-        filename = '%030x' % random.randrange(16**48)
+        filename = f'{hex(random.randrange(16**48))[2:]}'
         return filename + ext

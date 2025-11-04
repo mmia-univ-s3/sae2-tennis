@@ -1,7 +1,6 @@
 import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user
-from werkzeug.utils import secure_filename
 
 from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm
 from appli.models.partenaire import Partenaire
