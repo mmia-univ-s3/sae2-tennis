@@ -1,12 +1,17 @@
 from hashlib import sha256
+import os
+import random
 
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, HiddenField
 # from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired
 
+from appli.models.partenaire import Partenaire
 from appli.models.utilisateur import Utilisateur
+
 from .app import db
 
 # from wtforms.validators import DataRequired
@@ -30,6 +35,27 @@ class LoginForm(FlaskForm):
         password = m.hexdigest()
         return user if password == user.mdp else None
 
+class ConfirmForm(FlaskForm):
+    pass
+
+class PartenairesCreateForm(FlaskForm):
+    nom = StringField('Nom du partenaire', validators=[DataRequired()])
+    logo = FileField('Logo du partenaire (JPG ou PNG uniquement)',
+                     validators=[FileRequired(), FileAllowed(['jpg', 'png'],
+                                 "Merci de n'envoyer que des fichiers JPG ou PNG.")])
+    next = HiddenField()
+
+    def confirm(self, filename):
+        partenaire = Partenaire(self.nom.data, filename)
+        db.session.add(partenaire)
+        db.session.commit()
+        return partenaire
+
+    def filename(self):
+        _, ext = os.path.splitext(self.logo.data.filename)
+        filename = f'{hex(random.randrange(16**48))[2:]}'
+        return filename + ext
+
 class PageForm(FlaskForm):
     editor = StringField()
 
@@ -49,6 +75,3 @@ class RegisterForm(FlaskForm):
             db.session.commit()
             return user
         return None
-
-class ConfirmForm(FlaskForm):
-    pass
