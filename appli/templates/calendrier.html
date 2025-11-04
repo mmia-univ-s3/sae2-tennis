@@ -2,6 +2,18 @@
 
 {% block main %}
     <body>
-        <h1>Calendrier et résultats</h1>
+        <h1>Calendrier des compétitions</h1>
+        <h2>Compétitions individuelles</h2>
+            <ul>
+                {% for comp in comp_indiv %}
+                    <li>{{ comp.date_comp.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', type_tournoi='individuel', idC=comp.id) }}">{{ comp.titre }}</a></li>
+                {% endfor %}
+            </ul>
+        <h2>Compétitions par équipes</h2>
+            <ul>
+                {% for comp in comp_equipe %}
+                    <li>{{ comp.date_comp.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', type_tournoi='equipe', idC=comp.id) }}">{{ comp.titre }}</a></li>
+                {% endfor %}
+            </ul>
     </body>
 {% endblock %}

@@ -5,7 +5,7 @@ from flask import render_template, redirect, url_for, request
 from flask_login import logout_user, login_user, login_required, current_user
 
 from appli.forms import LoginForm, RegisterForm, ConfirmForm
-from appli.models import Utilisateur
+from appli.models import Utilisateur, ChampionnatIndividuel, ChampionnatEquipe
 from .app import app, db
 
 @app.route('/')
@@ -38,15 +38,21 @@ def competitions():
 
 @app.route('/competitions/calendrier/')
 def calendrier():
-    return render_template('calendrier.html', title="Calendrier et résultats - Compétitions")
+    list_comp_indiv = ChampionnatIndividuel.query.order_by(ChampionnatIndividuel.date_comp.desc()).all()
+    list_comp_equipe = ChampionnatEquipe.query.order_by(ChampionnatEquipe.date_comp.desc()).all()
+    return render_template('calendrier.html', title="Calendrier - Compétitions", comp_indiv=list_comp_indiv, comp_equipe=list_comp_equipe)
 
 @app.route('/competitions/palmares/')
 def palmares():
     return render_template('palmares.html', title="Palmarès - Competitions")
 
-@app.route('/competitions/tournois/')
-def tournois():
-    return render_template('tournois.html', title="Tournois - Competitions")
+@app.route('/competitions/tournoi/<type_tournoi>/<int:idC>/')
+def tournoi(type_tournoi: str, idC: int):
+    if type_tournoi == "individuel":
+        champ = ChampionnatIndividuel.query.get(idC)
+    else:
+        champ = ChampionnatEquipe.query.get(idC)
+    return render_template('tournoi.html', title="Tournoi - Competitions", championnat=champ, type_champ=type_tournoi)
 
 @app.route('/competitions/tournois-internes/')
 def internes():

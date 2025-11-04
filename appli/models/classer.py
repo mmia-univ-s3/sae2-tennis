@@ -11,7 +11,7 @@ class Classer(db.Model):
     competition = db.relationship("ChampionnatIndividuel", backref=db.backref("classer",
                                   lazy="dynamic", cascade="all, delete-orphan"))
     joueur = db.relationship("Joueur", backref=db.backref("classer",
-                             lazy="dynamic", cascade="all, delete-orphan"))
+                            lazy="dynamic", cascade="all, delete-orphan"))
 
     def __init__(self, id_championnat: int, id_j: int, rang: int):
         self._id_championnat = id_championnat
@@ -19,7 +19,7 @@ class Classer(db.Model):
         self.rang = rang
 
     def __str__(self):
-        return f"<Classer({self.id_championnat}, {self.id_j}) {self.rang}>"
+        return f"<Classer({self._id_championnat}, {self._id_j}) {self.rang}>"
 
     def __repr__(self):
         return self.__str__()

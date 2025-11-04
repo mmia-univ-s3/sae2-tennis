@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <body>
+        <h1>{{ championnat.titre }}</h1>
+        {% if type_champ == "individuel" %}
+            <h2>Championnnat individuel niveau {{ championnat.niveau }} categorie {{ championnat.categorie }} série {{ championnat.serie }}</h2>
+        {% else %}
+            <h2>Championnat par équipe</h2>
+        {% endif %}
+            <h2>Début le {{ championnat.date_comp.strftime("%d/%m/%Y") }}</h2>
+        {% if type_champ == "individuel" and championnat.classer.all()|length > 0%}
+            <table class="table table-bordered border-success">
+                <thead class="table-warning table-bordered border-success">
+                    <th scope="col"><center>Participant</center></th>
+                    <th scope="col"><center>Classement</center></th>
+                </thead>
+                <tbody>
+                    {% for classement in championnat.classer %}
+                        <tr>
+                            <td class="table-success table-bordered border-success"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
+                            <td class="table-secondary table-bordered border-success"><center>{{ classement.rang }}</center></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+        {% endif %}
+            
+    </body>
+{% endblock %}
