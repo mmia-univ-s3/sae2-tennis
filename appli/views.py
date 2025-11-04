@@ -41,7 +41,7 @@ def management():
 
 @app.route('/club/articles/')
 def articles():
-    liste_articles = Article.query.filter(Article.type_article!="pages").all()
+    liste_articles = Article.query.filter(Article.type_article != "pages").all()
     return render_template('articles.html', title="Articles du club - Club",
                            articles = liste_articles)
 
@@ -74,7 +74,7 @@ def article_delete(id_article):
         db.session.commit()
         return redirect(url_for("articles"))
     return render_template("article_delete.html", form=form,
-                           title="Suppression d'un article", art=article)
+                           title="Suppression d'un article", article=article)
 
 @app.route('/club/documents/')
 def documents():
