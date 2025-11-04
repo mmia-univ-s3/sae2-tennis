@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>Supprimer un utilisateur</h1>
+
+<form action="{{ url_for('utilisateurs_delete', login=user.login) }}" method="post" class="form-horizontal mb-3">
+  {{ form.hidden_tag() }}
+  <p>Vous allez supprimer l'utilisateur <b>{{ user.login }}</b>. Cet utilisateur ne pourra plus modifier le site. Voulez-vous continuer ?</p>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" value="Supprimer" class="btn btn-danger">
+      <a href="{{ url_for('utilisateurs') }}" class="btn btn-secondary">Annuler</a>
+    </div>
+  </div>
+</form>
+{% endblock %}

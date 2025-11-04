@@ -54,3 +54,24 @@ class PartenairesCreateForm(FlaskForm):
         _, ext = os.path.splitext(self.logo.data.filename)
         filename = f'{hex(random.randrange(16**48))[2:]}'
         return filename + ext
+
+class PageForm(FlaskForm):
+    editor = StringField()
+
+class RegisterForm(FlaskForm):
+    login = StringField('Identifiant', validators=[DataRequired()])
+    password = PasswordField('Mot de passe', validators=[DataRequired()])
+    repeat_password = PasswordField('Répétez le mot de passe', validators=[DataRequired()])
+    next = HiddenField()
+
+    def confirm(self):
+        m = sha256()
+        m.update(self.password.data.encode())
+        user = Utilisateur(self.login.data, m.hexdigest())
+        if (self.password.data == self.repeat_password.data and
+                len(self.password.data) >= 8 and len(self.login.data) >= 5):
+            db.session.add(user)
+            db.session.commit()
+            return user
+        return None
+
