@@ -5,7 +5,7 @@ from flask import render_template, redirect, url_for, request
 from flask_login import logout_user, login_user, login_required, current_user
 
 from appli.forms import LoginForm, RegisterForm, ConfirmForm
-from appli.models import Utilisateur, ChampionnatIndividuel, ChampionnatEquipe
+from appli.models import Utilisateur, ChampionnatIndividuel, ChampionnatEquipe, Affronter
 from .app import app, db
 
 @app.route('/')
@@ -50,8 +50,11 @@ def palmares():
 def tournoi(type_tournoi: str, idC: int):
     if type_tournoi == "individuel":
         champ = ChampionnatIndividuel.query.get(idC)
+        donnees = {}
     else:
         champ = ChampionnatEquipe.query.get(idC)
+        donnees = {}
+        for match in Affronter.query.filter(Affronter.championnat)
     return render_template('tournoi.html', title="Tournoi - Competitions", championnat=champ, type_champ=type_tournoi)
 
 @app.route('/competitions/tournois-internes/')

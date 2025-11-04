@@ -3,28 +3,46 @@
 {% block main %}
     <body>
         <h1>{{ championnat.titre }}</h1>
+        <h2>Début le {{ championnat.date_comp.strftime("%d/%m/%Y") }}</h2>
+        <ul>
+            {% if type_champ == "individuel" %}
+                <li>Championnnat individuel</li>
+                <li>Niveau : {{ championnat.niveau }}</li>
+            {% else %}
+                <li>Championnat par équipe</li>
+            {% endif %}
+            <li>Catégorie : {{ championnat.categorie }}</li>
+            <li>Série : {{ championnat.serie }}</li>
+        </ul>
         {% if type_champ == "individuel" %}
-            <h2>Championnnat individuel niveau {{ championnat.niveau }} categorie {{ championnat.categorie }} série {{ championnat.serie }}</h2>
+            {% if championnat.classer.all()|length > 0 %}
+                <table class="table table-bordered border-success">
+                    <thead class="table-warning table-bordered border-success">
+                        <th scope="col"><center>Participant</center></th>
+                        <th scope="col"><center>Classement</center></th>
+                    </thead>
+                    <tbody>
+                        {% for classement in championnat.classer %}
+                            <tr>
+                                <td class="table-success table-bordered border-success"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
+                                <td class="table-secondary table-bordered border-success"><center>{{ classement.rang }}</center></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucun joueur du club ne participe à ce tournoi</p>
+            {% endif %}
         {% else %}
-            <h2>Championnat par équipe</h2>
-        {% endif %}
-            <h2>Début le {{ championnat.date_comp.strftime("%d/%m/%Y") }}</h2>
-        {% if type_champ == "individuel" and championnat.classer.all()|length > 0%}
-            <table class="table table-bordered border-success">
-                <thead class="table-warning table-bordered border-success">
-                    <th scope="col"><center>Participant</center></th>
-                    <th scope="col"><center>Classement</center></th>
-                </thead>
-                <tbody>
-                    {% for classement in championnat.classer %}
-                        <tr>
-                            <td class="table-success table-bordered border-success"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
-                            <td class="table-secondary table-bordered border-success"><center>{{ classement.rang }}</center></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
+            {% if championnat.participer.all()|length == 0 %}
+                <p>Aucune équipe du club ne participe à ce tournoi</p>
+            {% else %}
+                {% for participant in championnat.participer %}
+                    <table class="table table-bordered border-success">
+                        <tr><th colspan="{{  }}"></th></tr>
+                    </table>
+                {% endfor %}
+            {% endif %}
         {% endif %}
             
     </body>
