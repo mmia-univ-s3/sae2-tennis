@@ -80,15 +80,17 @@ class RegisterForm(FlaskForm):
 
 class ArticleForm(FlaskForm):
     editor = StringField()
-    
+
 class ArticleAjoutForm(FlaskForm):
     titre = StringField('Titre', validators=[DataRequired()])
     editor = StringField('Contenu')
-    type_a = RadioField('Type', choices=[('club', 'Club'), ('stade', 'Stade')], default=1, coerce=str)
+    type_a = RadioField('Type', choices=[('club', 'Club'), ('stade', 'Stade')],
+                        default=1, coerce=str)
     next = HiddenField()
-    
+
     def creation_article(self): 
-        article = Article(self.titre.data, self.editor.data, datetime.date.today(), self.type_a.data)
+        article = Article(self.titre.data, self.editor.data, datetime.date.today(),
+                          self.type_a.data)
         db.session.add(article)
         db.session.commit()
         return article

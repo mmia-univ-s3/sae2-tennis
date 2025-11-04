@@ -5,7 +5,8 @@ import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import ArticleAjoutForm, ArticleForm, ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm
+from appli.forms import ArticleAjoutForm, ArticleForm, ConfirmForm, LoginForm,\
+    PartenairesCreateForm, PageForm, RegisterForm
 from appli.models import Partenaire, Article, Utilisateur
 from .app import app, db
 
@@ -40,8 +41,8 @@ def management():
 
 @app.route('/club/articles/')
 def articles():
-    articles = Article.query.filter(Article.type_article!="pages").all()
-    return render_template('articles.html', title="Articles du club - Club", articles = articles)
+    liste_articles = Article.query.filter(Article.type_article!="pages").all()
+    return render_template('articles.html', title="Articles du club - Club", articles = liste_articles)
 
 @app.route('/club/articles/<int:id_article>/', methods=('GET', 'POST'))
 def article_view(id_article):
@@ -52,7 +53,8 @@ def article_view(id_article):
             article.contenu = form.editor.data
             article.date = datetime.date.today()
             db.session.commit()
-    return render_template("article_view.html", title=article.titre, article=article, form=form, contenu=article.contenu)
+    return render_template("article_view.html", title=article.titre, article=article,
+                           form=form, contenu=article.contenu)
 
 @app.route('/club/articles/create/', methods=('GET', 'POST'))
 def article_create():
