@@ -1,10 +1,13 @@
 from hashlib import sha256
+import os
+import random
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, HiddenField
+from wtforms import FileField, StringField, HiddenField
 # from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 from appli.models.partenaire import Partenaire
 from appli.models.utilisateur import Utilisateur
@@ -37,10 +40,16 @@ class ConfirmForm(FlaskForm):
 
 class PartenairesCreateForm(FlaskForm):
     nom = StringField('Nom du partenaire', validators=[DataRequired()])
-    logo = StringField('url du logo', validators=[DataRequired()])
+    logo = FileField('image du logo en jpg ou png seulement', validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
+    next = HiddenField()
 
-    def confirm(self):
-        partenaire = Partenaire(self.nom.data, self.logo.data)
+    def confirm(self, filename):
+        partenaire = Partenaire(self.nom.data, filename)
         db.session.add(partenaire)
         db.session.commit()
         return partenaire
+
+    def filename(self): 
+        _, ext = os.path.splitext(self.logo.data.filename)
+        filename = '%030x' % random.randrange(16**48)
+        return filename + ext

@@ -2,7 +2,7 @@
 
 {% block main %}
     <h1>Suppression d'un partenaire</h1>
-    <form action="{{ url_for('partenaire_delete', idP=parte.id) }}" method="post" class="form-horizontal mb-3">
+    <form action="{{ url_for('partenaire_delete', id_p=parte.id) }}" method="post" class="form-horizontal mb-3">
         {{ form.hidden_tag() }}
         <p>Vous allez supprimer le partenaire <b>{{ parte.nom }}</b>. Ce partenaire ne sera plus visible sur le site. Voulez-vous continuer ?</p>
         <div class="form-group">

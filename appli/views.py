@@ -1,6 +1,7 @@
 import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user
+from werkzeug.utils import secure_filename
 
 from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm
 from appli.models.partenaire import Partenaire
@@ -67,7 +68,7 @@ def partenaires():
     parts = Partenaire.query.all()
     return render_template('partenaires.html', title="Partenaires", partenaires = parts)
 
-@app.route('/partenaire/<idP>/delete/', methods=("GET", "POST",))
+@app.route('/partenaire/<id_p>/delete/', methods=("GET", "POST",))
 @login_required
 def partenaire_delete(id_p: int):
     part = Partenaire.query.get(id_p)
@@ -75,7 +76,8 @@ def partenaire_delete(id_p: int):
     if form.validate_on_submit():
         db.session.delete(part)
         db.session.commit()
-        os.remove('./static/' + part.logo)
+        if os.path.exists(os.path.join("appli", "static", part.logo)):
+            os.remove(os.path.join("appli", "static", part.logo))
         return redirect(url_for("partenaires"))
     return render_template("partenaires_delete.html", form=form,
                            title="Suppression d'un partenaire", parte = part)
@@ -84,9 +86,11 @@ def partenaire_delete(id_p: int):
 def partenaire_create():
     form = PartenairesCreateForm()
     if form.validate_on_submit():
-        partenaire = form.confirm()
-        if partenaire:
-            return redirect(form.next.data or url_for("partenaires"))
+        filename = form.filename()
+        form.confirm(filename)
+        photo = form.logo.data
+        photo.save(os.path.join("appli", "static", filename))
+        return redirect(form.next.data or url_for("partenaires"))
     return render_template('partenaires_ajout.html', title="Partenaires", form=form)
 
 @app.route('/contacts/')
