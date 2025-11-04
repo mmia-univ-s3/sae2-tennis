@@ -74,9 +74,22 @@ def formation():
 def tarifications():
     return render_template('tarifications.html', title="Tarifications - Formation")
 
-@app.route('/formation/ecole-de-tennis/')
+@app.route('/formation/ecole-de-tennis/', methods=('GET', 'POST'))
 def ecole():
-    return render_template('ecole.html', title="École de Tennis - Formation")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_ecole" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_ecole", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('ecole.html', title="École de Tennis - Formation",
+                           contenu=article.contenu, form=form)
 
 @app.route('/partenaires/')
 def partenaires():
