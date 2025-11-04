@@ -86,9 +86,22 @@ def partenaires():
 def contacts():
     return render_template('contacts.html', title="Contacts")
 
-@app.route('/autre-sports/')
+@app.route('/autre-sports/', methods=('GET', 'POST'))
 def autre():
-    return render_template('autre.html', title="Autres sports sur le stade")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_autre" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_autre", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('autre.html', title="Autres sports sur le stade",
+                           contenu=article.contenu, form=form)
 
 @app.route('/connexion/', methods=('GET', 'POST'))
 def connexion():
