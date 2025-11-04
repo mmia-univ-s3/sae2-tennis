@@ -1,8 +1,10 @@
+import os
 from flask import render_template, redirect, url_for, request
-from flask_login import logout_user, login_user
+from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import LoginForm
-from .app import app
+from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm
+from appli.models.partenaire import Partenaire
+from .app import app, db
 
 @app.route('/')
 def index():
@@ -62,7 +64,29 @@ def ecole():
 
 @app.route('/partenaires/')
 def partenaires():
-    return render_template('partenaires.html', title="Partenaires")
+    parts = Partenaire.query.all()
+    return render_template('partenaires.html', title="Partenaires", partenaires = parts)
+
+@app.route('/partenaire/<idP>/delete/', methods=("GET", "POST",))
+@login_required
+def partenaire_delete(idP: int):
+    part = Partenaire.query.get(idP)
+    form = ConfirmForm()
+    if form.validate_on_submit():
+        db.session.delete(part)
+        db.session.commit()
+        os.remove('./static/' + part.logo)
+        return redirect(url_for("partenaires"))
+    return render_template("partenaires_delete.html", form=form, title="Suppression d'un partenaire", parte = part)
+
+@app.route('/partenaire/ajout/', methods=("GET", "POST",))
+def partenaire_create():
+    form = PartenairesCreateForm()
+    if form.validate_on_submit(): 
+        partenaire = form.confirm()
+        if partenaire: 
+            return redirect(form.next.data or url_for("partenaires"))
+    return render_template('partenaires_ajout.html', title="Partenaires", form=form)
 
 @app.route('/contacts/')
 def contacts():
