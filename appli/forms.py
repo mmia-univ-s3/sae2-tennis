@@ -40,7 +40,7 @@ class ConfirmForm(FlaskForm):
 
 class PartenairesCreateForm(FlaskForm):
     nom = StringField('Nom du partenaire', validators=[DataRequired()])
-    logo = FileField('image du logo en jpg ou png seulement', 
+    logo = FileField('image du logo en jpg ou png seulement',
                      validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
     next = HiddenField()
 
