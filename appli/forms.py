@@ -30,6 +30,9 @@ class LoginForm(FlaskForm):
         password = m.hexdigest()
         return user if password == user.mdp else None
 
+class PageForm(FlaskForm):
+    editor = StringField()
+
 class RegisterForm(FlaskForm):
     login = StringField('Identifiant', validators=[DataRequired()])
     password = PasswordField('Mot de passe', validators=[DataRequired()])

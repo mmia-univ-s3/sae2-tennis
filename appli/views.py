@@ -1,11 +1,12 @@
 from hashlib import sha256
 import random
+import datetime
 
 from flask import render_template, redirect, url_for, request
 from flask_login import logout_user, login_user, login_required, current_user
 
-from appli.forms import LoginForm, RegisterForm, ConfirmForm
-from appli.models import Utilisateur
+from appli.forms import LoginForm, PageForm, RegisterForm, ConfirmForm
+from appli.models import Article, Utilisateur
 from .app import app, db
 
 @app.route('/')
@@ -20,9 +21,22 @@ def club():
 def histoire():
     return render_template('histoire.html', title="Histoire et présentation - Club")
 
-@app.route('/club/management/')
+@app.route('/club/management/', methods=('GET', 'POST'))
 def management():
-    return render_template('management.html', title="Management du club - Club")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_management" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_management", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('management.html', title="Management du club - Club",
+                           contenu=article.contenu, form=form)
 
 @app.route('/club/articles/')
 def articles():

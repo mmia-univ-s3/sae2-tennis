@@ -4,14 +4,12 @@ Pour ajouter l'éditeur dans votre code HTML :
 
 <form>
   ...
-  {% extends "editor.html" %}
-  {% block content %}
-    (le contenu de base de l'éditeur)
-  {% endblock %}
+  {% import "editor.html" %}
   ...
 </form>
 
-Cela ajoute un élément "editor" dans votre formulaire.
+Cela ajoute un élément "editor" dans votre formulaire. Assurez-vous d'avoir une variable "contenu" qui contient le texte
+de base de l'éditeur HTML.
 
 -->
 
