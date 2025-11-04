@@ -40,8 +40,8 @@ class ConfirmForm(FlaskForm):
 
 class PartenairesCreateForm(FlaskForm):
     nom = StringField('Nom du partenaire', validators=[DataRequired()])
-    logo = FileField('image du logo en jpg ou png seulement',
-                     validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
+    logo = FileField('Logo du partenaire (JPG ou PNG uniquement)',
+                     validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Merci de n'envoyer que des fichiers JPG ou PNG.')])
     next = HiddenField()
 
     def confirm(self, filename):
@@ -74,4 +74,3 @@ class RegisterForm(FlaskForm):
             db.session.commit()
             return user
         return None
-
