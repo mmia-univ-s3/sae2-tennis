@@ -88,21 +88,24 @@ def tarifications():
     return render_template('tarifications.html', title="Tarifications - Formation",
                            cate_rese=list_cate_rese_tennis, cate_redu=list_cate_redu_tennis,
                            cate_padel=list_cate_padel)
-    
+
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/')
 @login_required
 def tarifications_souscategorie_ajout(id_cat):
-    return render_template('tarifications_demande_ajout.html', title="Ajouter une sous-catégorie", id_cate=id_cat)
-    
+    return render_template('tarifications_demande_ajout.html',
+                           title="Ajouter une sous-catégorie", id_cate=id_cat)
+
 @app.route('/formation/tarifications/ajout/')
 @login_required
 def tarifications_categorie_ajout(id_cat):
-    return render_template('tarifications_demande_ajout.html', title="Ajouter une catégorie", id_cate=id_cat)
+    return render_template('tarifications_demande_ajout.html',
+                           title="Ajouter une catégorie", id_cate=id_cat)
 
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/')
 @login_required
 def tarifications_tarif_ajout(id_cat):
-    return render_template('tarifications_ajout_intitule.html', title="Ajouter un tarif dans une catégorie", id_cate=id_cat)
+    return render_template('tarifications_ajout_intitule.html',
+                           title="Ajouter un tarif dans une catégorie", id_cate=id_cat)
 
 @app.route('/formation/tarifications/categorie/<id_cat>/delete/', methods=('GET', 'POST'))
 @login_required
@@ -113,7 +116,9 @@ def tarifications_categorie_delete(id_cat):
         db.session.delete(categorie)
         db.session.commit()
         return redirect(url_for("tarifications"))
-    return render_template('tarifications_delete_categorie.html', title="Supprimer une catégorie ou sous-catégorie", id_cate=id_cat, form=form, categorie=categorie)
+    return render_template('tarifications_delete_categorie.html',
+                           title="Supprimer une catégorie ou sous-catégorie",
+                           id_cate=id_cat, form=form, categorie=categorie)
 
 @app.route('/formation/tarifications/tarif/<id_t>/delete/', methods=('GET', 'POST'))
 @login_required
@@ -124,7 +129,8 @@ def tarifications_tarif_delete(id_t):
         db.session.delete(tarif)
         db.session.commit()
         return redirect(url_for("tarifications"))
-    return render_template('tarifications_delete_intitule.html', title="Supprimer un tarif", idt=id_t, tarif=tarif, form=form)
+    return render_template('tarifications_delete_intitule.html',
+                           title="Supprimer un tarif", idt=id_t, tarif=tarif, form=form)
 
 @app.route('/formation/ecole-de-tennis/', methods=('GET', 'POST'))
 def ecole():
