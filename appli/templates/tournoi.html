@@ -38,9 +38,9 @@
                 <p>Aucune équipe du club ne participe à ce tournoi</p>
             {% else %}
                 {% for participant in championnat.participer %}
-                    <table class="table-responsive table-success table-bordered border-success table align-middle">
+                    <table class="table-responsive table-bordered border-success table align-middle">
                         <tbody>
-                            <tr>
+                            <tr class="table-success">
                                 <th colspan="{{ stades[participant.equipe.id]|length * 2 }}"><center>{{ participant.equipe.nom }}</center></th>
                                 <th><center>{{ participant.rang }}{% if participant.rang == 1 %}ère{% else %}e{% endif %}</center></th>
                             </tr>
@@ -56,7 +56,7 @@
                                     <th class="table-warning table-bordered border-success" scope="row">{{ date_match.strftime("%d/%m/%Y") }}</th>
                                     {% for stade in stades[participant.equipe.id] %}
                                         {% if matchs[participant.equipe.id][date_match][stade] == None %}
-                                            <td class="table-light table-bordered border-success" colspan="2"><center> - </center></td>
+                                            <td colspan="2"><center> - </center></td>
                                         {% elif matchs[participant.equipe.id][date_match][stade].domicile %}
                                             <td class="table-primary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].adversaire }}</center></td>
                                             <td class="table-primary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].resultat }} {{ matchs[participant.equipe.id][date_match][stade].score }}</center></td>
