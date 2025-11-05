@@ -5,7 +5,8 @@ import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import CategorieForm, ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm, SousCategorieForm, TarifFormReduction, TarifFormReservation
+from appli.forms import CategorieForm, ConfirmForm, LoginForm, PartenairesCreateForm,\
+    PageForm, RegisterForm, SousCategorieForm, TarifFormReduction, TarifFormReservation
 from appli.models import CategorieTarif, Partenaire, Article, Utilisateur
 from appli.models.reduction import Reduction
 from appli.models.reservation import Reservation
@@ -150,8 +151,9 @@ def tarifications_tarif_delete(id_t):
         return redirect(url_for("tarifications"))
     return render_template('tarifications_delete_intitule.html',
                            title="Supprimer un tarif", idt=id_t, tarif=tarif, form=form)
-    
-@app.route('/formation/tarifications/categorie/<id_cat>/ajout/reservation/', methods=('GET', 'POST'))
+
+@app.route('/formation/tarifications/categorie/<id_cat>/ajout/reservation/',
+           methods=('GET', 'POST'))
 @login_required
 def tarifications_ajout_tarif_reservation(id_cat):
     form = TarifFormReservation()
@@ -163,7 +165,8 @@ def tarifications_ajout_tarif_reservation(id_cat):
         db.session.add(reservation)
         db.session.commit()
         return redirect(url_for("tarifications"))
-    return render_template('tarifications_ajout_tarif_reservation.html', title="Ajouter une réservation", form=form, id_cat=id_cat)
+    return render_template('tarifications_ajout_tarif_reservation.html',
+                           title="Ajouter une réservation", form=form, id_cat=id_cat)
 
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/reduction/', methods=('GET', 'POST'))
 @login_required
@@ -177,7 +180,8 @@ def tarifications_ajout_tarif_reduction(id_cat):
         db.session.add(reduction)
         db.session.commit()
         return redirect(url_for("tarifications"))
-    return render_template('tarifications_ajout_tarif_reduction.html', title="Ajouter une réduction", form=form, id_cat=id_cat)
+    return render_template('tarifications_ajout_tarif_reduction.html',
+                           title="Ajouter une réduction", form=form, id_cat=id_cat)
 
 @app.route('/formation/ecole-de-tennis/', methods=('GET', 'POST'))
 def ecole():
