@@ -5,9 +5,11 @@ import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import ArticleAjoutForm, ArticleForm, ConfirmForm, LoginForm,\
-    PartenairesCreateForm, PageForm, RegisterForm
-from appli.models import Partenaire, Article, Utilisateur
+from appli.forms import ArticleAjoutForm, ArticleForm, CategorieForm, ConfirmForm, \
+    LoginForm, PartenairesCreateForm, PageForm, RegisterForm, SousCategorieForm, \
+    TarifFormReduction, TarifFormReservation
+from appli.models import CategorieTarif, Partenaire, Article, Utilisateur, \
+    Reduction, Reservation, Tarif
 from .app import app, db
 
 @app.route('/')
@@ -122,7 +124,112 @@ def formation():
 
 @app.route('/formation/tarifications/')
 def tarifications():
-    return render_template('tarifications.html', title="Tarifications - Formation")
+    # pylint: disable=protected-access,singleton-comparison
+    list_cate_tennis = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
+                                                   CategorieTarif.sport == "tennis").all()
+    list_cate_rese_tennis = filter(lambda x: (len(x.enfants) > 0 and \
+                            len(x.enfants[0].tarifs.all()) > 0 and \
+                            len(x.enfants[0].tarifs[0].reductions.all()) == 0) or \
+                            (x.parent is None and \
+                            (len(x.enfants) == 0 or \
+                            (len(x.enfants) > 0 and \
+                            len(x.enfants[0].tarifs.all()) == 0))), list_cate_tennis)
+    list_cate_redu_tennis = filter(lambda x: len(x.enfants) > 0 and \
+                            len(x.enfants[0].tarifs.all()) > 0 and \
+                            len(x.enfants[0].tarifs[0].reductions.all()) > 0, list_cate_tennis)
+    # pylint: disable=protected-access,singleton-comparison
+    list_cate_padel = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
+                                                  CategorieTarif.sport == "padel").all()
+    return render_template('tarifications.html', title="Tarifications - Formation",
+                           cate_rese=list_cate_rese_tennis, cate_redu=list_cate_redu_tennis,
+                           cate_padel=list_cate_padel)
+
+@app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/', methods=('GET', 'POST'))
+@login_required
+def tarifications_souscategorie_ajout(id_cat):
+    form = SousCategorieForm()
+    categorie = CategorieTarif.query.get(id_cat)
+    if form.validate_on_submit():
+        categorie = CategorieTarif(categorie.sport, form.intituleCat.data, id_cat)
+        db.session.add(categorie)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_ajout_sous_categorie.html',
+                           title="Ajouter une sous-catégorie", id_cat=id_cat, form=form)
+
+@app.route('/formation/tarifications/ajout/categorie/', methods=('GET', 'POST'))
+@login_required
+def tarifications_categorie_ajout():
+    form = CategorieForm()
+    if form.validate_on_submit():
+        categorie = CategorieTarif(form.sport.data, form.intituleCat.data)
+        db.session.add(categorie)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_ajout_categorie.html',
+                           title="Ajouter une catégorie", form=form)
+
+@app.route('/formation/tarifications/categorie/<id_cat>/ajout/')
+@login_required
+def tarifications_tarif_ajout(id_cat):
+    return render_template('tarifications_ajout_intitule.html',
+                           title="Ajouter un tarif dans une catégorie", id_cat=id_cat)
+
+@app.route('/formation/tarifications/categorie/<id_cat>/delete/', methods=('GET', 'POST'))
+@login_required
+def tarifications_categorie_delete(id_cat):
+    categorie = CategorieTarif.query.get(id_cat)
+    form = ConfirmForm()
+    if form.validate_on_submit():
+        db.session.delete(categorie)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_delete_categorie.html',
+                           title="Supprimer une catégorie ou sous-catégorie",
+                           id_cate=id_cat, form=form, categorie=categorie)
+
+@app.route('/formation/tarifications/tarif/<id_t>/delete/', methods=('GET', 'POST'))
+@login_required
+def tarifications_tarif_delete(id_t):
+    tarif = Tarif.query.get(id_t)
+    form = ConfirmForm()
+    if form.validate_on_submit():
+        db.session.delete(tarif)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_delete_intitule.html',
+                           title="Supprimer un tarif", idt=id_t, tarif=tarif, form=form)
+
+@app.route('/formation/tarifications/categorie/<id_cat>/ajout/reservation/',
+           methods=('GET', 'POST'))
+@login_required
+def tarifications_ajout_tarif_reservation(id_cat):
+    form = TarifFormReservation()
+    if form.validate_on_submit():
+        tarif = Tarif(form.intituleT.data, id_cat)
+        db.session.add(tarif)
+        db.session.commit()
+        reservation = Reservation(tarif.id, form.montant.data)
+        db.session.add(reservation)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_ajout_tarif_reservation.html',
+                           title="Ajouter une réservation", form=form, id_cat=id_cat)
+
+@app.route('/formation/tarifications/categorie/<id_cat>/ajout/reduction/', methods=('GET', 'POST'))
+@login_required
+def tarifications_ajout_tarif_reduction(id_cat):
+    form = TarifFormReduction()
+    if form.validate_on_submit():
+        tarif = Tarif(form.intituleT.data, id_cat)
+        db.session.add(tarif)
+        db.session.commit()
+        reduction = Reduction(tarif.id, form.taux.data, form.estCumulable.data)
+        db.session.add(reduction)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_ajout_tarif_reduction.html',
+                           title="Ajouter une réduction", form=form, id_cat=id_cat)
 
 @app.route('/formation/ecole-de-tennis/', methods=('GET', 'POST'))
 def ecole():

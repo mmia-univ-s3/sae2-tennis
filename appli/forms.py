@@ -5,7 +5,7 @@ import random
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import RadioField, StringField, HiddenField
+from wtforms import RadioField, BooleanField, FloatField, SelectField, StringField, HiddenField
 # from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired
@@ -57,6 +57,24 @@ class PartenairesCreateForm(FlaskForm):
         _, ext = os.path.splitext(self.logo.data.filename)
         filename = f'{hex(random.randrange(16**48))[2:]}'
         return filename + ext
+
+class TarifFormReservation(FlaskForm):
+    intituleT = StringField('Intitule du tarif', validators=[DataRequired()])
+    montant = FloatField('Montant du tarif', validators=[DataRequired()])
+
+class TarifFormReduction(FlaskForm):
+    intituleT = StringField('Intitulé du tarif', validators=[DataRequired()])
+    taux = StringField('La réduction', validators=[DataRequired()])
+    estCumulable = BooleanField('Cumulable')
+
+class SousCategorieForm(FlaskForm):
+    intituleCat = StringField("L'intitulé de la catégorie",
+                              validators=[DataRequired()])
+
+class CategorieForm(FlaskForm):
+    intituleCat = StringField("L'intitulé de la catégorie", validators=[DataRequired()])
+    sport = SelectField("Sport", validators=[DataRequired()],
+                        choices=[("tennis", "Tennis"), ("padel", "Padel")])
 
 class PageForm(FlaskForm):
     editor = StringField()
