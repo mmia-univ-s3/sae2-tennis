@@ -230,7 +230,7 @@ def tarifications_ajout_tarif_reduction(id_cat):
         return redirect(url_for("tarifications"))
     return render_template('tarifications_ajout_tarif_reduction.html',
                            title="Ajouter une réduction", form=form, id_cat=id_cat)
-    
+
 @app.route('/formation/tarifications/tarif/<id_tarif>/update-reservation/', methods=('GET', 'POST'))
 @login_required
 def tarifications_reservations_update(id_tarif):
@@ -243,7 +243,7 @@ def tarifications_reservations_update(id_tarif):
         return redirect(url_for("tarifications"))
     return render_template('tarifications_reservations_update.html',
                            title="Ajouter une réduction", form=form, resa=reservation)
-    
+
 @app.route('/formation/tarifications/tarif/<id_tarif>/update-reduction/', methods=('GET', 'POST'))
 @login_required
 def tarifications_reductions_update(id_tarif):
