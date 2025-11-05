@@ -18,20 +18,8 @@
                             </th>
                         {% endif %}
                     </tr>
-                    {% for sous_cat in categorie.enfants %}
-                        <tr>
-                            <th colspan="2" class="bg-warning-subtle">
-                                <center>{{ sous_cat.intitule }}</center>
-                             </th>
-                            {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
-                                    <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
-                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                            {% endif %}
-                           
-                        </tr>
-                        {% for tarif in sous_cat.tarifs %}
+                    {% if categorie.enfants|length == 0 %}
+                        {% for tarif in categorie.tarifs %}
                             <tr>
                                 <td>
                                     <center>{{ tarif.intitule }}</center>
@@ -50,7 +38,40 @@
                                 {% endif %}
                             </tr>
                         {% endfor %}
-                    {% endfor %}
+                    {% else %}
+                        {% for sous_cat in categorie.enfants %}
+                            <tr>
+                                <th colspan="2" class="bg-warning-subtle">
+                                    <center>{{ sous_cat.intitule }}</center>
+                                </th>
+                                {% if current_user.is_authenticated %}
+                                <th style="width: 123px;">
+                                    <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
+                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
+                                </th>
+                                {% endif %}
+                            </tr>
+                            {% for tarif in sous_cat.tarifs %}
+                                <tr>
+                                    <td>
+                                        <center>{{ tarif.intitule }}</center>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        {% if tarif.reservations[0] %}
+                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    {% else %}
+                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
+                                    {% endif %}
+                                    </td>
+                                    {% if current_user.is_authenticated %}
+                                <th style="width: 123px; text-align: right;">
+                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
+                                </th>
+                                {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         {% endfor %}
@@ -97,19 +118,8 @@
                                 </th>
                         {% endif %}
                     </tr>
-                    {% for sous_cat in categorie.enfants %}
-                        <tr>
-                            <th colspan="2" class="bg-warning-subtle">
-                                <center>{{ sous_cat.intitule }}</center>
-                            </th>
-                            {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
-                                    <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
-                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                            {% endif %}
-                        </tr>
-                        {% for tarif in sous_cat.tarifs %}
+                    {% if categorie.enfants|length == 0 %}
+                        {% for tarif in categorie.tarifs %}
                             <tr>
                                 <td>
                                     <center>{{ tarif.intitule }}</center>
@@ -128,7 +138,40 @@
                                 {% endif %}
                             </tr>
                         {% endfor %}
-                    {% endfor %}
+                    {% else %}
+                        {% for sous_cat in categorie.enfants %}
+                            <tr>
+                                <th colspan="2" class="bg-warning-subtle">
+                                    <center>{{ sous_cat.intitule }}</center>
+                                </th>
+                                {% if current_user.is_authenticated %}
+                                <th style="width: 123px;">
+                                    <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
+                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
+                                </th>
+                                {% endif %}
+                            </tr>
+                            {% for tarif in sous_cat.tarifs %}
+                                <tr>
+                                    <td>
+                                        <center>{{ tarif.intitule }}</center>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        {% if tarif.reservations[0] %}
+                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    {% else %}
+                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
+                                    {% endif %}
+                                    </td>
+                                    {% if current_user.is_authenticated %}
+                                <th style="width: 123px; text-align: right;">
+                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
+                                </th>
+                                {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         {% endfor %}
@@ -174,7 +217,11 @@
                                     <center>{{ tarif.intitule }}</center>
                                 </td>
                                 <td style="width: 200px;">
-                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    {% if tarif.reservations[0] %}
+                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    {% else %}
+                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
+                                    {% endif %}
                                 </td>
                                 {% if current_user.is_authenticated %}
                                 <th style="width: 123px; text-align: right;">
@@ -202,7 +249,11 @@
                                         <center>{{ tarif.intitule }}</center>
                                     </td>
                                     <td style="width: 200px;">
+                                        {% if tarif.reservations[0] %}
                                         <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    {% else %}
+                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
+                                    {% endif %}
                                     </td>
                                     {% if current_user.is_authenticated %}
                                 <th style="width: 123px; text-align: right;">
@@ -227,5 +278,10 @@
                 </tbody>
             </table>
         {% endfor %}
+        {% if current_user.is_authenticated %}
+            <th style="width: 123px;">
+                <center><a href="{{ url_for('tarifications_categorie_ajout')}}" class="btn btn-primary">Ajouter une catégorie</a></center>
+            </th>
+        {% endif %}
     </body>
 {% endblock %}

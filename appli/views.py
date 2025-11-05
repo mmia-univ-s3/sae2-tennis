@@ -5,7 +5,7 @@ import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm, SousCategorieForm, TarifFormReduction, TarifFormReservation
+from appli.forms import CategorieForm, ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm, SousCategorieForm, TarifFormReduction, TarifFormReservation
 from appli.models import CategorieTarif, Partenaire, Article, Utilisateur
 from appli.models.reduction import Reduction
 from appli.models.reservation import Reservation
@@ -78,9 +78,13 @@ def tarifications():
     # pylint: disable=protected-access,singleton-comparison
     list_cate_tennis = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
                                                    CategorieTarif.sport == "tennis").all()
-    list_cate_rese_tennis = filter(lambda x: len(x.enfants) > 0 and \
+    list_cate_rese_tennis = filter(lambda x: (len(x.enfants) > 0 and \
                             len(x.enfants[0].tarifs.all()) > 0 and \
-                            len(x.enfants[0].tarifs[0].reservations.all()) > 0, list_cate_tennis)
+                            len(x.enfants[0].tarifs[0].reductions.all()) == 0) or \
+                            (x.parent is None and \
+                            (len(x.enfants) == 0 or \
+                            (len(x.enfants) > 0 and \
+                            len(x.enfants[0].tarifs.all()) == 0))), list_cate_tennis)
     list_cate_redu_tennis = filter(lambda x: len(x.enfants) > 0 and \
                             len(x.enfants[0].tarifs.all()) > 0 and \
                             len(x.enfants[0].tarifs[0].reductions.all()) > 0, list_cate_tennis)
@@ -94,8 +98,8 @@ def tarifications():
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/', methods=('GET', 'POST'))
 @login_required
 def tarifications_souscategorie_ajout(id_cat):
-    categorie = CategorieTarif.query.get(id_cat)
     form = SousCategorieForm()
+    categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
         categorie = CategorieTarif(categorie.sport, form.intituleCat.data, id_cat)
         db.session.add(categorie)
@@ -104,10 +108,17 @@ def tarifications_souscategorie_ajout(id_cat):
     return render_template('tarifications_ajout_sous_categorie.html',
                            title="Ajouter une sous-catégorie", id_cat=id_cat, form=form)
 
-@app.route('/formation/tarifications/ajout/')
+@app.route('/formation/tarifications/ajout/categorie/', methods=('GET', 'POST'))
 @login_required
-def tarifications_categorie_ajout(id_cat):
-    pass
+def tarifications_categorie_ajout():
+    form = CategorieForm()
+    if form.validate_on_submit():
+        categorie = CategorieTarif(form.sport.data, form.intituleCat.data)
+        db.session.add(categorie)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_ajout_categorie.html',
+                           title="Ajouter une catégorie", form=form)
 
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/')
 @login_required
