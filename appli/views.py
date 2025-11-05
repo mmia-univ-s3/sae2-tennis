@@ -116,29 +116,39 @@ def palmares():
 def tournoi(type_tournoi: str, idC: int):
     if type_tournoi == "individuel":
         champ = ChampionnatIndividuel.query.get(idC)
-        ensemble_stades = {}
+        liste_stades = {}
+        liste_dates = {}
         donnees = {}
     else:
         champ = ChampionnatEquipe.query.get(idC)
-        ensemble_stades = {}
+        liste_stades = {}
+        liste_dates = {}
         donnees = {}
         for participant in champ.participer:
             id_equipe = participant.equipe.id
             donnees[id_equipe] = {}
-            ensemble_stades[id_equipe] = set()
+            liste_stades[id_equipe] = []
+            liste_dates[id_equipe] = []
             for match in Affronter.query.filter(Affronter.championnat == champ,
                                                 Affronter.equipe == participant.equipe):
-                if match.date_match not in donnees:
+                if match.date_match not in donnees[id_equipe]:
                     donnees[id_equipe][match.date_match] = {match.stade : match}
-                    ensemble_stades[id_equipe].add(match.stade)
-                elif match.stade not in donnees[match.date_match]:
+                    if match.stade not in liste_stades[id_equipe]:
+                        liste_stades[id_equipe].append(match.stade)
+                    if match.date_match not in liste_dates[id_equipe]:
+                        liste_dates[id_equipe].append(match.date_match)
+                elif match.stade not in donnees[id_equipe][match.date_match]:
                     donnees[id_equipe][match.date_match][match.stade] = match
-                    ensemble_stades[id_equipe].add(match.stade)
-            for date_match in donnees[id_equipe]:
-                for stade in ensemble_stades[id_equipe]:
+                    if match.stade not in liste_stades[id_equipe]:
+                        liste_stades[id_equipe].append(match.stade)
+            for date_match in liste_dates[id_equipe]:
+                for stade in liste_stades[id_equipe]:
                     donnees[id_equipe][date_match].setdefault(stade, None)
+            liste_stades[id_equipe].sort()
+            liste_dates[id_equipe].sort()
     return render_template('tournoi.html', title="Tournoi - Competitions", championnat=champ,
-                           type_champ=type_tournoi, matchs=donnees, stades=ensemble_stades)
+                           type_champ=type_tournoi, matchs=donnees, stades=liste_stades,
+                           dates=liste_dates)
 
 @app.route('/competitions/tournois-internes/')
 def internes():

@@ -13,9 +13,9 @@ class Affronter(db.Model):
     adversaire: str = db.Column("nomAdv", db.String(100), primary_key=True)
     resultat: str = db.Column("resultat", db.Text)
     score: int = db.Column("score", db.Text)
-    stade: str = db.Column("stade", db.Text)
+    stade: str = db.Column("stade", db.String(50), primary_key=True)
     domicile: bool = db.Column("estDomicile", db.Boolean)
-    date_match: date = db.Column("dateMatch", db.Date)
+    date_match: date = db.Column("dateMatch", db.Date, primary_key=True)
 
     championnat = db.relationship("ChampionnatEquipe", backref=db.backref("affronter",
                                   lazy="dynamic", cascade="all, delete-orphan"))
