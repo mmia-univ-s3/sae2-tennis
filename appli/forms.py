@@ -5,7 +5,8 @@ import random
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import IntegerField, RadioField, BooleanField, FloatField, SelectField, StringField, HiddenField
+from wtforms import IntegerField, RadioField, BooleanField,\
+    FloatField, SelectField, StringField, HiddenField
 # from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired
