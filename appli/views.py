@@ -23,9 +23,22 @@ def index():
 def club():
     return redirect(url_for('histoire'), 301)
 
-@app.route('/club/histoire/')
+@app.route('/club/histoire/', methods=('GET', 'POST'))
 def histoire():
-    return render_template('histoire.html', title="Histoire et présentation - Club")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_histoire" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_histoire", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('histoire.html', title="Histoire du club - Club",
+                           contenu=article.contenu, form=form)
 
 @app.route('/club/management/', methods=('GET', 'POST'))
 def management():
