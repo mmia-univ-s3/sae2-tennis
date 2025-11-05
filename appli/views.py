@@ -38,31 +38,31 @@ def histoire():
             article.contenu = form.editor.data
             article.date = datetime.date.today()
             db.session.commit()
-    histoire = {}
+    dates = {}
     for texte in Histoire.query.order_by(Histoire.annee).all():
-        if texte.annee not in histoire:
-            histoire[texte.annee] = []
-        histoire[texte.annee].append((texte.id, texte.trivia))
+        if texte.annee not in dates:
+            dates[texte.annee] = []
+        dates[texte.annee].append((texte.id, texte.trivia))
     return render_template('histoire.html', title="Histoire du club - Club",
-                           contenu=article.contenu, form=form, histoire=histoire)
-    
-@app.route('/club/histoire/<idH>/delete/', methods=('GET', 'POST'))
-def histoire_delete(idH):
+                           contenu=article.contenu, form=form, histoire=dates)
+
+@app.route('/club/histoire/<id_h>/delete/', methods=('GET', 'POST'))
+def histoire_delete(id_h):
     form = ConfirmForm()
-    histoire = Histoire.query.get(idH)
+    date = Histoire.query.get(id_h)
     if form.validate_on_submit():
-        db.session.delete(histoire)
+        db.session.delete(date)
         db.session.commit()
         return redirect(url_for("histoire"))
     return render_template("histoire_delete_date.html", form=form,
-                           title="Suppression d'une date", id_h=idH)
-    
+                           title="Suppression d'une date", id_h=id_h)
+
 @app.route('/club/histoire/ajout/', methods=('GET', 'POST'))
 def histoire_ajout():
     form = HistoireForm()
     if form.validate_on_submit():
-        histoire = Histoire(form.annee.data, form.trivia.data)
-        db.session.add(histoire)
+        date = Histoire(form.annee.data, form.trivia.data)
+        db.session.add(date)
         db.session.commit()
         return redirect(url_for("histoire"))
     return render_template("histoire_ajout_date.html", form=form,

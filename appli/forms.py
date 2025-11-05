@@ -75,7 +75,7 @@ class CategorieForm(FlaskForm):
     intituleCat = StringField("L'intitulé de la catégorie", validators=[DataRequired()])
     sport = SelectField("Sport", validators=[DataRequired()],
                         choices=[("tennis", "Tennis"), ("padel", "Padel")])
-    
+
 class HistoireForm(FlaskForm):
     annee = IntegerField("L'année", validators=[DataRequired()])
     trivia = StringField("Texte", validators=[DataRequired()])
