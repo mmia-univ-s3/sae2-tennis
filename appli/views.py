@@ -231,6 +231,33 @@ def tarifications_ajout_tarif_reduction(id_cat):
     return render_template('tarifications_ajout_tarif_reduction.html',
                            title="Ajouter une réduction", form=form, id_cat=id_cat)
 
+@app.route('/formation/tarifications/tarif/<id_tarif>/update-reservation/', methods=('GET', 'POST'))
+@login_required
+def tarifications_reservations_update(id_tarif):
+    reservation = Reservation.query.get(id_tarif)
+    form = TarifFormReservation(intituleT=reservation.tarif.intitule, montant=reservation.montant)
+    if form.validate_on_submit():
+        reservation.tarif.intitule = form.intituleT.data
+        reservation.montant = form.montant.data
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_reservations_update.html',
+                           title="Ajouter une réduction", form=form, resa=reservation)
+
+@app.route('/formation/tarifications/tarif/<id_tarif>/update-reduction/', methods=('GET', 'POST'))
+@login_required
+def tarifications_reductions_update(id_tarif):
+    reduction = Reduction.query.get(id_tarif)
+    form = TarifFormReduction(intituleT=reduction.tarif.intitule, taux=reduction.taux,
+                              estCumulable=reduction.cumulable)
+    if form.validate_on_submit():
+        reduction.tarif.intitule = form.intituleT.data
+        reduction.taux = form.taux.data
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_reductions_update.html',
+                           title="Ajouter une réduction", form=form, reduc=reduction)
+
 @app.route('/formation/ecole-de-tennis/', methods=('GET', 'POST'))
 def ecole():
     form = PageForm()
