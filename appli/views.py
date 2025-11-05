@@ -12,7 +12,8 @@ from .app import app, db
 
 @app.route('/')
 def index():
-    liste_articles = Article.query.filter(Article.type_article == "club").order_by(Article.date_publi.desc())
+    liste_articles = Article.query.filter(Article.type_article == "club")
+                                  .order_by(Article.date_publi.desc())
     article = liste_articles.first()
     return render_template('index.html', title="", article=article, articles=liste_articles)
 
