@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <body>
-        <h1>Bienvenue sur le site du Stade Poitevin Tennis !</h1>
-    </body>
+    <div class="row">
+        <div class="col">
+            <h1><center>News du club de tennis du Stade Poitevin </center></h1>
+            <a href="{{ url_for('article_view', id_article = article.id) }}">{{ article.titre }}</a>
+            {{ article.contenu|safe }}
+        </div>
+        <div class="col col-lg-2">
+            <div class="list-group list-group-flush">
+                {% for article in articles %}
+                    <a class="list-group-item list-group-item-action" href="{{ url_for('article_view', id_article=article.id)}}">
+                        {{ article.titre }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
