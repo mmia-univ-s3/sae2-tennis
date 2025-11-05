@@ -1,11 +1,11 @@
-idArt,titreArt,contenu,nbClics,dateArt,typeArt
-1,Michel a gagné,<p>Bonjour</p>,0,2025-05-17,stade
-2,Stephane a perdu,<p>Hi</p>,1,2025-05-18,stade
-3,Décès de Martine,<p>Hello</p>,2,2025-05-19,stade
-4,art1,<p>Halo</p>,3,2025-05-20,stade
-5,art2,<p>Hola</p>,4,2025-05-21,stade
-6,art3,<p>Gutten Tag</p>,5,2025-05-22,club
-7,art4,<p>Bonjour</p>,6,2025-05-23,club
-8,art5,<p>Hi</p>,7,2025-05-24,club
-9,art6,<p>Hello</p>,8,2025-05-25,club
-10,art7,<p>Halo</p>,9,2025-05-26,club
+idArt;titreArt;contenu;nbClics;dateArt;typeArt
+1;Michel a gagné;<p>Bonjour</p>;0;2025-05-17;stade
+2;Stephane a perdu;<p>Hi</p>;1;2025-05-18;stade
+3;Décès de Martine;<p>Hello</p>;2;2025-05-19;stade
+4;art1;<p>Halo</p>;3;2025-05-20;stade
+5;art2;<p>Hola</p>;4;2025-05-21;stade
+6;art3;<p>Gutten Tag</p>;5;2025-05-22;club
+7;art4;<p>Bonjour</p>;6;2025-05-23;club
+8;art5;<p>Hi</p>;7;2025-05-24;club
+9;art6;<p>Hello</p>;8;2025-05-25;club
+10;art7;<p>Halo</p>;9;2025-05-26;club

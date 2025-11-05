@@ -3,5 +3,26 @@
 {% block main %}
     <body>
         <h1>Partenaires</h1>
+        {% if current_user.is_authenticated %}
+        <p>
+            Cliquez sur un partenaire pour le supprimer.
+        </p>
+        {% endif %}
+        <div class="row">
+            {% for part in partenaires %}
+                <div class="col-6 col-md-4">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('partenaire_delete', id_p=part.id)}}">
+                            <img src="{{ url_for('static', filename=part.logo)}}" width="200" alt="{{part.nom}}">
+                        </a>
+                    {% else %}
+                        <img src="{{ url_for('static', filename=part.logo)}}" width="200" alt="{{part.nom}}">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        {% if current_user.is_authenticated %}
+                <a href="{{ url_for('partenaire_create')}}" class="btn btn-primary">Ajouter un partenaire</a>
+        {% endif %}
     </body>
 {% endblock %}

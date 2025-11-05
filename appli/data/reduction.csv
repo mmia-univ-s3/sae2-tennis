@@ -1,11 +1,7 @@
-idT,taux,estCumulable
-1,50% de reduction,True
-2,50% de reduction,True
-3,50% de reduction,True
-4,50% de reduction,True
-5,50% de reduction,True
-6,1 part,True
-7,1 part,False
-8,1 part,False
-9,2.5 part,False
-10,2.5 part,False
+idT;taux;estCumulable
+30;50% de réduction;True
+31;Cotisation gratuite;True
+32;1 part;False
+33;2.5 parts;False
+34;5% de 3,5 à 5 et 10% pour 5,5 et +; False
+35;10% de réduction;True
