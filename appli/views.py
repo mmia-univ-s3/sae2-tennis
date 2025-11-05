@@ -71,12 +71,6 @@ def tournoi(type_tournoi: str, idC: int):
             for date_match in donnees[id_equipe]:
                 for stade in ensemble_stades[id_equipe]:
                     donnees[id_equipe][date_match].setdefault(stade, None)
-
-
-        for date_match in donnees.values():
-            for stade in date_match.values():
-                for match in stade.values():
-                    print(match.domicile)
     return render_template('tournoi.html', title="Tournoi - Competitions", championnat=champ,
                            type_champ=type_tournoi, matchs=donnees, stades=ensemble_stades)
 
