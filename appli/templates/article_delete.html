@@ -2,7 +2,7 @@
 
 {% block main %}
     <h1>Suppression d'un article</h1>
-    <form action="{{ url_for('article_delete', id_article=art.id) }}" method="post" class="form-horizontal mb-3">
+    <form action="{{ url_for('article_delete', id_article=article.id) }}" method="post" class="form-horizontal mb-3">
         {{ form.hidden_tag() }}
         <p>Vous allez supprimer l'article <b>{{ article.titre }}</b>. Cet article ne sera plus visible sur le site. Voulez-vous continuer ?</p>
         <div class="form-group">
