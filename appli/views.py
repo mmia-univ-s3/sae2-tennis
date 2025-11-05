@@ -76,9 +76,22 @@ def article_delete(id_article):
     return render_template("article_delete.html", form=form,
                            title="Suppression d'un article", article=article)
 
-@app.route('/club/documents/')
+@app.route('/club/documents/', methods=('GET', 'POST'))
 def documents():
-    return render_template('documents.html', title="Documents administratifs - Club")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_documents" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_documents", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    return render_template('documents.html', title="Documents administratifs - Club",
+                           contenu=article.contenu, form=form)
 
 @app.route('/competitions/')
 def competitions():
