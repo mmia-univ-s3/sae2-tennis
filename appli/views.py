@@ -5,8 +5,9 @@ import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm
+from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm, TarifFormReservation
 from appli.models import CategorieTarif, Partenaire, Article, Utilisateur
+from appli.models.reservation import Reservation
 from appli.models.tarif import Tarif
 from .app import app, db
 
@@ -105,7 +106,7 @@ def tarifications_categorie_ajout(id_cat):
 @login_required
 def tarifications_tarif_ajout(id_cat):
     return render_template('tarifications_ajout_intitule.html',
-                           title="Ajouter un tarif dans une catégorie", id_cate=id_cat)
+                           title="Ajouter un tarif dans une catégorie", id_cat=id_cat)
 
 @app.route('/formation/tarifications/categorie/<id_cat>/delete/', methods=('GET', 'POST'))
 @login_required
@@ -131,6 +132,20 @@ def tarifications_tarif_delete(id_t):
         return redirect(url_for("tarifications"))
     return render_template('tarifications_delete_intitule.html',
                            title="Supprimer un tarif", idt=id_t, tarif=tarif, form=form)
+    
+@app.route('/formation/tarifications/categorie/<id_cat>/ajout/reservation/', methods=('GET', 'POST'))
+@login_required
+def tarifications_ajout_tarif_reservation(id_cat):
+    form = TarifFormReservation()
+    if form.validate_on_submit():
+        tarif = Tarif(form.intituleT.data, id_cat)
+        db.session.add(tarif)
+        db.session.commit()
+        reservation = Reservation(tarif.id, form.montant.data)
+        db.session.add(reservation)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_ajout_tarif_reservation.html', title="Ajouter une réservation", form=form, id_cat=id_cat)
 
 @app.route('/formation/ecole-de-tennis/', methods=('GET', 'POST'))
 def ecole():

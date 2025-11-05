@@ -2,5 +2,11 @@
 
 {% block main %}
     <body>
+        <h1>Ajout d'un tarif</h1>
+    <div class="col-sm-offset-2 col-sm-10">
+        <a href="{{ url_for('tarifications_ajout_tarif_reservation', id_cat=id_cat)}}" class="btn btn-primary">Ajouter une réservation</a>
+        <a href="{{ url_for('tarifications') }}" class="btn btn-primary">Ajouter une réduction</a>
+        <a href="{{ url_for('tarifications') }}" class="btn btn-secondary">Annuler</a>
+    </div>
     </body>
 {% endblock %}
