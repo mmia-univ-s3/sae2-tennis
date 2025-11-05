@@ -125,7 +125,7 @@ def _importer_championnats_equipes(filepath):
             affronter = Affronter(id_championnat=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
                                 adversaire=ligne["nomAdv"], resultat=ligne["resultat"],
                                 score=ligne["score"], stade=ligne["stade"],
-                                domicile=bool(ligne["estDomicile"]),
+                                domicile=ligne["estDomicile"] == "True",
                                 date_match=date.fromisoformat(ligne["dateMatch"]))
             db.session.add(affronter)
     db.session.commit()

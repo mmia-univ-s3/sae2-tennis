@@ -50,12 +50,35 @@ def palmares():
 def tournoi(type_tournoi: str, idC: int):
     if type_tournoi == "individuel":
         champ = ChampionnatIndividuel.query.get(idC)
+        ensemble_stades = {}
         donnees = {}
     else:
         champ = ChampionnatEquipe.query.get(idC)
+        ensemble_stades = {}
         donnees = {}
-        for match in Affronter.query.filter(Affronter.championnat)
-    return render_template('tournoi.html', title="Tournoi - Competitions", championnat=champ, type_champ=type_tournoi)
+        for participant in champ.participer:
+            id_equipe = participant.equipe.id
+            donnees[id_equipe] = {}
+            ensemble_stades[id_equipe] = set()
+            for match in Affronter.query.filter(Affronter.championnat == champ,
+                                                Affronter.equipe == participant.equipe):
+                if match.date_match not in donnees:
+                    donnees[id_equipe][match.date_match] = {match.stade : match}
+                    ensemble_stades[id_equipe].add(match.stade)
+                elif match.stade not in donnees[match.date_match]:
+                    donnees[id_equipe][match.date_match][match.stade] = match
+                    ensemble_stades[id_equipe].add(match.stade)
+            for date_match in donnees[id_equipe]:
+                for stade in ensemble_stades[id_equipe]:
+                    donnees[id_equipe][date_match].setdefault(stade, None)
+
+
+        for date_match in donnees.values():
+            for stade in date_match.values():
+                for match in stade.values():
+                    print(match.domicile)
+    return render_template('tournoi.html', title="Tournoi - Competitions", championnat=champ,
+                           type_champ=type_tournoi, matchs=donnees, stades=ensemble_stades)
 
 @app.route('/competitions/tournois-internes/')
 def internes():

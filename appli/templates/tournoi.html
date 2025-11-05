@@ -38,8 +38,33 @@
                 <p>Aucune équipe du club ne participe à ce tournoi</p>
             {% else %}
                 {% for participant in championnat.participer %}
-                    <table class="table table-bordered border-success">
-                        <tr><th colspan="{{  }}"></th></tr>
+                    <table class="table table-success table-bordered border-success">
+                        <tbody>
+                            <tr><th colspan="{{ stades[participant.equipe.id]|length * 2 + 1 }}">{{ participant.equipe.nom }}</th></tr>
+                            <tr class="table-warning table-bordered border-success">
+                                <th scope="col">Date des Matchs</th>
+                                {% for stade in stades[participant.equipe.id] %}
+                                    <th scope="col">{{ stade }}</th>
+                                    <th scope="col">Resultat</th>
+                                {% endfor %}
+                            </tr>
+                            {% for date_match in matchs[participant.equipe.id] %}
+                                <tr>
+                                    <th class="table-warning table-bordered border-success" scope="row">{{ date_match.strftime("%d/%m/%Y") }}</th>
+                                    {% for stade in stades[participant.equipe.id] %}
+                                        {% if matchs[participant.equipe.id][date_match][stade] == None %}
+                                            <td class="table-light table-bordered border-success" colspan="2"><center> - </center></td>
+                                        {% elif matchs[participant.equipe.id][date_match][stade].domicile %}
+                                            <td class="table-primary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].adversaire }}</center></td>
+                                            <td class="table-primary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].resultat }} {{ matchs[participant.equipe.id][date_match][stade].score }}</center></td>
+                                        {% else %}
+                                            <td class="table-secondary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].adversaire }}</center></td>
+                                            <td class="table-secondary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].resultat }} {{ matchs[participant.equipe.id][date_match][stade].score }}</center></td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
                 {% endfor %}
             {% endif %}
