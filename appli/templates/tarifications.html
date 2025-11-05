@@ -37,7 +37,11 @@
                                     <center>{{ tarif.intitule }}</center>
                                 </td>
                                 <td style="width: 200px;">
-                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    {% if tarif.reservations[0] %}
+                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    {% else %}
+                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
+                                    {% endif %}
                                 </td>
                                 {% if current_user.is_authenticated %}
                                 <th style="width: 123px; text-align: right;">
@@ -111,7 +115,11 @@
                                     <center>{{ tarif.intitule }}</center>
                                 </td>
                                 <td style="width: 200px;">
-                                    <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
+                                    {% if tarif.reservations[0] %}
+                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                    {% else %}
+                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
+                                    {% endif %}
                                 </td>
                                 {% if current_user.is_authenticated %}
                                 <th style="width: 123px; text-align: right;">

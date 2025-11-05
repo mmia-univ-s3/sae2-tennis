@@ -61,9 +61,12 @@ class TarifFormReservation(FlaskForm):
     montant = FloatField('Montant du tarif', validators=[DataRequired()])
     
 class TarifFormReduction(FlaskForm):
-    intituleT = StringField('Intitule du tarif', validators=[DataRequired()])
+    intituleT = StringField('Intitulé du tarif', validators=[DataRequired()])
     taux = StringField('La réduction', validators=[DataRequired()])
     estCumulable = BooleanField('Cumulable')
+    
+class SousCategorieForm(FlaskForm):
+    intituleCat = StringField("L'intitulé de la catégorie", validators=[DataRequired()])
 
 class PageForm(FlaskForm):
     editor = StringField()

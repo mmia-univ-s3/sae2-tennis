@@ -5,8 +5,9 @@ import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm, TarifFormReservation
+from appli.forms import ConfirmForm, LoginForm, PartenairesCreateForm, PageForm, RegisterForm, SousCategorieForm, TarifFormReduction, TarifFormReservation
 from appli.models import CategorieTarif, Partenaire, Article, Utilisateur
+from appli.models.reduction import Reduction
 from appli.models.reservation import Reservation
 from appli.models.tarif import Tarif
 from .app import app, db
@@ -90,17 +91,23 @@ def tarifications():
                            cate_rese=list_cate_rese_tennis, cate_redu=list_cate_redu_tennis,
                            cate_padel=list_cate_padel)
 
-@app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/')
+@app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/', methods=('GET', 'POST'))
 @login_required
 def tarifications_souscategorie_ajout(id_cat):
-    return render_template('tarifications_demande_ajout.html',
-                           title="Ajouter une sous-catégorie", id_cate=id_cat)
+    categorie = CategorieTarif.query.get(id_cat)
+    form = SousCategorieForm()
+    if form.validate_on_submit():
+        categorie = CategorieTarif(categorie.sport, form.intituleCat.data, id_cat)
+        db.session.add(categorie)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_ajout_sous_categorie.html',
+                           title="Ajouter une sous-catégorie", id_cat=id_cat, form=form)
 
 @app.route('/formation/tarifications/ajout/')
 @login_required
 def tarifications_categorie_ajout(id_cat):
-    return render_template('tarifications_demande_ajout.html',
-                           title="Ajouter une catégorie", id_cate=id_cat)
+    pass
 
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/')
 @login_required
@@ -146,6 +153,20 @@ def tarifications_ajout_tarif_reservation(id_cat):
         db.session.commit()
         return redirect(url_for("tarifications"))
     return render_template('tarifications_ajout_tarif_reservation.html', title="Ajouter une réservation", form=form, id_cat=id_cat)
+
+@app.route('/formation/tarifications/categorie/<id_cat>/ajout/reduction/', methods=('GET', 'POST'))
+@login_required
+def tarifications_ajout_tarif_reduction(id_cat):
+    form = TarifFormReduction()
+    if form.validate_on_submit():
+        tarif = Tarif(form.intituleT.data, id_cat)
+        db.session.add(tarif)
+        db.session.commit()
+        reduction = Reduction(tarif.id, form.taux.data, form.estCumulable.data)
+        db.session.add(reduction)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template('tarifications_ajout_tarif_reduction.html', title="Ajouter une réduction", form=form, id_cat=id_cat)
 
 @app.route('/formation/ecole-de-tennis/', methods=('GET', 'POST'))
 def ecole():
