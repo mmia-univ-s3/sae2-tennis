@@ -5,11 +5,12 @@ import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import ArticleAjoutForm, ArticleForm, CategorieForm, ConfirmForm, \
+from appli.forms import ArticleAjoutForm, ArticleForm, CategorieForm, ConfirmForm, HistoireForm, \
     LoginForm, PartenairesCreateForm, PageForm, RegisterForm, SousCategorieForm, \
     TarifFormReduction, TarifFormReservation
 from appli.models import CategorieTarif, Partenaire, Article, Utilisateur, \
     Reduction, Reservation, Tarif
+from appli.models.histoire import Histoire
 from .app import app, db
 
 @app.route('/')
@@ -37,8 +38,35 @@ def histoire():
             article.contenu = form.editor.data
             article.date = datetime.date.today()
             db.session.commit()
+    histoire = {}
+    for texte in Histoire.query.order_by(Histoire.annee).all():
+        if texte.annee not in histoire:
+            histoire[texte.annee] = []
+        histoire[texte.annee].append((texte.id, texte.trivia))
     return render_template('histoire.html', title="Histoire du club - Club",
-                           contenu=article.contenu, form=form)
+                           contenu=article.contenu, form=form, histoire=histoire)
+    
+@app.route('/club/histoire/<idH>/delete/', methods=('GET', 'POST'))
+def histoire_delete(idH):
+    form = ConfirmForm()
+    histoire = Histoire.query.get(idH)
+    if form.validate_on_submit():
+        db.session.delete(histoire)
+        db.session.commit()
+        return redirect(url_for("histoire"))
+    return render_template("histoire_delete_date.html", form=form,
+                           title="Suppression d'une date", id_h=idH)
+    
+@app.route('/club/histoire/ajout/', methods=('GET', 'POST'))
+def histoire_ajout():
+    form = HistoireForm()
+    if form.validate_on_submit():
+        histoire = Histoire(form.annee.data, form.trivia.data)
+        db.session.add(histoire)
+        db.session.commit()
+        return redirect(url_for("histoire"))
+    return render_template("histoire_ajout_date.html", form=form,
+                           title="Ajout d'une date")
 
 @app.route('/club/management/', methods=('GET', 'POST'))
 def management():

@@ -5,7 +5,7 @@ import random
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import RadioField, BooleanField, FloatField, SelectField, StringField, HiddenField
+from wtforms import IntegerField, RadioField, BooleanField, FloatField, SelectField, StringField, HiddenField
 # from wtforms.fields.numeric import FloatField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired
@@ -75,6 +75,10 @@ class CategorieForm(FlaskForm):
     intituleCat = StringField("L'intitulé de la catégorie", validators=[DataRequired()])
     sport = SelectField("Sport", validators=[DataRequired()],
                         choices=[("tennis", "Tennis"), ("padel", "Padel")])
+    
+class HistoireForm(FlaskForm):
+    annee = IntegerField("L'année", validators=[DataRequired()])
+    trivia = StringField("Texte", validators=[DataRequired()])
 
 class PageForm(FlaskForm):
     editor = StringField()
