@@ -12,15 +12,15 @@ from .app import app, db
 
 @app.route('/')
 def index():
-    articles = Article.query.filter(Article.type_article == "club")
+    liste_articles = Article.query.filter(Article.type_article == "club")
     min_article = None
     article = None
-    for art in articles: 
+    for art in liste_articles:
         temps = datetime.date.today() - art.date_publi
-        if min_article is None or temps < min_article: 
+        if min_article is None or temps < min_article:
             min_article = temps
             article = art
-    return render_template('index.html', title="", article=art, articles=articles)
+    return render_template('index.html', title="", article=article, articles=liste_articles)
 
 @app.route('/club/')
 def club():
