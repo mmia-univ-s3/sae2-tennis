@@ -47,6 +47,7 @@ def histoire():
                            contenu=article.contenu, form=form, histoire=dates)
 
 @app.route('/club/histoire/<id_h>/delete/', methods=('GET', 'POST'))
+@login_required
 def histoire_delete(id_h):
     form = ConfirmForm()
     date = Histoire.query.get(id_h)
@@ -58,6 +59,7 @@ def histoire_delete(id_h):
                            title="Suppression d'une date", id_h=id_h)
 
 @app.route('/club/histoire/ajout/', methods=('GET', 'POST'))
+@login_required
 def histoire_ajout():
     form = HistoireForm()
     if form.validate_on_submit():
@@ -104,6 +106,7 @@ def article_view(id_article):
                            form=form, contenu=article.contenu)
 
 @app.route('/club/articles/create/', methods=('GET', 'POST'))
+@login_required
 def article_create():
     form = ArticleAjoutForm()
     if form.validate_on_submit():
@@ -112,6 +115,7 @@ def article_create():
     return render_template("article_create.html", title="Ajout d'un article", form=form)
 
 @app.route('/club/articles/<id_article>/delete/', methods=('GET', 'POST'))
+@login_required
 def article_delete(id_article):
     form = ConfirmForm()
     article = Article.query.get(id_article)
@@ -309,6 +313,7 @@ def partenaire_delete(id_p: int):
                            title="Suppression d'un partenaire", parte = part)
 
 @app.route('/partenaire/ajout/', methods=("GET", "POST",))
+@login_required
 def partenaire_create():
     form = PartenairesCreateForm()
     if form.validate_on_submit():
