@@ -3,14 +3,19 @@
 {% block main %}
     <div class="row">
         <div class="col">
-            <h1><center>News du Stade Poitevin Tennis</center></h1>
-            <p><a href="{{ url_for('article_view', id_article = article.id) }}">{{ article.titre }}</a></p>
+            <h1>
+                <center>News du Stade Poitevin Tennis</center>
+            </h1>
+            <p>
+                <a href="{{ url_for('article_view', id_article = article.id) }}">{{ article.titre }}</a>
+            </p>
             {{ article.contenu|safe }}
         </div>
         <div class="col col-lg-2">
             <div class="list-group list-group-flush">
                 {% for article in articles %}
-                    <a class="list-group-item list-group-item-action" href="{{ url_for('article_view', id_article=article.id)}}">
+                    <a class="list-group-item list-group-item-action"
+                       href="{{ url_for('article_view', id_article=article.id) }}">
                         {{ article.titre }}
                     </a>
                 {% endfor %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Modification de la réduction {{ reduction.tarif.intitule }}</h1>
+    <form action="{{ url_for('tarifications_reductions_update', id_tarif=reduction.tarif.id) }}"
+          method="post" class="form-horizontal mb-3">
+        {{ form.hidden_tag() }}
+        <div class="form-group mb-3">
+            <label for="intitule" class="col-sm-2 control-label">{{ form.intitule.label }}</label>
+            <div class="col-sm-10">
+                {{ form.intitule(size=50, class_="form-control") }}
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="taux" class="col-sm-2 control-label">{{ form.taux.label }}</label>
+            <div class="col-sm-10">
+                {{ form.taux(size=50, class_="form-control") }}
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="cumulable" class="col-sm-2 control-label">{{ form.cumulable.label }}</label>
+            <div class="col-sm-10">
+                {{ form.cumulable(size=50) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="Valider" class="btn btn-success">
+                <a href="{{ url_for('tarifications') }}" class="btn btn-secondary">Retour</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

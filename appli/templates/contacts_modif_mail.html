@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block main %}
-  <h1>Modification de l'adresse mail</h1>
+  <h1>Modification de l'adresse email</h1>
   {% if current_user.is_authenticated %}
     <form action="{{ url_for('contacts_modif_mail') }}" method="post" class="form-horizontal mb-3">
       {{ form.hidden_tag() }}

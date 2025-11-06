@@ -1,18 +1,17 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <body>
-        <h1>Histoire du club</h1>
-        {% if current_user.is_authenticated %}
-    <form action="{{ url_for('histoire') }}" method="post" class="form-horizontal mb-3">
-      {{ form.hidden_tag() }}
-      {% include "editor.html" %}
-      <div class="form-group mt-2">
-        <div class="col-sm-offset-2 col-sm-10">
-          <input type="submit" value="Sauvegarder" class="btn btn-success">
-        </div>
-      </div>
-    </form>
+    <h1>Histoire du club</h1>
+    {% if current_user.is_authenticated %}
+        <form action="{{ url_for('histoire') }}" method="post" class="form-horizontal mb-3">
+            {{ form.hidden_tag() }}
+            {% include "editor.html" %}
+            <div class="form-group mt-2">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="submit" value="Sauvegarder" class="btn btn-success">
+                </div>
+            </div>
+        </form>
     {% else %}
         {{ contenu|safe }}
     {% endif %}
@@ -23,25 +22,38 @@
                     <div class="histoire-annee-bullet"></div>
                 </div>
                 <div class="histoire-annee-contenu">
-                    <h3>{{annee}}</h3>
+                    <h3>{{ annee }}</h3>
                     <ul class="histoire-textes">
                         {% for id_h, texte in textes %}
                             <li class="histoire-texte">
                                 {% if current_user.is_authenticated %}
-                                    <a href="{{ url_for('histoire_delete', id_h=id_h)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
+                                    <a href="{{ url_for('histoire_delete', id_h=id_h) }}"
+                                       class="btn btn-outline-danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-trash-icon lucide-trash">
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                            <path d="M3 6h18"/>
+                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                        </svg>
+                                    </a>
                                 {% endif %}
-                                <span>{{texte}}</span>
+                                <span>{{ texte }}</span>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
         {% endfor %}
-    </ul>
+    </div>
     {% if current_user.is_authenticated %}
-            <th style="width: 123px;">
-                <center><a href="{{ url_for('histoire_ajout')}}" class="btn btn-primary">Ajouter une date</a></center>
-            </th>
-        {% endif %}
-    </body>
+        <th style="width: 123px;">
+            <center><a href="{{ url_for('histoire_ajout') }}" class="btn btn-primary">Ajouter une
+                information</a>
+            </center>
+        </th>
+    {% endif %}
 {% endblock %}
