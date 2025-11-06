@@ -5,11 +5,12 @@ import os
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, logout_user, login_user, current_user
 
-from appli.forms import ArticleAjoutForm, ArticleForm, CategorieForm, ConfirmForm, \
+from appli.forms import ArticleAjoutForm, ArticleForm, CategorieForm, ConfirmForm, HistoireForm, \
     LoginForm, PartenairesCreateForm, PageForm, RegisterForm, SousCategorieForm, \
     TarifFormReduction, TarifFormReservation
 from appli.models import CategorieTarif, Partenaire, Article, Utilisateur, \
     Reduction, Reservation, Tarif
+from appli.models.histoire import Histoire
 from .app import app, db
 
 @app.route('/')
@@ -23,9 +24,51 @@ def index():
 def club():
     return redirect(url_for('histoire'), 301)
 
-@app.route('/club/histoire/')
+@app.route('/club/histoire/', methods=('GET', 'POST'))
 def histoire():
-    return render_template('histoire.html', title="Histoire et présentation - Club")
+    form = PageForm()
+    article = Article.query.filter(Article.titre == "_histoire" and
+                                   Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_histoire", "", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+    dates = {}
+    for texte in Histoire.query.order_by(Histoire.annee).all():
+        if texte.annee not in dates:
+            dates[texte.annee] = []
+        dates[texte.annee].append((texte.id, texte.trivia))
+    return render_template('histoire.html', title="Histoire du club - Club",
+                           contenu=article.contenu, form=form, histoire=dates)
+
+@app.route('/club/histoire/<id_h>/delete/', methods=('GET', 'POST'))
+@login_required
+def histoire_delete(id_h):
+    form = ConfirmForm()
+    date = Histoire.query.get(id_h)
+    if form.validate_on_submit():
+        db.session.delete(date)
+        db.session.commit()
+        return redirect(url_for("histoire"))
+    return render_template("histoire_delete_date.html", form=form,
+                           title="Suppression d'une date", id_h=id_h)
+
+@app.route('/club/histoire/ajout/', methods=('GET', 'POST'))
+@login_required
+def histoire_ajout():
+    form = HistoireForm()
+    if form.validate_on_submit():
+        date = Histoire(form.annee.data, form.trivia.data)
+        db.session.add(date)
+        db.session.commit()
+        return redirect(url_for("histoire"))
+    return render_template("histoire_ajout_date.html", form=form,
+                           title="Ajout d'une date")
 
 @app.route('/club/management/', methods=('GET', 'POST'))
 def management():
@@ -63,6 +106,7 @@ def article_view(id_article):
                            form=form, contenu=article.contenu)
 
 @app.route('/club/articles/create/', methods=('GET', 'POST'))
+@login_required
 def article_create():
     form = ArticleAjoutForm()
     if form.validate_on_submit():
@@ -71,6 +115,7 @@ def article_create():
     return render_template("article_create.html", title="Ajout d'un article", form=form)
 
 @app.route('/club/articles/<id_article>/delete/', methods=('GET', 'POST'))
+@login_required
 def article_delete(id_article):
     form = ConfirmForm()
     article = Article.query.get(id_article)
@@ -295,6 +340,7 @@ def partenaire_delete(id_p: int):
                            title="Suppression d'un partenaire", parte = part)
 
 @app.route('/partenaire/ajout/', methods=("GET", "POST",))
+@login_required
 def partenaire_create():
     form = PartenairesCreateForm()
     if form.validate_on_submit():

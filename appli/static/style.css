@@ -18,15 +18,54 @@
     backdrop-filter: blur(50px);
 }
 
-.navbar#navbar-om86 {
-    background-color: rgba(253, 220, 22, .4) !important;
-    backdrop-filter: blur(10px);
-}
-
 body {
     background-image: var(--background-image);
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
     background-size: 50%;
+}
+
+.histoire-textes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.histoire-annee {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    grid-gap: 20px;
+    padding: 10px;
+}
+
+.histoire-annee-bullet {
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    background-color: var(--bs-warning);
+    margin-top: 8px;
+}
+
+.histoire-annee-bullet::after {
+    content: "";
+    width: 12px;
+    height: calc(41px * var(--nb-elements) + 50px);
+    background-color: var(--bs-success);
+    display: block;
+    margin-top: 16px;
+    margin-left: 6px;
+    z-index: -1;
+    position: absolute;
+}
+
+.histoire-annee-left {
+    display: flex;
+    justify-content: center;
+}
+
+.histoire-texte {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
