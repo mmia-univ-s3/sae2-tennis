@@ -4,14 +4,20 @@
     <center><h1>Articles du club</h1></center>
     <div class="list-group" style="max-width: 400px; margin-left: auto; margin-right: auto;">
         {% for article in articles %}
-            <a class="list-group-item list-group-item-action" href="{{ url_for('article_view', id_article=article.id)}}"><center>
-                {{ article.titre }} -
-                {{ article.date_publi }} -
-                {{ article.type_article}}
-            </center></a>
+            <a class="list-group-item list-group-item-action"
+               href="{{ url_for('article_view', id_article=article.id) }}">
+                <center>
+                    {{ article.titre }} -
+                    {{ article.date_publi }} -
+                    {{ article.type_article }}
+                </center>
+            </a>
         {% endfor %}
         {% if current_user.is_authenticated %}
-            <a class="list-group-item list-group-item-action" href="{{ url_for('article_create')}}"><center>Ajouter un article</center></a>
+            <a class="list-group-item list-group-item-action"
+               href="{{ url_for('article_create') }}">
+                <center>Ajouter un article</center>
+            </a>
         {% endif %}
     </div>
 {% endblock %}
