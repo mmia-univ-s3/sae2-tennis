@@ -60,9 +60,9 @@ class FormRegister(FlaskForm):
 class FormPartenaireAdd(FlaskForm):
     nom = StringField('Nom du partenaire', validators=[DataRequired()])
     logo = FileField('Logo du partenaire (JPG ou PNG uniquement)', validators=[FileRequired(),
-                                                                               FileAllowed(
-                                                                                   ['jpg', 'png'],
-                                                                                   "Merci de n'envoyer que des fichiers JPG ou PNG.")])
+                     FileAllowed(
+                         ['jpg', 'png'],
+                         "Merci de n'envoyer que des fichiers JPG ou PNG.")])
     next = HiddenField()
 
     def confirm(self, filename):

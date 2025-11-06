@@ -9,6 +9,7 @@ from appli.models import Article
 from appli.models.histoire import Histoire
 
 
+# pylint: disable=duplicate-code
 @app.route('/club/histoire/', methods=('GET', 'POST'))
 def histoire():
     form = FormPageEdit()
