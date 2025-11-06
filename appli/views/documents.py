@@ -1,5 +1,5 @@
 from appli.app import app
-from appli.views.static import page_statique
+from appli.views.statique import page_statique
 
 
 @app.route('/club/documents/', methods=('GET', 'POST'))

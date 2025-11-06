@@ -19,6 +19,7 @@ def articles():
 def article_view(id_article):
     article = Article.query.get(id_article)
     form = FormPageEdit()
+    # pylint: disable=duplicate-code
     if current_user.is_authenticated:
         if form.validate_on_submit():
             article.contenu = form.editor.data

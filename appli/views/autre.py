@@ -1,5 +1,5 @@
 from appli.app import app
-from appli.views.static import page_statique
+from appli.views.statique import page_statique
 
 
 @app.route('/autre-sports/', methods=('GET', 'POST'))
