@@ -19,4 +19,5 @@ from .reduction import Reduction
 
 @login_manager.user_loader
 def load_user(login: str):
+    """Récupère un utilisateur à partir de son identifiant"""
     return Utilisateur.query.get(login)

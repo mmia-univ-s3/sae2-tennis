@@ -11,6 +11,7 @@ from appli.models import Utilisateur
 
 @app.route('/connexion/', methods=('GET', 'POST'))
 def connexion():
+    """Page de connexion d'un administrateur"""
     form = FormLogin()
     if not form.is_submitted():
         form.next.data = request.args.get("next")
@@ -26,6 +27,7 @@ def connexion():
 @app.route('/utilisateurs/')
 @login_required
 def utilisateurs():
+    """Page de gestion des utilisateurs"""
     return render_template('utilisateurs.html', title="Gestion des utilisateurs",
                            users=Utilisateur.query.all())
 
@@ -33,6 +35,7 @@ def utilisateurs():
 @app.route('/utilisateurs/create/', methods=("GET", "POST",))
 @login_required
 def utilisateurs_create():
+    """Formulaire de création d'un administrateur"""
     form = FormRegister()
     if not form.is_submitted():
         form.next.data = request.args.get("next")
@@ -46,6 +49,7 @@ def utilisateurs_create():
 @app.route('/utilisateurs/<login>/reset/', methods=("GET", "POST",))
 @login_required
 def utilisateurs_reset(login: str):
+    """Page de réinitialisation de mot de passe d'un administrateur"""
     user = Utilisateur.query.get(login)
     form = FormConfirm()
     if form.validate_on_submit():
@@ -63,6 +67,7 @@ def utilisateurs_reset(login: str):
 @app.route('/utilisateurs/<login>/delete/', methods=("GET", "POST",))
 @login_required
 def utilisateurs_delete(login: str):
+    """Formulaire de suppression d'un administrateur"""
     if login == current_user.login:
         return redirect(url_for("utilisateurs"))
     user = Utilisateur.query.get(login)
