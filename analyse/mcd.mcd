@@ -7,13 +7,12 @@ UTILISATEUR: idU, mdp
 CHAMPIONNAT: idCha, dateCha, titreCha, categorieSport, serie
 
 CHAMP_INDIV: niveau
-CHAMP_EQUIPE: 
-INSCRIRE, 01 CHAMP_EQUIPE, 0N> DIVISION
+CHAMP_EQUIPE:
 DIVISION: idDiv, intituleDiv
 
 CLASSER, 0N CHAMP_INDIV, 0N JOUEUR: rang
 PARTICIPER, 0N CHAMP_EQUIPE, 0N EQUIPE: rang, poule
-AFFRONTER, 0N CHAMP_EQUIPE, 0N EQUIPE: nomAdv, resultat, score, stade, estDomicile, dateMatch
+AFFRONTER, 0N CHAMP_EQUIPE, 0N EQUIPE: nomAdv, dateMatch, resultat, score, estDomicile
 CONCOURIR, 01 EQUIPE, 0N> DIVISION: rang
 
 JOUEUR: idJ, nomJ, prenomJ
@@ -25,6 +24,6 @@ APPARTENIR, 0N> CATEGORIE_TARIF, 01 TARIF
 TARIF: idT, intituleT
 
 SOUS_CATEGORIE, 0N> CATEGORIE_TARIF, 01 CATEGORIE_TARIF
-REDUCTION: taux, estCumulable
+REDUCTION: taux, surLicence
 /T\ TARIF -> REDUCTION, RESERVATION
 RESERVATION: montant

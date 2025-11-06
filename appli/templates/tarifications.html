@@ -1,287 +1,669 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <body>
-        <h1>Tarifications</h1>
-        <h2>Détail des tarifs tennis</h2>
-        {% for categorie in cate_rese %}
-            <table class="table table-bordered border-success">
-                <tbody>
+    <h1>Tarifications</h1>
+    <h2>Détail des tarifs tennis</h2>
+    {% for categorie in cate_rese %}
+        <table class="table table-bordered border-success">
+            <tbody>
+            <tr>
+                <th colspan="2" class="bg-success-subtle">
+                    <center>{{ categorie.intitule }}</center>
+                </th>
+                {% if current_user.is_authenticated %}
+                    <th style="width: 123px;">
+                        <a href="{{ url_for('tarifications_souscategorie_ajout', id_cat=categorie.id) }}"
+                           class="btn btn-outline-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-circle-plus-icon lucide-circle-plus">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12h8"/>
+                                <path d="M12 8v8"/>
+                            </svg>
+                        </a>
+                        <a href="{{ url_for('tarifications_categorie_delete', id_cat=categorie.id) }}"
+                           class="btn btn-outline-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-trash-icon lucide-trash">
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                <path d="M3 6h18"/>
+                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                        </a>
+                    </th>
+                {% endif %}
+            </tr>
+            {% if categorie.enfants|length == 0 %}
+                {% for tarif in categorie.tarifs %}
                     <tr>
-                        <th colspan="2" class="bg-success-subtle">
-                            <center>{{ categorie.intitule }}</center>
+                        <td>
+                            <center>{{ tarif.intitule }}</center>
+                        </td>
+                        <td style="width: 200px;">
+                            {% if tarif.reservations[0] %}
+                                <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                            {% else %}
+                                <center>{{ tarif.reductions[0].taux }}
+                                    {% if tarif.reductions[0].cumulable %}
+                                        <span class="text-danger">*</span>{% endif %}</center>
+                            {% endif %}
+                        </td>
+                        {% if current_user.is_authenticated %}
+                            <th style="width: 123px; text-align: right;">
+                                <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id) }}"
+                                   class="btn btn-outline-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-trash-icon lucide-trash">
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                        <path d="M3 6h18"/>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </a>
+                            </th>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for sous_cat in categorie.enfants %}
+                    <tr>
+                        <th colspan="2" class="bg-warning-subtle">
+                            <center>{{ sous_cat.intitule }}</center>
                         </th>
                         {% if current_user.is_authenticated %}
                             <th style="width: 123px;">
-                                <a href="{{ url_for('tarifications_souscategorie_ajout', id_cat=categorie.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
-                                <a href="{{ url_for('tarifications_categorie_delete', id_cat=categorie.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
+                                <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id) }}"
+                                   class="btn btn-outline-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-circle-plus-icon lucide-circle-plus">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M8 12h8"/>
+                                        <path d="M12 8v8"/>
+                                    </svg>
+                                </a>
+                                <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id) }}"
+                                   class="btn btn-outline-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-trash-icon lucide-trash">
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                        <path d="M3 6h18"/>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </a>
                             </th>
                         {% endif %}
                     </tr>
-                    {% if categorie.enfants|length == 0 %}
-                        {% for tarif in categorie.tarifs %}
-                            <tr>
-                                <td>
-                                    <center>{{ tarif.intitule }}</center>
-                                </td>
-                                <td style="width: 200px;">
-                                    {% if tarif.reservations[0] %}
-                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
-                                    {% else %}
-                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
-                                    {% endif %}
-                                </td>
-                                {% if current_user.is_authenticated %}
-                                <th style="width: 123px; text-align: right;">
-                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        {% for sous_cat in categorie.enfants %}
-                            <tr>
-                                <th colspan="2" class="bg-warning-subtle">
-                                    <center>{{ sous_cat.intitule }}</center>
-                                </th>
-                                {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
-                                    <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
-                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                            </tr>
-                            {% for tarif in sous_cat.tarifs %}
-                                <tr>
-                                    <td>
-                                        <center>{{ tarif.intitule }}</center>
-                                    </td>
-                                    <td style="width: 200px;">
-                                        {% if tarif.reservations[0] %}
-                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
-                                    {% else %}
-                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
-                                    {% endif %}
-                                    </td>
-                                    {% if current_user.is_authenticated %}
-                                <th style="width: 123px; text-align: right;">
-                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                                </tr>
-                            {% endfor %}
-                        {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
-        {% endfor %}
-        <table class="table table-bordered border-danger">
-            <tbody>
-                <tr>
-                    <th>
-                        <p><span class="text-danger">L'adhésion au club comprend la réservation de courts</span> intérieurs et extérieurs pendant 4h30/semaine ainsi que 4 heures d'invitations/an</p>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-bordered border-primary">
-            <tbody>
-                <tr>
-                    <th>
-                        <p>Le club possède 4 courts intérieurs en résine chauffés l’hiver, 3 courts extérieurs en terre artificielle ainsi que 2 courts extérieurs en béton poreux. Notre adhésion à l’école de tennis s’étend sur 32 semaines, de la 3e semaine de septembre à la dernière semaine de juin</p>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-bordered border-black">
-            <tbody>
-                <tr>
-                    <th>
-                        <center>Réservation de créneau à l’année 50€</center>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>Détail des réductions tennis</h2>
-        {% for categorie in cate_redu %}
-            <table class="table table-bordered border-success">
-                <tbody>
-                    <tr>
-                        <th colspan="2" class="bg-success-subtle">
-                            <center>{{ categorie.intitule }}</center>
-                        </th>
-                        {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
-                                    <a href="{{ url_for('tarifications_souscategorie_ajout', id_cat=categorie.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
-                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=categorie.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                        {% endif %}
-                    </tr>
-                    {% if categorie.enfants|length == 0 %}
-                        {% for tarif in categorie.tarifs %}
-                            <tr>
-                                <td>
-                                    <center>{{ tarif.intitule }}</center>
-                                </td>
-                                <td style="width: 200px;">
-                                    {% if tarif.reservations[0] %}
-                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
-                                    {% else %}
-                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
-                                    {% endif %}
-                                </td>
-                                {% if current_user.is_authenticated %}
-                                <th style="width: 123px; text-align: right;">
-                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        {% for sous_cat in categorie.enfants %}
-                            <tr>
-                                <th colspan="2" class="bg-warning-subtle">
-                                    <center>{{ sous_cat.intitule }}</center>
-                                </th>
-                                {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
-                                    <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
-                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                            </tr>
-                            {% for tarif in sous_cat.tarifs %}
-                                <tr>
-                                    <td>
-                                        <center>{{ tarif.intitule }}</center>
-                                    </td>
-                                    <td style="width: 200px;">
-                                        {% if tarif.reservations[0] %}
-                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
-                                    {% else %}
-                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
-                                    {% endif %}
-                                    </td>
-                                    {% if current_user.is_authenticated %}
-                                <th style="width: 123px; text-align: right;">
-                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                                </tr>
-                            {% endfor %}
-                        {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
-        {% endfor %}
-        <table class="table table-bordered border-danger">
-            <tbody>
-                <tr>
-                    <th>
-                        <center>Les différentes réductions ne se cumulent pas, seule la réduction la plus importante sera retenue.</center>
-                        <center><span class="text-danger">Ne s'applique pas sur la licence *. Ne s’applique pas sur la compétition jeune.</span></center>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-bordered border-warning">
-            <tbody>
-                <tr>
-                    <th>
-                        <center>Paiements en ligne, chèques vacances papier et connect, chèques, espèces, coupons sport, CB &<span class="text-danger"> Pass'Sport (à donner avant le 20 décembre 2025)</span></center>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>Détail des tarifs padel</h2>
-        {% for categorie in cate_padel %}
-            <table class="table table-bordered border-success">
-                <tbody>
-                    <tr>
-                        <th colspan="2" class="bg-success-subtle">
-                            <center>{{ categorie.intitule }}</center>
-                        </th>
-                        {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
-                                    <a href="{{ url_for('tarifications_souscategorie_ajout', id_cat=categorie.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
-                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=categorie.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                        {% endif %}
-                    </tr>
-                    {% if categorie.enfants|length == 0 %}
-                        {% for tarif in categorie.tarifs %}
-                            <tr>
-                                <td>
-                                    <center>{{ tarif.intitule }}</center>
-                                </td>
-                                <td style="width: 200px;">
-                                    {% if tarif.reservations[0] %}
-                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
-                                    {% else %}
-                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
-                                    {% endif %}
-                                </td>
-                                {% if current_user.is_authenticated %}
-                                <th style="width: 123px; text-align: right;">
-                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        {% for sous_cat in categorie.enfants %}
-                            <tr>
-                                <th colspan="2" class="bg-warning-subtle">
-                                    <center>{{ sous_cat.intitule }}</center>
-                                </th>
-                                {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
-                                    <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id)}}" class="btn btn-outline-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></a>
-                                    <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                            </tr>
-                            {% for tarif in sous_cat.tarifs %}
-                                <tr>
-                                    <td>
-                                        <center>{{ tarif.intitule }}</center>
-                                    </td>
-                                    <td style="width: 200px;">
-                                        {% if tarif.reservations[0] %}
-                                        <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
-                                    {% else %}
-                                        <center>{{ tarif.reductions[0].taux }} {% if tarif.reductions[0].cumulable %} <span class="text-danger">*</span>{% endif %}</center>
-                                    {% endif %}
-                                    </td>
-                                    {% if current_user.is_authenticated %}
-                                <th style="width: 123px; text-align: right;">
-                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id)}}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></a>
-                                </th>
-                                {% endif %}
-                                </tr>
-                            {% endfor %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if categorie.intitule == "Abonnement" %}
+                    {% for tarif in sous_cat.tarifs %}
                         <tr>
-                            <th colspan="2">
-                                <center><span class="text-danger">Date d'expiration des carnets de tickets 31 août 2027</span></center>
-                            </th>
+                            <td>
+                                <center>{{ tarif.intitule }}</center>
+                            </td>
+                            <td style="width: 200px;">
+                                {% if tarif.reservations[0] %}
+                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                {% else %}
+                                    <center>{{ tarif.reductions[0].taux }}
+                                        {% if tarif.reductions[0].cumulable %}
+                                            <span class="text-danger">*</span>{% endif %}</center>
+                                {% endif %}
+                            </td>
                             {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
+                                <th style="width: 123px; text-align: right;">
+                                    {% if tarif.reservations[0] %}
+                                        <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
+                                           class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                 height="24"
+                                                 viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                            </svg>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('tarifications_reductions_update', id_tarif=tarif.id) }}"
+                                           class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                 height="24"
+                                                 viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id) }}"
+                                       class="btn btn-outline-danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-trash-icon lucide-trash">
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                            <path d="M3 6h18"/>
+                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                        </svg>
+                                    </a>
                                 </th>
                             {% endif %}
                         </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        {% endfor %}
-        {% if current_user.is_authenticated %}
-            <th style="width: 123px;">
-                <center><a href="{{ url_for('tarifications_categorie_ajout')}}" class="btn btn-primary">Ajouter une catégorie</a></center>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    {% endfor %}
+    <table class="table table-bordered border-danger">
+        <tbody>
+        <tr>
+            <th>
+                <p><span
+                        class="text-danger">L'adhésion au club comprend la réservation de courts</span>
+                    intérieurs et extérieurs pendant 4h30/semaine ainsi que 4 heures
+                    d'invitations/an</p>
             </th>
-        {% endif %}
-    </body>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered border-primary">
+        <tbody>
+        <tr>
+            <th>
+                <p>Le club possède 4 courts intérieurs en résine chauffés l’hiver, 3 courts
+                    extérieurs en
+                    terre artificielle ainsi que 2 courts extérieurs en béton poreux. Notre adhésion
+                    à l’école
+                    de tennis s’étend sur 32 semaines, de la 3e semaine de septembre à la dernière
+                    semaine de
+                    juin</p>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered border-black">
+        <tbody>
+        <tr>
+            <th>
+                <center>Réservation de créneau à l’année 50€</center>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Détail des réductions tennis</h2>
+    {% for categorie in cate_redu %}
+        <table class="table table-bordered border-success">
+            <tbody>
+            <tr>
+                <th colspan="2" class="bg-success-subtle">
+                    <center>{{ categorie.intitule }}</center>
+                </th>
+                {% if current_user.is_authenticated %}
+                    <th style="width: 123px;">
+                        <a href="{{ url_for('tarifications_souscategorie_ajout', id_cat=categorie.id) }}"
+                           class="btn btn-outline-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-circle-plus-icon lucide-circle-plus">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12h8"/>
+                                <path d="M12 8v8"/>
+                            </svg>
+                        </a>
+                        <a href="{{ url_for('tarifications_categorie_delete', id_cat=categorie.id) }}"
+                           class="btn btn-outline-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-trash-icon lucide-trash">
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                <path d="M3 6h18"/>
+                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                        </a>
+                    </th>
+                {% endif %}
+            </tr>
+            {% if categorie.enfants|length == 0 %}
+                {% for tarif in categorie.tarifs %}
+                    <tr>
+                        <td>
+                            <center>{{ tarif.intitule }}</center>
+                        </td>
+                        <td style="width: 200px;">
+                            {% if tarif.reservations[0] %}
+                                <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                            {% else %}
+                                <center>{{ tarif.reductions[0].taux }}
+                                    {% if tarif.reductions[0].cumulable %}
+                                        <span class="text-danger">*</span>{% endif %}</center>
+                            {% endif %}
+                        </td>
+                        {% if current_user.is_authenticated %}
+                            <th style="width: 123px; text-align: right;">
+                                {% if tarif.reservations[0] %}
+                                    <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
+                                       class="btn btn-outline-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-pen-icon lucide-pen">
+                                            <path
+                                                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                        </svg>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('tarifications_reductions_update', id_tarif=tarif.id) }}"
+                                       class="btn btn-outline-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-pen-icon lucide-pen">
+                                            <path
+                                                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                        </svg>
+                                    </a>
+                                {% endif %}
+                                <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id) }}"
+                                   class="btn btn-outline-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-trash-icon lucide-trash">
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                        <path d="M3 6h18"/>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </a>
+                            </th>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for sous_cat in categorie.enfants %}
+                    <tr>
+                        <th colspan="2" class="bg-warning-subtle">
+                            <center>{{ sous_cat.intitule }}</center>
+                        </th>
+                        {% if current_user.is_authenticated %}
+                            <th style="width: 123px;">
+                                <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id) }}"
+                                   class="btn btn-outline-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-circle-plus-icon lucide-circle-plus">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M8 12h8"/>
+                                        <path d="M12 8v8"/>
+                                    </svg>
+                                </a>
+                                <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id) }}"
+                                   class="btn btn-outline-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-trash-icon lucide-trash">
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                        <path d="M3 6h18"/>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </a>
+                            </th>
+                        {% endif %}
+                    </tr>
+                    {% for tarif in sous_cat.tarifs %}
+                        <tr>
+                            <td>
+                                <center>{{ tarif.intitule }}</center>
+                            </td>
+                            <td style="width: 200px;">
+                                {% if tarif.reservations[0] %}
+                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                {% else %}
+                                    <center>{{ tarif.reductions[0].taux }}
+                                        {% if tarif.reductions[0].cumulable %}
+                                            <span class="text-danger">*</span>{% endif %}</center>
+                                {% endif %}
+                            </td>
+                            {% if current_user.is_authenticated %}
+                                <th style="width: 123px; text-align: right;">
+                                    {% if tarif.reservations[0] %}
+                                        <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
+                                           class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                 height="24"
+                                                 viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                            </svg>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('tarifications_reductions_update', id_tarif=tarif.id) }}"
+                                           class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                 height="24"
+                                                 viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id) }}"
+                                       class="btn btn-outline-danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-trash-icon lucide-trash">
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                            <path d="M3 6h18"/>
+                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                        </svg>
+                                    </a>
+                                </th>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    {% endfor %}
+    <table class="table table-bordered border-danger">
+        <tbody>
+        <tr>
+            <th>
+                <center>Les différentes réductions ne se cumulent pas, seule la réduction la plus
+                    importante
+                    sera retenue.
+                </center>
+                <center><span class="text-danger">Ne s'applique pas sur la licence *. Ne s’applique pas sur la compétition jeune.</span>
+                </center>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered border-warning">
+        <tbody>
+        <tr>
+            <th>
+                <center>Paiements en ligne, chèques vacances papier et connect, chèques, espèces,
+                    coupons
+                    sport, CB &<span
+                            class="text-danger"> Pass'Sport (à donner avant le 20 décembre 2025)</span>
+                </center>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Détail des tarifs padel</h2>
+    {% for categorie in cate_padel %}
+        <table class="table table-bordered border-success">
+            <tbody>
+            <tr>
+                <th colspan="2" class="bg-success-subtle">
+                    <center>{{ categorie.intitule }}</center>
+                </th>
+                {% if current_user.is_authenticated %}
+                    <th style="width: 123px;">
+                        <a href="{{ url_for('tarifications_souscategorie_ajout', id_cat=categorie.id) }}"
+                           class="btn btn-outline-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-circle-plus-icon lucide-circle-plus">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12h8"/>
+                                <path d="M12 8v8"/>
+                            </svg>
+                        </a>
+                        <a href="{{ url_for('tarifications_categorie_delete', id_cat=categorie.id) }}"
+                           class="btn btn-outline-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-trash-icon lucide-trash">
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                <path d="M3 6h18"/>
+                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                        </a>
+                    </th>
+                {% endif %}
+            </tr>
+            {% if categorie.enfants|length == 0 %}
+                {% for tarif in categorie.tarifs %}
+                    <tr>
+                        <td>
+                            <center>{{ tarif.intitule }}</center>
+                        </td>
+                        <td style="width: 200px;">
+                            {% if tarif.reservations[0] %}
+                                <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                            {% else %}
+                                <center>{{ tarif.reductions[0].taux }}
+                                    {% if tarif.reductions[0].cumulable %}
+                                        <span class="text-danger">*</span>{% endif %}</center>
+                            {% endif %}
+                        </td>
+                        {% if current_user.is_authenticated %}
+                            <th style="width: 123px; text-align: right;">
+                                {% if tarif.reservations[0] %}
+                                    <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
+                                       class="btn btn-outline-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-pen-icon lucide-pen">
+                                            <path
+                                                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                        </svg>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('tarifications_reductions_update', id_tarif=tarif.id) }}"
+                                       class="btn btn-outline-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-pen-icon lucide-pen">
+                                            <path
+                                                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                        </svg>
+                                    </a>
+                                {% endif %}
+                                <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id) }}"
+                                   class="btn btn-outline-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-trash-icon lucide-trash">
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                        <path d="M3 6h18"/>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </a>
+                            </th>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for sous_cat in categorie.enfants %}
+                    <tr>
+                        <th colspan="2" class="bg-warning-subtle">
+                            <center>{{ sous_cat.intitule }}</center>
+                        </th>
+                        {% if current_user.is_authenticated %}
+                            <th style="width: 123px;">
+                                <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id) }}"
+                                   class="btn btn-outline-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-circle-plus-icon lucide-circle-plus">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M8 12h8"/>
+                                        <path d="M12 8v8"/>
+                                    </svg>
+                                </a>
+                                <a href="{{ url_for('tarifications_categorie_delete', id_cat=sous_cat.id) }}"
+                                   class="btn btn-outline-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-trash-icon lucide-trash">
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                        <path d="M3 6h18"/>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </a>
+                            </th>
+                        {% endif %}
+                    </tr>
+                    {% for tarif in sous_cat.tarifs %}
+                        <tr>
+                            <td>
+                                <center>{{ tarif.intitule }}</center>
+                            </td>
+                            <td style="width: 200px;">
+                                {% if tarif.reservations[0] %}
+                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                {% else %}
+                                    <center>{{ tarif.reductions[0].taux }}
+                                        {% if tarif.reductions[0].cumulable %}
+                                            <span class="text-danger">*</span>{% endif %}</center>
+                                {% endif %}
+                            </td>
+                            {% if current_user.is_authenticated %}
+                                <th style="width: 123px; text-align: right;">
+                                    {% if tarif.reservations[0] %}
+                                        <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
+                                           class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                 height="24"
+                                                 viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                            </svg>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('tarifications_reductions_update', id_tarif=tarif.id) }}"
+                                           class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                 height="24"
+                                                 viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+                                    <a href="{{ url_for('tarifications_tarif_delete', id_t=tarif.id) }}"
+                                       class="btn btn-outline-danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-trash-icon lucide-trash">
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                            <path d="M3 6h18"/>
+                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                        </svg>
+                                    </a>
+                                </th>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% if categorie.intitule == "Abonnement" %}
+                <tr>
+                    <th colspan="2">
+                        <center><span
+                                class="text-danger">Date d'expiration des carnets de tickets : 31 août 2027</span>
+                        </center>
+                    </th>
+                    {% if current_user.is_authenticated %}
+                        <th style="width: 123px;">
+                        </th>
+                    {% endif %}
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    {% endfor %}
+    {% if current_user.is_authenticated %}
+        <th style="width: 123px;">
+            <center><a href="{{ url_for('tarifications_categorie_ajout') }}"
+                       class="btn btn-primary">Ajouter
+                une catégorie</a></center>
+        </th>
+    {% endif %}
 {% endblock %}

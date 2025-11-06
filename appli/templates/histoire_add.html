@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Ajout d'une information</h1>
+    <form action="{{ url_for('histoire_ajout') }}" method="post" class="form-horizontal mb-3">
+        {{ form.hidden_tag() }}
+        <div class="form-group mb-3">
+            <label for="annee" class="col-sm-2 control-label">{{ form.annee.label }}</label>
+            <div class="col-sm-10">
+                {{ form.annee(size=50, class_="form-control", min=1900, max=3000) }}
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="trivia" class="col-sm-2 control-label">{{ form.trivia.label }}</label>
+            <div class="col-sm-10">
+                {{ form.trivia(size=50, class_="form-control") }}
+            </div>
+        </div>
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit" value="Valider" class="btn btn-success">
+            <a href="{{ url_for('histoire') }}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+{% endblock %}
