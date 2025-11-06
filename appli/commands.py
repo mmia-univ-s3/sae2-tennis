@@ -102,7 +102,7 @@ def _importer_championnats_equipes(filepath):
         for ligne in lecture:
             champ = ChampionnatEquipe(date_cha=date.fromisoformat(ligne["dateCha"]),
                                       titre=ligne["titreCha"], categorie=ligne["categorieSport"],
-                                      serie=ligne["serie"], id_div=int(ligne["idDiv"]))
+                                      serie=ligne["serie"])
             db.session.add(champ)
 
     with open(filepath+"/equipe.csv", newline="", encoding="utf-8") as csvfile:
