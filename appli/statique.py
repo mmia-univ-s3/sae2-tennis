@@ -9,6 +9,7 @@ from appli.models import Article
 
 # pylint: disable=duplicate-code
 def page_statique(id_p, html, titre):
+    """Code de base pour une page statique"""
     form = FormPageEdit()
     article = Article.query.filter(
         Article.titre == "_" + id_p and Article.type_article == "pages").first()

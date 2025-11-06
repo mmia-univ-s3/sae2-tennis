@@ -16,20 +16,29 @@ from appli.models.utilisateur import Utilisateur
 from .app import db
 
 
+"""Formulaire de confirmation (oui/non)"""
 class FormConfirm(FlaskForm):
     pass
 
 
+"""Formulaire de modification d'une page"""
 class FormPageEdit(FlaskForm):
     editor = StringField()
 
 
+"""Formulaire de connexion"""
 class FormLogin(FlaskForm):
     login = StringField('Identifiant', validators=[DataRequired()])
     password = PasswordField('Mot de passe', validators=[DataRequired()])
     next = HiddenField()
 
     def get_authenticated_user(self):
+        """
+        Vérifie que les identifiants sont corrects et renvoie l'utilisateur
+
+        Returns:
+            L'utilisateur si les identifiants sont corrects, None sinon
+        """
         user = Utilisateur.query.get(self.login.data)
         if user is None:
             return None
@@ -39,6 +48,7 @@ class FormLogin(FlaskForm):
         return user if password == user.mdp else None
 
 
+"""Formulaire de création d'un utilisateur"""
 class FormRegister(FlaskForm):
     login = StringField('Identifiant', validators=[DataRequired()])
     password = PasswordField('Mot de passe', validators=[DataRequired()])
@@ -46,6 +56,12 @@ class FormRegister(FlaskForm):
     next = HiddenField()
 
     def confirm(self):
+        """
+        Confirme la création de l'utilisateur et le renvoie.
+
+        Returns:
+            L'utilisateur créé, ou None si les identifiants ne respectent pas les contraintes
+        """
         m = sha256()
         m.update(self.password.data.encode())
         user = Utilisateur(self.login.data, m.hexdigest())
