@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Suppression d'une information</h1>
+    <p>Vous allez supprimer une information. Cette information ne sera plus visible sur le site.
+        Voulez-vous continuer ?</p>
+    <form action="{{ url_for('histoire_delete', id_h=id_h) }}" method="post"
+          class="form-horizontal mb-3">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="Supprimer" class="btn btn-danger">
+                <a href="{{ url_for('histoire') }}" class="btn btn-secondary">Annuler</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

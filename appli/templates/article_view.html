@@ -1,23 +1,22 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <body>
-        <h1>{{ article.titre }}</h1>
-        {% if current_user.is_authenticated %}
-            <form action="{{ url_for('article_view', id_article=article.id) }}" method="post" class="form-horizontal mb-3">
+    <h1>{{ article.titre }}</h1>
+    {% if current_user.is_authenticated %}
+        <form action="{{ url_for('article_view', id_article=article.id) }}" method="post"
+              class="form-horizontal mb-3">
             {{ form.hidden_tag() }}
             {% include "editor.html" %}
             <div class="form-group mt-2">
                 <div class="col-sm-offset-2 col-sm-10">
                     <input type="submit" value="Sauvegarder" class="btn btn-success">
-                    <a href="{{ url_for('article_delete', id_article=article.id) }}" class="btn btn-danger">Supprimer</a>
+                    <a href="{{ url_for('article_delete', id_article=article.id) }}"
+                       class="btn btn-danger">Supprimer</a>
                     <a href="{{ url_for('articles') }}" class="btn btn-secondary">Annuler</a>
                 </div>
             </div>
-            </form>
-        {% else %}
-            {{ article.contenu|safe }}
-        {% endif %}
-        
-    </body>
+        </form>
+    {% else %}
+        {{ article.contenu|safe }}
+    {% endif %}
 {% endblock %}

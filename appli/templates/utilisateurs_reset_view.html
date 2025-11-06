@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Réinitialisation du mot de passe</h1>
+
+    <p>Le mot de passe de <b>{{ user.login }}</b> a été réinitialisé. Le nouveau mot de passe est
+        affiché ci-dessous. <b>Il ne sera pas affiché à nouveau.</b></p>
+    <ul>
+        <li><code>{{ mdp }}</code></li>
+    </ul>
+
+    <div class="mt-2">
+        <a href="/utilisateurs/">Retour</a>
+    </div>
+
+{% endblock %}
