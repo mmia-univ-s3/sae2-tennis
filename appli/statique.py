@@ -7,6 +7,7 @@ from appli.app import db
 from appli.forms import FormPageEdit
 from appli.models import Article
 
+# pylint: disable=duplicate-code
 def page_statique(id_p, html, titre):
     form = FormPageEdit()
     article = Article.query.filter(

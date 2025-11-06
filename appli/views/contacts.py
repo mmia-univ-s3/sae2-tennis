@@ -38,11 +38,9 @@ def contacts_modif_adresse():
     article = Article.query.filter(
         Article.titre == "_adresse" and Article.type_article == "pages").first()
     if article is None:
-        # pylint: disable=duplicate-code
         article = Article("_adresse", "", datetime.date.today(), "pages")
         db.session.add(article)
         db.session.commit()
-    # pylint: disable=duplicate-code
     if current_user.is_authenticated:
         if form.validate_on_submit():
             article.contenu = form.editor.data
@@ -62,7 +60,6 @@ def contacts_modif_tel():
         Article.titre == "_tel" and Article.type_article == "pages").first()
     if article is None:
         article = Article("_tel", "", datetime.date.today(), "pages")
-        # pylint: disable=duplicate-code
         db.session.add(article)
         db.session.commit()
     if current_user.is_authenticated:
