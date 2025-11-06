@@ -11,7 +11,7 @@ DIVISION[<u>idDiv</u>, intituleDiv]
 CHAMP_EQUIPE[<u>idCha</u>, dateCha, titreCha, categorieSport, serie]  
 EQUIPE[<u>idE</u>, nomE, categorieE, #idDiv, rangDiv]  
 PARTICIPER[<u>#idCha, #idE</u>, rang, poule]  
-AFFRONTER[<u>#idCha, #idE, nomAdv, dateMatch</u>, resultat, score, estDomicile]
+AFFRONTER[<u>#idCha, #idE, nomAdv, dateMatch</u>, resultat, score, estDomicile]  
 
 CATEGORIE_TARIF[<u>idCat</u>, sport, intituleCat, #idCatParent]  
 TARIF[<u>idT</u>, intituleT, #idCat]  
