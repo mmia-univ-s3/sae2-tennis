@@ -93,27 +93,32 @@ class FormPartenaireAdd(FlaskForm):
 
 
 class FormReservationAdd(FlaskForm):
+    """Formulaire d'ajout d'une réservation"""
     intitule = StringField('Intitule de la réservation', validators=[DataRequired()])
     montant = FloatField('Montant (€)', validators=[DataRequired()])
 
 
 class FormReductionAdd(FlaskForm):
+    """Formulaire d'ajout d'une réduction"""
     intitule = StringField('Intitulé de la réduction', validators=[DataRequired()])
     taux = StringField('Réduction', validators=[DataRequired()])
     cumulable = BooleanField('Cumulable')
 
 
 class FormSouscategorieAdd(FlaskForm):
+    """Formulaire d'ajout d'une sous-catégorie"""
     intitule = StringField("Intitulé de la sous-catégorie", validators=[DataRequired()])
 
 
 class FormCategorieAdd(FlaskForm):
+    """Formulaire d'ajout d'une catégorie"""
     intitule = StringField("Intitulé de la catégorie", validators=[DataRequired()])
     sport = SelectField("Sport", validators=[DataRequired()],
                         choices=[("tennis", "Tennis"), ("padel", "Padel")])
 
 
 class FormHistoireAdd(FlaskForm):
+    """Formulaire d'ajout d'une date"""
     annee = IntegerField("Année", validators=[DataRequired()])
     trivia = StringField("Texte", validators=[DataRequired()])
 

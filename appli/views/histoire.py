@@ -12,6 +12,7 @@ from appli.models.histoire import Histoire
 # pylint: disable=duplicate-code
 @app.route('/club/histoire/', methods=('GET', 'POST'))
 def histoire():
+    """Page de l'histoire du site"""
     form = FormPageEdit()
     article = Article.query.filter(
         Article.titre == "_histoire" and Article.type_article == "pages").first()
@@ -36,6 +37,7 @@ def histoire():
 @app.route('/club/histoire/ajout/', methods=('GET', 'POST'))
 @login_required
 def histoire_ajout():
+    """Page d'ajout d'une date"""
     form = FormHistoireAdd()
     if form.validate_on_submit():
         information = Histoire(form.annee.data, form.trivia.data)
@@ -48,6 +50,7 @@ def histoire_ajout():
 @app.route('/club/histoire/<id_h>/delete/', methods=('GET', 'POST'))
 @login_required
 def histoire_delete(id_h):
+    """Page de suppression d'une date"""
     form = FormConfirm()
     information = Histoire.query.get(id_h)
     if form.validate_on_submit():
