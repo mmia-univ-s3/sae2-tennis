@@ -344,7 +344,8 @@ def contacts():
         mail = Article("_mail", "", datetime.date.today(), "pages")
         db.session.add(mail)
         db.session.commit()
-    return render_template('contacts.html', title="Contacts", adresse=adresse.contenu, tel=tel.contenu, mail=mail.contenu)
+    return render_template('contacts.html', title="Contacts", adresse=adresse.contenu,
+                           tel=tel.contenu, mail=mail.contenu)
 
 @app.route('/contacts/modif_adresse/', methods=("GET", "POST",))
 @login_required
@@ -364,7 +365,7 @@ def contacts_modif_adresse():
             return redirect(url_for('contacts'))
     return render_template('contacts_modif_adresse.html', title="Contacts",
                            form=form, contenu=article.contenu)
-    
+
 @app.route('/contacts/modif_tel/', methods=("GET", "POST",))
 @login_required
 def contacts_modif_tel():
@@ -383,7 +384,7 @@ def contacts_modif_tel():
             return redirect(url_for('contacts'))
     return render_template('contacts_modif_tel.html', title="Contacts",
                            form=form, contenu=article.contenu)
-    
+
 @app.route('/contacts/modif_mail/', methods=("GET", "POST",))
 @login_required
 def contacts_modif_mail():
