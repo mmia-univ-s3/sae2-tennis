@@ -38,6 +38,7 @@ def contacts_modif_adresse():
     article = Article.query.filter(
         Article.titre == "_adresse" and Article.type_article == "pages").first()
     if article is None:
+        # pylint: disable=duplicate-code
         article = Article("_adresse", "", datetime.date.today(), "pages")
         db.session.add(article)
         db.session.commit()
