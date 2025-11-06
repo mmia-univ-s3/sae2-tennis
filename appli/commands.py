@@ -96,7 +96,7 @@ def _importer_championnats_equipes(filepath):
     with open(filepath + "/champ_equipe.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            champ = ChampionnatEquipe(date_cha=date.fromisoformat(ligne["dateCha"]),
+            champ = ChampionnatEquipe(date_championnat=date.fromisoformat(ligne["dateCha"]),
                                       titre=ligne["titreCha"], categorie=ligne["categorieSport"],
                                       serie=ligne["serie"])
             db.session.add(champ)
@@ -140,7 +140,7 @@ def _importer_championnats_individuels(filepath):
     with open(filepath + "/champ_indiv.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            champ = ChampionnatIndividuel(date_cha=date.fromisoformat(ligne["dateCha"]),
+            champ = ChampionnatIndividuel(date_championnat=date.fromisoformat(ligne["dateCha"]),
                                           titre=ligne["titreCha"],
                                           categorie=ligne["categorieSport"], serie=ligne["serie"],
                                           niveau=ligne["niveau"])

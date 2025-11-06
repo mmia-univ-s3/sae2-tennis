@@ -5,15 +5,15 @@ class ChampionnatIndividuel(db.Model):
     __tablename__ = "CHAMP_INDIV"
 
     id: int = db.Column("idCha", db.Integer, primary_key=True)
-    date_cha: date = db.Column("dateCha", db.Date)
+    date_championnat: date = db.Column("dateCha", db.Date)
     titre: str = db.Column("titreCha", db.Text)
     categorie: str = db.Column("categorieSport", db.Text)
     serie: str = db.Column("serie", db.Text)
     niveau: str = db.Column("niveau", db.Text)
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
-    def __init__(self, date_cha: date, titre: str, categorie: str, serie: str, niveau: str):
-        self.date_cha = date_cha
+    def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str, niveau: str):
+        self.date_championnat = date_championnat
         self.titre = titre
         self.categorie = categorie
         self.serie = serie
@@ -29,14 +29,14 @@ class ChampionnatEquipe(db.Model):
     __tablename__ = "CHAMP_EQUIPE"
 
     id: int = db.Column("idCha", db.Integer, primary_key=True)
-    date_cha: date = db.Column("dateCha", db.Date)
+    date_championnat: date = db.Column("dateCha", db.Date)
     titre: str = db.Column("titreCha", db.Text)
     categorie : str = db.Column("categorieSport", db.Text)
     serie : str = db.Column("serie", db.Text)
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
-    def __init__(self, date_cha: date, titre: str, categorie: str, serie: str):
-        self.date_cha = date_cha
+    def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str):
+        self.date_championnat = date_championnat
         self.titre = titre
         self.categorie = categorie
         self.serie = serie
