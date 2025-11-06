@@ -158,12 +158,12 @@ def _importer_championnats_individuels(filepath):
 @app.cli.command()
 @click.argument('filepath')
 def loaddb(filepath):
-    '''Crée les tables de la base et les remplies
+    """Crée les tables de la base et les remplies
 
     Args:
         filepath (str): Le chemin du dossier contenant les fichiers CSV où se trouvent les données
                         de notre base
-    '''
+    """
     #  création de toutes les tables
     db.drop_all()
     db.create_all()
