@@ -16,18 +16,18 @@ from appli.models.utilisateur import Utilisateur
 from .app import db
 
 
-"""Formulaire de confirmation (oui/non)"""
 class FormConfirm(FlaskForm):
+    """Formulaire de confirmation (oui/non)"""
     pass
 
 
-"""Formulaire de modification d'une page"""
 class FormPageEdit(FlaskForm):
+    """Formulaire de modification d'une page"""
     editor = StringField()
 
 
-"""Formulaire de connexion"""
 class FormLogin(FlaskForm):
+    """Formulaire de connexion"""
     login = StringField('Identifiant', validators=[DataRequired()])
     password = PasswordField('Mot de passe', validators=[DataRequired()])
     next = HiddenField()
@@ -48,8 +48,8 @@ class FormLogin(FlaskForm):
         return user if password == user.mdp else None
 
 
-"""Formulaire de création d'un utilisateur"""
 class FormRegister(FlaskForm):
+    """Formulaire de création d'un utilisateur"""
     login = StringField('Identifiant', validators=[DataRequired()])
     password = PasswordField('Mot de passe', validators=[DataRequired()])
     repeat_password = PasswordField('Répétez le mot de passe', validators=[DataRequired()])
