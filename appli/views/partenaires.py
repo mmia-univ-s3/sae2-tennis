@@ -10,6 +10,7 @@ from appli.models import Partenaire
 
 @app.route('/partenaires/')
 def partenaires():
+    """Page de la liste des partenaires"""
     parts = Partenaire.query.all()
     return render_template('partenaires.html', title="Partenaires", partenaires=parts)
 
@@ -17,6 +18,7 @@ def partenaires():
 @app.route('/partenaire/<id_p>/delete/', methods=("GET", "POST",))
 @login_required
 def partenaire_delete(id_p: int):
+    """Page de suppression d'un partenaire choisi"""
     part = Partenaire.query.get(id_p)
     form = FormConfirm()
     if form.validate_on_submit():
@@ -32,6 +34,7 @@ def partenaire_delete(id_p: int):
 @app.route('/partenaire/ajout/', methods=("GET", "POST",))
 @login_required
 def partenaire_create():
+    """Page de création d'un partenaire"""
     form = FormPartenaireAdd()
     if form.validate_on_submit():
         filename = form.filename()

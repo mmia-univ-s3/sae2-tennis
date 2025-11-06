@@ -10,6 +10,7 @@ from appli.models import Article
 
 @app.route('/club/articles/')
 def articles():
+    """Page des articles"""
     liste_articles = Article.query.filter(Article.type_article != "pages").all()
     return render_template('articles.html', title="Articles du club - Club",
                            articles=liste_articles)
@@ -17,6 +18,7 @@ def articles():
 
 @app.route('/club/articles/<int:id_article>/', methods=('GET', 'POST'))
 def article_view(id_article):
+    """Page d'un article choisi"""
     article = Article.query.get(id_article)
     form = FormPageEdit()
     # pylint: disable=duplicate-code
@@ -32,6 +34,7 @@ def article_view(id_article):
 @app.route('/club/articles/create/', methods=('GET', 'POST'))
 @login_required
 def article_create():
+    """Page de création d'un article"""
     form = FormArticleAdd()
     if form.validate_on_submit():
         article = form.creation_article()
@@ -42,6 +45,7 @@ def article_create():
 @app.route('/club/articles/<id_article>/delete/', methods=('GET', 'POST'))
 @login_required
 def article_delete(id_article):
+    """Page de suppression d'un article choisi"""
     form = FormConfirm()
     article = Article.query.get(id_article)
     if form.validate_on_submit():
