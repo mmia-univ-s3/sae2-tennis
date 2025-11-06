@@ -10,6 +10,7 @@ from appli.models import Article
 
 @app.route('/contacts/')
 def contacts():
+    """Page de contacts"""
     adresse = Article.query.filter(
         Article.titre == "_adresse" and Article.type_article == "pages").first()
     if adresse is None:
@@ -34,6 +35,7 @@ def contacts():
 @app.route('/contacts/adresse/', methods=("GET", "POST",))
 @login_required
 def contacts_modif_adresse():
+    """Page de modification de l'adresse"""
     form = FormPageEdit()
     article = Article.query.filter(
         Article.titre == "_adresse" and Article.type_article == "pages").first()
@@ -55,6 +57,7 @@ def contacts_modif_adresse():
 @app.route('/contacts/telephone/', methods=("GET", "POST",))
 @login_required
 def contacts_modif_tel():
+    """Page de modification du numéro de téléphone"""
     form = FormPageEdit()
     article = Article.query.filter(
         Article.titre == "_tel" and Article.type_article == "pages").first()
@@ -75,6 +78,7 @@ def contacts_modif_tel():
 @app.route('/contacts/email/', methods=("GET", "POST",))
 @login_required
 def contacts_modif_mail():
+    """Page de modification de l'adresse mail"""
     form = FormPageEdit()
     article = Article.query.filter(
         Article.titre == "_mail" and Article.type_article == "pages").first()

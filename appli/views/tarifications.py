@@ -10,6 +10,7 @@ from appli.models import CategorieTarif, Reduction, Reservation, Tarif
 # noinspection PyProtectedMember,PyComparisonWithNone
 @app.route('/formation/tarifications/')
 def tarifications():
+    """Page des tarifs"""
     # pylint: disable=protected-access,singleton-comparison
     list_cate_tennis = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
                                                    CategorieTarif.sport == "tennis").all()
@@ -34,6 +35,7 @@ def tarifications():
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/', methods=('GET', 'POST'))
 @login_required
 def tarifications_souscategorie_ajout(id_cat):
+    """Page d'ajout d'une sous-catégorie"""
     form = FormSouscategorieAdd()
     categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
@@ -48,6 +50,7 @@ def tarifications_souscategorie_ajout(id_cat):
 @app.route('/formation/tarifications/ajout/categorie/', methods=('GET', 'POST'))
 @login_required
 def tarifications_categorie_ajout():
+    """Page d'ajout d'une catégorie"""
     form = FormCategorieAdd()
     if form.validate_on_submit():
         categorie = CategorieTarif(form.sport.data, form.intitule.data)
@@ -61,6 +64,7 @@ def tarifications_categorie_ajout():
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/')
 @login_required
 def tarifications_tarif_ajout(id_cat):
+    """Page d'ajout d'un tarif"""
     return render_template('tarifications_tarif_add.html',
                            title="Ajouter un tarif dans une catégorie", id_cat=id_cat)
 
@@ -68,6 +72,7 @@ def tarifications_tarif_ajout(id_cat):
 @app.route('/formation/tarifications/categorie/<id_cat>/delete/', methods=('GET', 'POST'))
 @login_required
 def tarifications_categorie_delete(id_cat):
+    """Page de suppression d'une catégorie ou d'une sous-catégorie"""
     categorie = CategorieTarif.query.get(id_cat)
     form = FormConfirm()
     if form.validate_on_submit():
@@ -82,6 +87,7 @@ def tarifications_categorie_delete(id_cat):
 @app.route('/formation/tarifications/tarif/<id_t>/delete/', methods=('GET', 'POST'))
 @login_required
 def tarifications_tarif_delete(id_t):
+    """Page de suppression d'un tarif"""
     tarif = Tarif.query.get(id_t)
     form = FormConfirm()
     if form.validate_on_submit():
@@ -96,6 +102,7 @@ def tarifications_tarif_delete(id_t):
            methods=('GET', 'POST'))
 @login_required
 def tarifications_ajout_tarif_reservation(id_cat):
+    """Page d'ajout d'une réservation"""
     form = FormReservationAdd()
     if form.validate_on_submit():
         tarif = Tarif(form.intitule.data, id_cat)
@@ -112,6 +119,7 @@ def tarifications_ajout_tarif_reservation(id_cat):
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/reduction/', methods=('GET', 'POST'))
 @login_required
 def tarifications_ajout_tarif_reduction(id_cat):
+    """Page d'ajout d'une réduction"""
     form = FormReductionAdd()
     if form.validate_on_submit():
         tarif = Tarif(form.intitule.data, id_cat)
@@ -128,6 +136,7 @@ def tarifications_ajout_tarif_reduction(id_cat):
 @app.route('/formation/tarifications/tarif/<id_tarif>/update-reservation/', methods=('GET', 'POST'))
 @login_required
 def tarifications_reservations_update(id_tarif):
+    """Page de modification d'une réservation"""
     reservation = Reservation.query.get(id_tarif)
     form = FormReservationAdd(intitule=reservation.tarif.intitule, montant=reservation.montant)
     if form.validate_on_submit():
@@ -142,6 +151,7 @@ def tarifications_reservations_update(id_tarif):
 @app.route('/formation/tarifications/tarif/<id_tarif>/update-reduction/', methods=('GET', 'POST'))
 @login_required
 def tarifications_reductions_update(id_tarif):
+    """Page de modification d'une réduction"""
     reduction = Reduction.query.get(id_tarif)
     form = FormReductionAdd(intitule=reduction.tarif.intitule, taux=reduction.taux,
                             cumulable=reduction.cumulable)
