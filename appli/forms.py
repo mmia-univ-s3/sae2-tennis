@@ -18,7 +18,6 @@ from .app import db
 
 class FormConfirm(FlaskForm):
     """Formulaire de confirmation (oui/non)"""
-    pass
 
 
 class FormPageEdit(FlaskForm):
