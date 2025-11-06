@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Participer(db.Model):
+    """Participation/Classement d'une équipe dans un championnat par équipe"""
     __tablename__ = "PARTICIPER"
 
     _id_championnat: int = db.Column("idCha", db.Integer,

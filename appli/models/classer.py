@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Classer(db.Model):
+    """Participation/Classement d'un joueur dans un championnat individuel"""
     __tablename__ = "CLASSER"
 
     _id_championnat: int = db.Column("idCha", db.Integer, db.ForeignKey("CHAMP_INDIV.idCha"),

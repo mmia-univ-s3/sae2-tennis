@@ -42,7 +42,7 @@
                         <tbody>
                             <tr class="table-bordered border-success-subtle">
                                 <th class="bg-success-subtle" colspan="2"><center>{{ participant.equipe.nom }}</center></th>
-                                <th class="bg-success-subtle"><center>{{ participant.rang }}</center></th>
+                                <th class="bg-success-subtle"><center>Classement : {{ participant.rang }}</center></th>
                             </tr>
                             <tr class="table-bordered border-success-subtle">
                                 <th class="bg-warning-subtle" scope="col"><center>Date</center></th>
@@ -54,7 +54,7 @@
                                     <th class="bg-warning-subtle table-bordered border-success-subtle" scope="row"><center>{{ date_match.strftime("%d/%m/%Y") }}</center></th>
                                     {% if matchs[participant.equipe.id][date_match].domicile %}
                                         <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].adversaire }}</center></td>
-                                        <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].resultat }} {{ matchs[participant.equipe.id][date_match].score }}</center></td>
+                                        <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{% if matchs[participant.equipe.id][date_match].resultat != None %}{{ matchs[participant.equipe.id][date_match].resultat }} {{ matchs[participant.equipe.id][date_match].score }}{% else %} - {% endif %}</center></td>
                                     {% else %}
                                         <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].adversaire }}</center></td>
                                         <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].resultat }} {{ matchs[participant.equipe.id][date_match].score }}</center></td>

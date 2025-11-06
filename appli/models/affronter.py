@@ -2,6 +2,7 @@ from datetime import date
 from appli.app import db
 
 class Affronter(db.Model):
+    """Match entre 2 équipes durant un championnat par équipe"""
     # pylint: disable=too-many-instance-attributes,duplicate-code
     __tablename__ = "AFFRONTER"
 

@@ -6,6 +6,7 @@ from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter
 
 @app.route('/competitions/calendrier/')
 def calendrier():
+    """Permet d'afficher la page concernant le calendrier des tournois"""
     list_comp_indiv = ChampionnatIndividuel.query.order_by(ChampionnatIndividuel.date_championnat.desc()).all()
     list_comp_equipe = ChampionnatEquipe.query.order_by(ChampionnatEquipe.date_championnat.desc()).all()
     return render_template('calendrier.html', title="Calendrier - Compétitions", comp_indiv=list_comp_indiv, comp_equipe=list_comp_equipe)
@@ -17,6 +18,12 @@ def palmares():
 
 @app.route('/competitions/tournoi/<type_tournoi>/<int:idC>/')
 def tournoi(type_tournoi: str, idC: int):
+    """Permet d'afficher la page d'un tournoi
+
+    Args:
+        type_tournoi (str): Indique si le tournoi est "individuel" ou en "equipe"
+        idC (int): L'identifiant du tournoi dans la base de données
+    """
     if type_tournoi == "individuel":
         champ = ChampionnatIndividuel.query.get(idC)
         liste_dates = {}
