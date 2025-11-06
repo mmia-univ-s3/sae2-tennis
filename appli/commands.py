@@ -6,8 +6,8 @@ import click
 
 from .app import app, db
 from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Tarif, \
-    Reservation, Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, Equipe, Participer, \
-    Affronter, Joueur, Classer
+    Reservation, Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, Equipe, \
+    Participer, Affronter, Joueur, Classer
 
 
 def _importer_articles(filename):
