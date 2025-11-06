@@ -96,9 +96,9 @@ def _importer_championnats_equipes(filepath):
     with open(filepath + "/champ_equipe.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            champ = ChampionnatEquipe(date_comp=date.fromisoformat(ligne["dateCha"]),
+            champ = ChampionnatEquipe(date_championnat=date.fromisoformat(ligne["dateCha"]),
                                       titre=ligne["titreCha"], categorie=ligne["categorieSport"],
-                                      serie=ligne["serie"], id_div=int(ligne["idDiv"]))
+                                      serie=ligne["serie"])
             db.session.add(champ)
 
     with open(filepath + "/equipe.csv", newline="", encoding="utf-8") as csvfile:
@@ -118,9 +118,10 @@ def _importer_championnats_equipes(filepath):
     with open(filepath + "/affronter.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            affronter = Affronter(id_championnat=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
-                                  adversaire=ligne["nomAdv"], resultat=ligne["resultat"],
-                                  score=ligne["score"], stade=ligne["stade"],
+            affronter = Affronter(id_championnat=int(ligne["idCha"]),
+                                  id_equipe=int(ligne["idE"]),
+                                  adversaire=ligne["nomAdv"],
+                                  resultat=ligne["resultat"], score=ligne["score"],
                                   domicile=bool(ligne["estDomicile"]),
                                   date_match=date.fromisoformat(ligne["dateMatch"]))
             db.session.add(affronter)
@@ -139,7 +140,7 @@ def _importer_championnats_individuels(filepath):
     with open(filepath + "/champ_indiv.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            champ = ChampionnatIndividuel(date_comp=date.fromisoformat(ligne["dateCha"]),
+            champ = ChampionnatIndividuel(date_championnat=date.fromisoformat(ligne["dateCha"]),
                                           titre=ligne["titreCha"],
                                           categorie=ligne["categorieSport"], serie=ligne["serie"],
                                           niveau=ligne["niveau"])
@@ -157,8 +158,13 @@ def _importer_championnats_individuels(filepath):
 @app.cli.command()
 @click.argument('filepath')
 def loaddb(filepath):
-    """Creates the tables and populates them with data."""
+    """Crée les tables de la base et les remplies
 
+    Args:
+        filepath (str): Le chemin du dossier contenant les fichiers CSV où se trouvent les données
+                        de notre base
+    """
+    #  création de toutes les tables
     db.drop_all()
     db.create_all()
 

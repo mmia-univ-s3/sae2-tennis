@@ -11,11 +11,10 @@ class Affronter(db.Model):
     _id_equipe: int = db.Column("idE", db.Integer,
                                 db.ForeignKey("EQUIPE.idE"), primary_key=True)
     adversaire: str = db.Column("nomAdv", db.String(100), primary_key=True)
+    date_match: date = db.Column("dateMatch", db.Date, primary_key=True)
     resultat: str = db.Column("resultat", db.Text)
     score: int = db.Column("score", db.Text)
-    stade: str = db.Column("stade", db.Text)
     domicile: bool = db.Column("estDomicile", db.Boolean)
-    date_match: date = db.Column("dateMatch", db.Date)
 
     championnat = db.relationship("ChampionnatEquipe", backref=db.backref("affronter",
                                   lazy="dynamic", cascade="all, delete-orphan"))
@@ -25,13 +24,12 @@ class Affronter(db.Model):
     # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, id_championnat: int, id_equipe: int, adversaire: str,
                  resultat: str, score: str,
-                 stade: str, domicile: bool, date_match: date):
+                 domicile: bool, date_match: date):
         self._id_championnat = id_championnat
         self._id_equipe = id_equipe
         self.adversaire = adversaire
         self.resultat = resultat
         self.score = score
-        self.stade = stade
         self.domicile = domicile
         self.date_match = date_match
 
