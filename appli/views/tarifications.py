@@ -72,7 +72,7 @@ def tarifications_tarif_ajout(id_cat):
 @app.route('/formation/tarifications/categorie/<id_cat>/delete/', methods=('GET', 'POST'))
 @login_required
 def tarifications_categorie_delete(id_cat):
-    """Page de suppression d'une catégorie"""
+    """Page de suppression d'une catégorie ou d'une sous-catégorie"""
     categorie = CategorieTarif.query.get(id_cat)
     form = FormConfirm()
     if form.validate_on_submit():

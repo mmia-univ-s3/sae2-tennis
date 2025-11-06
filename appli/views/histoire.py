@@ -37,7 +37,7 @@ def histoire():
 @app.route('/club/histoire/ajout/', methods=('GET', 'POST'))
 @login_required
 def histoire_ajout():
-    """Page d'ajout d'une date"""
+    """Page d'ajout d'une information sur l'histoire"""
     form = FormHistoireAdd()
     if form.validate_on_submit():
         information = Histoire(form.annee.data, form.trivia.data)
@@ -50,7 +50,7 @@ def histoire_ajout():
 @app.route('/club/histoire/<id_h>/delete/', methods=('GET', 'POST'))
 @login_required
 def histoire_delete(id_h):
-    """Page de suppression d'une date"""
+    """Page de suppression d'une information sur l'histoire"""
     form = FormConfirm()
     information = Histoire.query.get(id_h)
     if form.validate_on_submit():
