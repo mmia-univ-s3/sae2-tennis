@@ -73,6 +73,7 @@ class FormRegister(FlaskForm):
 
 
 class FormPartenaireAdd(FlaskForm):
+    """Formulaire de création d'un partenaire"""
     nom = StringField('Nom du partenaire', validators=[DataRequired()])
     logo = FileField('Logo du partenaire (JPG ou PNG uniquement)', validators=[FileRequired(),
                      FileAllowed(
@@ -81,12 +82,24 @@ class FormPartenaireAdd(FlaskForm):
     next = HiddenField()
 
     def confirm(self, filename):
+        """
+        Confirme la création d'un partenaire et le renvoie.
+
+        Returns:
+           Partenaire:  Le partenaire créé
+        """
         partenaire = Partenaire(self.nom.data, filename)
         db.session.add(partenaire)
         db.session.commit()
         return partenaire
 
     def filename(self):
+        """
+        Donne un nom au logo du partenaire créé
+
+        Returns:
+            str: nom du logo
+        """
         _, ext = os.path.splitext(self.logo.data.filename)
         filename = f'{hex(random.randrange(16 ** 48))[2:]}'
         return filename + ext
@@ -124,6 +137,7 @@ class FormHistoireAdd(FlaskForm):
 
 
 class FormArticleAdd(FlaskForm):
+    """Formulaire de l'ajout d'un article"""
     titre = StringField('Titre', validators=[DataRequired()])
     editor = StringField('Contenu')
     type_a = RadioField('Type', choices=[('club', 'Club'), ('stade', 'Stade')], default=1,
@@ -131,6 +145,12 @@ class FormArticleAdd(FlaskForm):
     next = HiddenField()
 
     def creation_article(self):
+        """
+        Créé un article et le renvoie
+
+        Returns:
+            Article: article créé
+        """
         article = Article(self.titre.data, self.editor.data, datetime.date.today(),
                           self.type_a.data)
         db.session.add(article)

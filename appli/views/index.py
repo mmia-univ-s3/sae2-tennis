@@ -6,6 +6,7 @@ from appli.models import Article
 
 @app.route('/')
 def index():
+    """Page d'accueil"""
     # noinspection PyUnresolvedReferences
     liste_articles = Article.query.filter(Article.type_article == "club").order_by(
         Article.date_publi.desc())
