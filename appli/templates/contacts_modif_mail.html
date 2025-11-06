@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <h1>Modification de l'adresse mail</h1>
+  {% if current_user.is_authenticated %}
+    <form action="{{ url_for('contacts_modif_mail') }}" method="post" class="form-horizontal mb-3">
+      {{ form.hidden_tag() }}
+      {% include "editor.html" %}
+      <div class="form-group mt-2">
+        <div class="col-sm-offset-2 col-sm-10">
+          <input type="submit" value="Sauvegarder" class="btn btn-success">
+        </div>
+      </div>
+    </form>
+  {% else %}
+    {{ contenu|safe }}
+  {% endif %}
+{% endblock %}
