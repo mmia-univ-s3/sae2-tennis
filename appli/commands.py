@@ -1,23 +1,14 @@
 import csv
 import logging as lg
 from datetime import date
+
 import click
+
 from .app import app, db
-from .models.article import Article
-from .models.histoire import Histoire
-from .models.partenaire import Partenaire
-from .models.utilisateur import Utilisateur
-from .models.categorie_tarif import CategorieTarif
-from .models.tarif import Tarif
-from .models.reservation import Reservation
-from .models.reduction import Reduction
-from .models.division import Division
-from .models.championnat import ChampionnatEquipe, ChampionnatIndividuel
-from .models.equipe import Equipe
-from .models.participer import Participer
-from .models.affronter import Affronter
-from .models.joueur import Joueur
-from .models.classer import Classer
+from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Tarif, \
+    Reservation, Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, Equipe, \
+    Participer, Affronter, Joueur, Classer
+
 
 def _importer_articles(filename):
     """Permet d'importer les articles"""
@@ -30,6 +21,7 @@ def _importer_articles(filename):
             db.session.add(article)
     db.session.commit()
 
+
 def _importer_trivias(filename):
     """Permet d'importer les trivias liés à l'histoire du club"""
     with open(filename, newline="", encoding="utf-8") as csvfile:
@@ -38,6 +30,7 @@ def _importer_trivias(filename):
             histoire = Histoire(annee=int(ligne["annee"]), trivia=ligne["trivia"])
             db.session.add(histoire)
     db.session.commit()
+
 
 def _importer_partenaires(filename):
     """Permet d'importer les partenaires du club"""
@@ -48,6 +41,7 @@ def _importer_partenaires(filename):
             db.session.add(partenaire)
     db.session.commit()
 
+
 def _importer_users(filename):
     """Permet d'importer les utilisateurs"""
     with open(filename, newline="", encoding="utf-8") as csvfile:
@@ -57,9 +51,10 @@ def _importer_users(filename):
             db.session.add(utilisateur)
     db.session.commit()
 
+
 def _importer_tarifs(filepath):
     """Permet d'importer les tarifs"""
-    with open(filepath+"/categorie.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/categorie.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             if ligne["idCatParent"] == "":
@@ -69,19 +64,19 @@ def _importer_tarifs(filepath):
                                            id_parent=int(ligne["idCatParent"]))
             db.session.add(categorie)
 
-    with open(filepath+"/tarif.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/tarif.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             tarif = Tarif(intitule=ligne["intituleT"], id_cat=int(ligne["idCat"]))
             db.session.add(tarif)
 
-    with open(filepath+"/reservation.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/reservation.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             reservation = Reservation(id_tarif=int(ligne["idT"]), montant=float(ligne["montant"]))
             db.session.add(reservation)
 
-    with open(filepath+"/reduction.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/reduction.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             reduction = Reduction(id_tarif=int(ligne["idT"]), taux=ligne["taux"],
@@ -89,15 +84,16 @@ def _importer_tarifs(filepath):
             db.session.add(reduction)
     db.session.commit()
 
+
 def _importer_championnats_equipes(filepath):
     """Permet d'importer les données relatives aux championnats par équipes"""
-    with open(filepath+"/division.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/division.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             division = Division(intitule=ligne["intituleDiv"])
             db.session.add(division)
 
-    with open(filepath+"/champ_equipe.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/champ_equipe.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             champ = ChampionnatEquipe(date_cha=date.fromisoformat(ligne["dateCha"]),
@@ -105,21 +101,21 @@ def _importer_championnats_equipes(filepath):
                                       serie=ligne["serie"], id_div=int(ligne["idDiv"]))
             db.session.add(champ)
 
-    with open(filepath+"/equipe.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/equipe.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             equipe = Equipe(nom=ligne["nomE"], categorie=ligne["categorieE"],
                             id_div=int(ligne["idDiv"]), rang=int(ligne["rangDiv"]))
             db.session.add(equipe)
 
-    with open(filepath+"/participer.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/participer.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             participer = Participer(id_cha=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
                                     rang=int(ligne["rang"]), poule=ligne["poule"])
             db.session.add(participer)
 
-    with open(filepath+"/affronter.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/affronter.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             affronter = Affronter(id_championnat=int(ligne["idCha"]),
@@ -131,16 +127,17 @@ def _importer_championnats_equipes(filepath):
             db.session.add(affronter)
     db.session.commit()
 
+
 def _importer_championnats_individuels(filepath):
     """Permet d'importer les données relatives aux championnats par équipes"""
-    with open(filepath+"/joueur.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/joueur.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             joueur = Joueur(nom=ligne["nomJ"], prenom=ligne["prenomJ"],
                             id_equipe=int(ligne["idE"]) if ligne['idE'] != "" else None)
             db.session.add(joueur)
 
-    with open(filepath+"/champ_indiv.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/champ_indiv.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             champ = ChampionnatIndividuel(date_cha=date.fromisoformat(ligne["dateCha"]),
@@ -149,13 +146,14 @@ def _importer_championnats_individuels(filepath):
                                           niveau=ligne["niveau"])
             db.session.add(champ)
 
-    with open(filepath+"/classer.csv", newline="", encoding="utf-8") as csvfile:
+    with open(filepath + "/classer.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             classer = Classer(id_championnat=int(ligne["idCha"]), id_j=int(ligne["idJ"]),
                               rang=int(ligne["rang"]))
             db.session.add(classer)
     db.session.commit()
+
 
 @app.cli.command()
 @click.argument('filepath')
@@ -169,20 +167,26 @@ def loaddb(filepath):
     #  création de toutes les tables
     db.drop_all()
     db.create_all()
+
     try:
-        # chargement de notre base
-        _importer_articles(filename=filepath+"/article.csv")
+        _importer_articles(filename=filepath + "/article.csv")
         lg.warning('Articles importés')
-        _importer_trivias(filename=filepath+"/histoire.csv")
+
+        _importer_trivias(filename=filepath + "/histoire.csv")
         lg.warning('Trivias importées')
-        _importer_partenaires(filename=filepath+"/partenaire.csv")
+
+        _importer_partenaires(filename=filepath + "/partenaire.csv")
         lg.warning('Partenaires importés')
-        _importer_users(filename=filepath+"/utilisateur.csv")
+
+        _importer_users(filename=filepath + "/utilisateur.csv")
         lg.warning('Utilisateurs importés')
+
         _importer_tarifs(filepath=filepath)
         lg.warning('Tarifs importés')
+
         _importer_championnats_equipes(filepath=filepath)
         lg.warning('Championnats par équipes importés')
+
         _importer_championnats_individuels(filepath=filepath)
         lg.warning('Championnats individuels importés')
 
