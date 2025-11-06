@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Suppression d'une catégorie ou sous-catégorie</h1>
+    <p>Vous allez supprimer une catégorie ou une sous-catégorie. Cette catégorie sous-catégorie ne
+        sera plus visible sur le site. Voulez-vous continuer ?</p>
+    <form action="{{ url_for('tarifications_categorie_delete', id_cat=categorie.id) }}"
+          method="post"
+          class="form-horizontal mb-3">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="Supprimer" class="btn btn-danger">
+                <a href="{{ url_for('tarifications') }}" class="btn btn-secondary">Annuler</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
