@@ -7,15 +7,15 @@ class Reduction(db.Model):
                                db.ForeignKey("TARIF.idT", ondelete="CASCADE",onupdate="CASCADE"),
                                primary_key=True)
     taux: str = db.Column("taux", db.Text)
-    licence: bool = db.Column("surLicence", db.Boolean)
+    cumulable: bool = db.Column("estCumulable", db.Boolean)
 
     tarif = db.relationship("Tarif", backref=db.backref("reductions",
                             lazy="dynamic", cascade="all, delete-orphan"))
 
-    def __init__(self, id_tarif: int, taux: str, licence: bool):
+    def __init__(self, id_tarif: int, taux: str, cumulable: bool):
         self._id_tarif = id_tarif
         self.taux = taux
-        self.licence = licence
+        self.cumulable = cumulable
 
     def __str__(self):
         return f"<Reduction({self._id_tarif}) {self.tarif.intitule} {self.taux}>"

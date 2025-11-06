@@ -25,8 +25,8 @@ def _importer_articles(filename):
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             article = Article(titre=ligne["titreArt"], contenu=ligne["contenu"],
-                            date_publi=date.fromisoformat(ligne["dateArt"]),
-                            type_article=ligne["typeArt"])
+                              date_publi=date.fromisoformat(ligne["dateArt"]),
+                              type_article=ligne["typeArt"])
             db.session.add(article)
     db.session.commit()
 
@@ -66,7 +66,7 @@ def _importer_tarifs(filepath):
                 categorie = CategorieTarif(sport=ligne["sport"], intitule=ligne["intituleCat"])
             else:
                 categorie = CategorieTarif(sport=ligne["sport"], intitule=ligne["intituleCat"],
-                                        id_parent=int(ligne["idCatParent"]))
+                                           id_parent=int(ligne["idCatParent"]))
             db.session.add(categorie)
 
     with open(filepath+"/tarif.csv", newline="", encoding="utf-8") as csvfile:
@@ -85,7 +85,7 @@ def _importer_tarifs(filepath):
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             reduction = Reduction(id_tarif=int(ligne["idT"]), taux=ligne["taux"],
-                                cumulable=ligne["estCumulable"].strip() == "True")
+                                  cumulable=ligne["estCumulable"].strip() == "True")
             db.session.add(reduction)
     db.session.commit()
 
@@ -100,9 +100,9 @@ def _importer_championnats_equipes(filepath):
     with open(filepath+"/champ_equipe.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            champ = ChampionnatEquipe(date_comp=date.fromisoformat(ligne["dateCha"]),
-                                    titre=ligne["titreCha"], categorie=ligne["categorieSport"],
-                                    serie=ligne["serie"], id_div=int(ligne["idDiv"]))
+            champ = ChampionnatEquipe(date_cha=date.fromisoformat(ligne["dateCha"]),
+                                      titre=ligne["titreCha"], categorie=ligne["categorieSport"],
+                                      serie=ligne["serie"], id_div=int(ligne["idDiv"]))
             db.session.add(champ)
 
     with open(filepath+"/equipe.csv", newline="", encoding="utf-8") as csvfile:
@@ -122,11 +122,12 @@ def _importer_championnats_equipes(filepath):
     with open(filepath+"/affronter.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            affronter = Affronter(id_championnat=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
-                                adversaire=ligne["nomAdv"], resultat=ligne["resultat"],
-                                score=ligne["score"], stade=ligne["stade"],
-                                domicile=bool(ligne["estDomicile"]),
-                                date_match=date.fromisoformat(ligne["dateMatch"]))
+            affronter = Affronter(id_championnat=int(ligne["idCha"]),
+                                  id_equipe=int(ligne["idE"]),
+                                  adversaire=ligne["nomAdv"],
+                                  resultat=ligne["resultat"], score=ligne["score"],
+                                  domicile=bool(ligne["estDomicile"]),
+                                  date_match=date.fromisoformat(ligne["dateMatch"]))
             db.session.add(affronter)
     db.session.commit()
 
@@ -142,25 +143,29 @@ def _importer_championnats_individuels(filepath):
     with open(filepath+"/champ_indiv.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            champ = ChampionnatIndividuel(date_comp=date.fromisoformat(ligne["dateCha"]),
-                                    titre=ligne["titreCha"],
-                                    categorie=ligne["categorieSport"], serie=ligne["serie"],
-                                        niveau=ligne["niveau"])
+            champ = ChampionnatIndividuel(date_cha=date.fromisoformat(ligne["dateCha"]),
+                                          titre=ligne["titreCha"],
+                                          categorie=ligne["categorieSport"], serie=ligne["serie"],
+                                          niveau=ligne["niveau"])
             db.session.add(champ)
 
     with open(filepath+"/classer.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             classer = Classer(id_championnat=int(ligne["idCha"]), id_j=int(ligne["idJ"]),
-                            rang=int(ligne["rang"]))
+                              rang=int(ligne["rang"]))
             db.session.add(classer)
     db.session.commit()
 
 @app.cli.command()
 @click.argument('filepath')
 def loaddb(filepath):
-    '''Creates the tables and populates them with data.'''
+    '''Crée les tables de la base et les remplies
 
+    Args:
+        filepath (str): Le chemin du dossier contenant les fichiers CSV où se trouvent les données
+                        de notre base
+    '''
     #  création de toutes les tables
     db.drop_all()
     db.create_all()
