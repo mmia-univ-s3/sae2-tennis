@@ -1,57 +1,57 @@
-idCha;idE;nomAdv;resultat;score;stade;estDomicile;dateMatch
-1;1;equipe 10;V;7/2;stade1;True;2025-10-05
-2;2;equipe 3;D;4/7;stade1;False;2025-10-06
-3;3;equipe 2;V;7/4;stade1;True;2025-10-06
-4;4;equipe 5;D;10/12;stade1;False;2025-10-08
-5;5;equipe 4;V;12/10;stade1;True;2025-10-08
-6;6;equipe 7;D;0/7;stade1;False;2025-10-10
-7;7;equipe 6;V;7/0;stade1;True;2025-10-10
-8;8;equipe 9;D;9/11;stade1;False;2025-10-12
-9;9;equipe 8;V;11/9;stade1;True;2025-10-12
-10;10;equipe10;D;4/5;stade1;False;2025-10-05
-11;6;Malemort ASV;D;6/0;Stade 2;False;2023-03-26
-11;6;Gradignan TC;D;6/0;Stade 2;True;2023-04-02
-11;6;Rochefort SA;V;5/0;Stade 3;True;2023-04-02
-11;6;Loudun TC;V;5/0;Stade 4;False;2023-04-02
-11;6;Chauvigny US;V;3/2;Stade 5;False;2023-04-02
-11;6;Chasseneuil TC;D;6/0;Stade 2;False;2023-04-16
-11;6;Isle TC;D;5/1;Stade 2;True;2023-04-23
-11;6;Neuville TC;V;4/1;Stade 3;False;2023-04-23
-11;6;Raquettes du Moisson;V;3/2;Stade 4;True;2023-04-23
-11;6;Isle Jourdain TC;V;3/2;Stade 5;True;2023-04-23
-11;6;Ingrandes TC;V;3/1;Stade 6;True;2023-04-23
-11;6;Cisse TC;D;4/0;Stade 7;False;2023-04-23
-11;6;Gencay-Usson TC;N;2/2;Stade 8;True;2023-04-23
-11;6;Saint Benoit TC;D;4/0;Stade 9;True;2023-04-23
-11;6;TC Du 16ème;D;6/0;Stade 1;True;2023-04-30
-11;6;Limoges ASPTT;D;forfait;Stade 2;False;2023-04-30
-11;6;Nouaille TC;V;4/1;Stade 3;True;2023-04-30
-11;6;Viliteuil TC;V;4/1;Stade 4;False;2023-04-30
-11;6;Lusignan Venours TC;D;3/2;Stade 5;True;2023-04-30
-11;6;Migne Auxances US;D;3/1;Stade 6;False;2023-04-30
-11;6;Mirebeau TC;V;3/1;Stade 7;True;2023-04-30
-11;6;Vouille TC;N;2/2;Stade 8;False;2023-04-30
-11;6;Naintre TC;N;2/2;Stade 9;False;2023-04-30
-11;6;SNUC Tennis;D;5/1;Stade 1;False;2023-05-07
-11;6;Rochefoucauld TC;V;4/1;Stade 3;False;2023-05-07
-11;6;Neuville TC;V;3/2;Stade 4;True;2023-05-07
-11;6;Angouleme TCM;D;3/2;Stade 5;False;2023-05-07
-11;6;Chatelleraudais Nautique TC;V;3/1;Stade 6;True;2023-05-07
-11;6;Vienne et Mouliere TC;D;4/0;Stade 9;True;2023-05-07
-11;6;TC De Gemenos;D;5/1;Stade 1;True;2023-05-14
-11;6;Chasseneuil TC;V;3/2;Stade 3;True;2023-05-14
-11;6;Fontaine LeComte TC;D;4/1;Stade 4;False;2023-05-14
-11;6;Charente Limousine TC;V;4/1;Stade 5;True;2023-05-14
-11;6;Vienne et Mouliere TC;D;4/0;Stade 7;True;2023-05-14
-11;6;Raquette Bonnimatoise;D;3/1;Stade 8;False;2023-05-14
-11;6;Neuilly (AT);D;6/0;Stade 1;True;2023-05-21
-11;6;Poitiers Condorcet TC;D;3/1;Stade 6;False;2023-05-28
-11;6;Chasseuneuil TC;V;4/0;Stade 7;False;2023-05-28
-11;6;Chauvigny US;D;4/0;Stade 8;True;2023-05-28
-11;6;Val de Boivre TC;V;3/1;Stade 9;False;2023-05-28
-11;6;SC Ardresien;D;forfait;Stade 1;False;2023-06-04
-11;6;16e Creche TC;V;3/2;Stade 3;False;2023-06-04
-11;6;Roche Posay TC;V;3/1;Stade 6;True;2023-06-04
-11;6;PEC;N;2/2;Stade 7;True;2023-06-04
-11;6;Vercival TC;D;4/0;Stade 8;False;2023-06-04
-11;6;Lusignan Venours TC;D;4/0;Stade 9;True;2023-06-04
+idCha;idE;nomAdv;resultat;score;estDomicile;dateMatch
+1;1;equipe 10;V;7/2;True;2025-10-05
+2;2;equipe 3;D;4/7;False;2025-10-06
+3;3;equipe 2;V;7/4;True;2025-10-06
+4;4;equipe 5;D;10/12;False;2025-10-08
+5;5;equipe 4;V;12/10;True;2025-10-08
+6;6;equipe 7;D;0/7;False;2025-10-10
+7;7;equipe 6;V;7/0;True;2025-10-10
+8;8;equipe 9;D;9/11;False;2025-10-12
+9;9;equipe 8;V;11/9;True;2025-10-12
+10;10;equipe10;D;4/5;False;2025-10-05
+11;12;Malemort ASV;D;6/0;False;2023-03-26
+11;12;Gradignan TC;D;6/0;True;2023-04-02
+11;13;Rochefort SA;V;5/0;True;2023-04-02
+11;14;Loudun TC;V;5/0;False;2023-04-02
+11;15;Chauvigny US;V;3/2;False;2023-04-02
+11;12;Chasseneuil TC;D;6/0;False;2023-04-16
+11;12;Isle TC;D;5/1;True;2023-04-23
+11;13;Neuville TC;V;4/1;False;2023-04-23
+11;14;Raquettes du Moisson;V;3/2;True;2023-04-23
+11;15;Isle Jourdain TC;V;3/2;True;2023-04-23
+11;16;Ingrandes TC;V;3/1;True;2023-04-23
+11;17;Cisse TC;D;4/0;False;2023-04-23
+11;18;Gencay-Usson TC;N;2/2;True;2023-04-23
+11;19;Saint Benoit TC;D;4/0;True;2023-04-23
+11;11;TC Du 16ème;D;6/0;True;2023-04-30
+11;12;Limoges ASPTT;D;forfait;False;2023-04-30
+11;13;Nouaille TC;V;4/1;True;2023-04-30
+11;14;Viliteuil TC;V;4/1;False;2023-04-30
+11;15;Lusignan Venours TC;D;3/2;True;2023-04-30
+11;16;Migne Auxances US;D;3/1;False;2023-04-30
+11;17;Mirebeau TC;V;3/1;True;2023-04-30
+11;18;Vouille TC;N;2/2;False;2023-04-30
+11;19;Naintre TC;N;2/2;False;2023-04-30
+11;11;SNUC Tennis;D;5/1;False;2023-05-07
+11;13;Rochefoucauld TC;V;4/1;False;2023-05-07
+11;14;Neuville TC;V;3/2;True;2023-05-07
+11;15;Angouleme TCM;D;3/2;False;2023-05-07
+11;16;Chatelleraudais Nautique TC;V;3/1;True;2023-05-07
+11;19;Vienne et Mouliere TC;D;4/0;True;2023-05-07
+11;11;TC De Gemenos;D;5/1;True;2023-05-14
+11;13;Chasseneuil TC;V;3/2;True;2023-05-14
+11;14;Fontaine LeComte TC;D;4/1;False;2023-05-14
+11;15;Charente Limousine TC;V;4/1;True;2023-05-14
+11;17;Vienne et Mouliere TC;D;4/0;True;2023-05-14
+11;18;Raquette Bonnimatoise;D;3/1;False;2023-05-14
+11;11;Neuilly (AT);D;6/0;True;2023-05-21
+11;16;Poitiers Condorcet TC;D;3/1;False;2023-05-28
+11;17;Chasseuneuil TC;V;4/0;False;2023-05-28
+11;18;Chauvigny US;D;4/0;True;2023-05-28
+11;19;Val de Boivre TC;V;3/1;False;2023-05-28
+11;11;SC Ardresien;D;forfait;False;2023-06-04
+11;13;16e Creche TC;V;3/2;False;2023-06-04
+11;16;Roche Posay TC;V;3/1;True;2023-06-04
+11;17;PEC;N;2/2;True;2023-06-04
+11;18;Vercival TC;D;4/0;False;2023-06-04
+11;19;Lusignan Venours TC;D;4/0;True;2023-06-04

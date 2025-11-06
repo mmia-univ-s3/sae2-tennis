@@ -105,14 +105,14 @@ def _importer_championnats_equipes(filepath):
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             equipe = Equipe(nom=ligne["nomE"], categorie=ligne["categorieE"],
-                            id_div=int(ligne["idDiv"]), rang=int(ligne["rangDiv"]))
+                            id_div=int(ligne["idDiv"]), rang=ligne["rangDiv"])
             db.session.add(equipe)
 
     with open(filepath + "/participer.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             participer = Participer(id_cha=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
-                                    rang=int(ligne["rang"]), poule=ligne["poule"])
+                                    rang=ligne["rang"], poule=ligne["poule"])
             db.session.add(participer)
 
     with open(filepath + "/affronter.csv", newline="", encoding="utf-8") as csvfile:

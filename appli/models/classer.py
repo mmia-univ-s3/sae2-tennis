@@ -6,14 +6,14 @@ class Classer(db.Model):
     _id_championnat: int = db.Column("idCha", db.Integer, db.ForeignKey("CHAMP_INDIV.idCha"),
                              primary_key=True)
     _id_j: int = db.Column("idJ", db.Integer, db.ForeignKey("JOUEUR.idJ"), primary_key=True)
-    rang: int = db.Column("rang", db.Integer)
+    rang: str = db.Column("rang", db.Text)
 
     competition = db.relationship("ChampionnatIndividuel", backref=db.backref("classer",
                                   lazy="dynamic", cascade="all, delete-orphan"))
     joueur = db.relationship("Joueur", backref=db.backref("classer",
                             lazy="dynamic", cascade="all, delete-orphan"))
 
-    def __init__(self, id_championnat: int, id_j: int, rang: int):
+    def __init__(self, id_championnat: int, id_j: int, rang: str):
         self._id_championnat = id_championnat
         self._id_j = id_j
         self.rang = rang

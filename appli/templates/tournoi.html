@@ -3,7 +3,7 @@
 {% block main %}
     <body>
         <h1>{{ championnat.titre }}</h1>
-        <h2>Début le {{ championnat.date_comp.strftime("%d/%m/%Y") }}</h2>
+        <h2>Début le {{ championnat.date_championnat.strftime("%d/%m/%Y") }}</h2>
         <ul>
             {% if type_champ == "individuel" %}
                 <li>Championnnat individuel</li>
@@ -16,16 +16,16 @@
         </ul>
         {% if type_champ == "individuel" %}
             {% if championnat.classer.all()|length > 0 %}
-                <table class="table table-bordered border-success">
-                    <thead class="table-warning table-bordered border-success">
-                        <th scope="col"><center>Participant</center></th>
-                        <th scope="col"><center>Classement</center></th>
+                <table class="table table-bordered border-success-subtle">
+                    <thead class="table-bordered border-success-subtle">
+                        <th class="bg-warning-subtle" scope="col"><center>Participant</center></th>
+                        <th class="bg-warning-subtle" scope="col"><center>Classement</center></th>
                     </thead>
                     <tbody>
                         {% for classement in championnat.classer %}
                             <tr>
-                                <td class="table-success table-bordered border-success"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
-                                <td class="table-secondary table-bordered border-success"><center>{{ classement.rang }}{% if classement.rang == 1 %}er{% else %}e{% endif %}</center></td>
+                                <td class="bg-success-subtle table-bordered border-success-subtle"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
+                                <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ classement.rang }}{% if classement.rang == 1 %}er{% else %}e{% endif %}</center></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -38,44 +38,38 @@
                 <p>Aucune équipe du club ne participe à ce tournoi</p>
             {% else %}
                 {% for participant in championnat.participer %}
-                    <table class="table-responsive table-bordered border-success table align-middle">
+                    <table class="table-responsive table-bordered border-success-subtle table align-middle">
                         <tbody>
-                            <tr class="table-success">
-                                <th colspan="{{ stades[participant.equipe.id]|length * 2 }}"><center>{{ participant.equipe.nom }}</center></th>
-                                <th><center>{{ participant.rang }}{% if participant.rang == 1 %}ère{% else %}e{% endif %}</center></th>
+                            <tr class="table-bordered border-success-subtle">
+                                <th class="bg-success-subtle" colspan="2"><center>{{ participant.equipe.nom }}</center></th>
+                                <th class="bg-success-subtle"><center>{{ participant.rang }}</center></th>
                             </tr>
-                            <tr class="table-warning table-bordered border-success">
-                                <th scope="col"></th>
-                                {% for stade in stades[participant.equipe.id] %}
-                                    <th scope="col"><center>{{ stade }}</center></th>
-                                    <th scope="col"><center>Resultat</center></th>
-                                {% endfor %}
+                            <tr class="table-bordered border-success-subtle">
+                                <th class="bg-warning-subtle" scope="col"><center>Date</center></th>
+                                <th class="bg-warning-subtle" scope="col"><center>Adversaire</center></th>
+                                <th class="bg-warning-subtle" scope="col"><center>Resultat</center></th>
                             </tr>
                             {% for date_match in dates[participant.equipe.id] %}
                                 <tr>
-                                    <th class="table-warning table-bordered border-success" scope="row">{{ date_match.strftime("%d/%m/%Y") }}</th>
-                                    {% for stade in stades[participant.equipe.id] %}
-                                        {% if matchs[participant.equipe.id][date_match][stade] == None %}
-                                            <td colspan="2"><center> - </center></td>
-                                        {% elif matchs[participant.equipe.id][date_match][stade].domicile %}
-                                            <td class="table-primary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].adversaire }}</center></td>
-                                            <td class="table-primary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].resultat }} {{ matchs[participant.equipe.id][date_match][stade].score }}</center></td>
-                                        {% else %}
-                                            <td class="table-secondary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].adversaire }}</center></td>
-                                            <td class="table-secondary table-bordered border-success"><center>{{ matchs[participant.equipe.id][date_match][stade].resultat }} {{ matchs[participant.equipe.id][date_match][stade].score }}</center></td>
-                                        {% endif %}
-                                    {% endfor %}
+                                    <th class="bg-warning-subtle table-bordered border-success-subtle" scope="row"><center>{{ date_match.strftime("%d/%m/%Y") }}</center></th>
+                                    {% if matchs[participant.equipe.id][date_match].domicile %}
+                                        <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].adversaire }}</center></td>
+                                        <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].resultat }} {{ matchs[participant.equipe.id][date_match].score }}</center></td>
+                                    {% else %}
+                                        <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].adversaire }}</center></td>
+                                        <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].resultat }} {{ matchs[participant.equipe.id][date_match].score }}</center></td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 {% endfor %}
-                <table class="table table-bordered border-info">
+                <table class="table table-bordered border-info-subtle">
                     <tbody>
-                        <tr><th class="table-warning" colspan="2">Légende</th></tr>
+                        <tr><th class="bg-warning-subtle" colspan="2">Légende</th></tr>
                         <tr>
-                            <td class="table-primary">Réception</td>
-                            <td class="table-secondary">Déplacement</td>
+                            <td class="bg-primary-subtle">Réception</td>
+                            <td class="bg-secondary-subtle">Déplacement</td>
                         </tr>
                     </tbody>
                 </table>

@@ -8,7 +8,7 @@ class Participer(db.Model):
                                                   onupdate="CASCADE"), primary_key=True)
     _id_equipe: int = db.Column("idE", db.Integer,
                                db.ForeignKey("EQUIPE.idE"), primary_key=True)
-    rang: int = db.Column("rang", db.Integer)
+    rang: str = db.Column("rang", db.Text)
     poule: str = db.Column("poule", db.Text)
 
     championnat = db.relationship("ChampionnatEquipe", backref=db.backref("participer",
@@ -16,7 +16,7 @@ class Participer(db.Model):
     equipe = db.relationship("Equipe", backref=db.backref("participer",
                              lazy="dynamic", cascade="all, delete-orphan"))
 
-    def __init__(self, id_cha: int, id_equipe: int, rang: int, poule: int):
+    def __init__(self, id_cha: int, id_equipe: int, rang: str, poule: int):
         self._id_championnat = id_cha
         self._id_equipe = id_equipe
         self.rang = rang
