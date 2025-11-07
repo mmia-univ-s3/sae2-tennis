@@ -9,7 +9,7 @@ class Classer(db.Model):
     _id_j: int = db.Column("idJ", db.Integer, db.ForeignKey("JOUEUR.idJ"), primary_key=True)
     rang: str = db.Column("rang", db.Text)
 
-    competition = db.relationship("ChampionnatIndividuel", backref=db.backref("classer",
+    championnat = db.relationship("ChampionnatIndividuel", backref=db.backref("classer",
                                   lazy="dynamic", cascade="all, delete-orphan"))
     joueur = db.relationship("Joueur", backref=db.backref("classer",
                             lazy="dynamic", cascade="all, delete-orphan"))

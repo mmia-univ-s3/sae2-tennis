@@ -26,10 +26,10 @@
                         {% for classement in championnat.classer %}
                             <tr>
                                 <td class="bg-success-subtle table-bordered border-success-subtle"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
-                                <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ classement.rang }}{% if classement.rang == 1 %}er{% else %}e{% endif %}</center></td>
+                                <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ classement.rang }}</center></td>
                                 {% if current_user.is_authenticated %}
                                     <td class="table-bordered border-success-subtle">
-                                        <center><a href="{{ url_for('participant_indiv_delete', idC=championnat.id, idJ=classement.joueur.id) }}"
+                                        <center><a href="{{ url_for('participant_indiv_delete', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
                                             class="btn btn-outline-danger">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24"
@@ -40,6 +40,18 @@
                                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
                                                 <path d="M3 6h18"/>
                                                 <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ url_for('participant_indiv_update', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
+                                            class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24"
+                                                    viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
                                             </svg>
                                         </a></center>
                                     </td>
@@ -52,7 +64,7 @@
                 <p>Aucun joueur du club ne participe à ce tournoi</p>
             {% endif %}
             {% if current_user.is_authenticated %}
-                <center><a href="{{ url_for('participant_indiv_add', idC=championnat.id) }}"
+                <center><a href="{{ url_for('participant_indiv_add', id_championnat=championnat.id) }}"
                     class="btn btn-primary">Ajouter un participant</a></center>
             {% endif %}
         {% else %}
@@ -63,8 +75,8 @@
                     <table class="table-responsive table-bordered border-success-subtle table align-middle">
                         <tbody>
                             <tr class="table-bordered border-success-subtle">
-                                <th class="bg-success-subtle" colspan="2"><center>{{ participant.equipe.nom }}</center></th>
-                                <th class="bg-success-subtle"><center>Classement : {{ participant.rang }}</center></th>
+                                <th scope="col" bg-success-subtle" colspan="2"><center>{{ participant.equipe.nom }}</center></th>
+                                <th scope="col" class="bg-success-subtle"><center>Classement : {{ participant.rang }}</center></th>
                             </tr>
                             <tr class="table-bordered border-success-subtle">
                                 <th class="bg-warning-subtle" scope="col"><center>Date</center></th>
