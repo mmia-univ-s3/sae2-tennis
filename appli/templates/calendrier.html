@@ -5,15 +5,56 @@
         <h1>Calendrier des compétitions</h1>
         <h2>Compétitions individuelles</h2>
             <ul>
-                {% for comp in comp_indiv %}
-                    <li>{{ comp.date_championnat.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', type_tournoi='individuel', idC=comp.id) }}">{{ comp.titre }}</a></li>
+                {% for championnat in comp_indiv %}
+                    <li>
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('tournoi_delete', type_tournoi='individuel', idC=championnat.id) }}"
+                                class="btn btn-outline-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-trash-icon lucide-trash">
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                    <path d="M3 6h18"/>
+                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </a>
+                        {% endif %}
+                        {{ championnat.date_championnat.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', type_tournoi='individuel', idC=championnat.id) }}">{{ championnat.titre }}</a>
+                    </li>
                 {% endfor %}
             </ul>
+        {% if current_user.is_authenticated %}
+            <center><a href="{{ url_for('tournoi_add', type_tournoi='individuel') }}"
+                        class="btn btn-primary">Ajouter un championnat individuel</a></center>
+        {% endif %}
         <h2>Compétitions par équipes</h2>
             <ul>
-                {% for comp in comp_equipe %}
-                    <li>{{ comp.date_championnat.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', type_tournoi='equipe', idC=comp.id) }}">{{ comp.titre }}</a></li>
+                {% for championnat in comp_equipe %}
+                    <li>
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('tournoi_delete', type_tournoi='equipe', idC=championnat.id) }}"
+                                class="btn btn-outline-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-trash-icon lucide-trash">
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                    <path d="M3 6h18"/>
+                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </a>
+                        {% endif %}
+                        {{ championnat.date_championnat.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', type_tournoi='equipe', idC=championnat.id) }}">{{ championnat.titre }}</a>
+                    </li>
                 {% endfor %}
             </ul>
-    </body>
+        {% if current_user.is_authenticated %}
+            <center><a href="{{ url_for('tournoi_add', type_tournoi='equipe') }}"
+                class="btn btn-primary">Ajouter un championnat par équipe</a></center>
+        {% endif %}
 {% endblock %}
