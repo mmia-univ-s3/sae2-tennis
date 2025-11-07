@@ -17,7 +17,7 @@
                 </div>
                 <div class="btn-group">
                     <a title="Réinitialiser le mot de passe"
-                       href="/utilisateurs/{{ user.login }}/reset/"
+                       href="{{ url_for('utilisateurs_reset', login=user.login) }}"
                        class="btn btn-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                              viewBox="0 0 24 24"
@@ -32,7 +32,7 @@
                             <circle cx="10" cy="14" r="2"/>
                         </svg>
                     </a>
-                    <a title="Supprimer" href="/utilisateurs/{{ user.login }}/delete/"
+                    <a title="Supprimer" href="{{ url_for('utilisateurs_delete', login=user.login) }}"
                        class="btn btn-secondary {% if current_user.login == user.login %}disabled{% endif %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                              viewBox="0 0 24 24"
@@ -50,6 +50,6 @@
     </ul>
 
     <div class="mt-2">
-        <a href="/utilisateurs/create" class="btn btn-primary">Ajouter un nouvel utilisateur</a>
+        <a href="{{ url_for('utilisateurs_create') }}" class="btn btn-primary">Ajouter un nouvel utilisateur</a>
     </div>
 {% endblock %}
