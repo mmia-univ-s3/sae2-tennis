@@ -18,7 +18,30 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-### Pour exécuter
+## Initialisation de la base de données
+
+```
+flask loaddb appli/data
+```
+
+Ou si vous devez modifier l'URL de la base de données :
+
+* Sur Linux/macOS :
+
+```
+DATABASE_URL=mysql://nomutilisateur:motdepasse@serveur/BaseDeDonnees flask loaddb appli/data
+```
+
+* Sur Windows :
+
+```
+$Env:DATABASE_URL = "mysql://nomutilisateur:motdepasse@serveur/BaseDeDonnees"
+flask loaddb appli/data
+```
+
+Vous pouvez aussi utiliser `sqlite:///chemin/vers/la/base/de/donnees.db` pour utiliser SQLite au lieu de MySQL.
+
+## Lancement
 
 ```
 flask run
@@ -26,18 +49,20 @@ flask run
 
 Ou si vous devez modifier l'URL de la base de données :
 
-#### Sur Linux ou macOS
+* Sur Linux/macOS :
 
 ```
 DATABASE_URL=mysql://nomutilisateur:motdepasse@serveur/BaseDeDonnees flask run
 ```
 
-#### Sur Windows
+* Sur Windows :
 
 ```
 $Env:DATABASE_URL = "mysql://nomutilisateur:motdepasse@serveur/BaseDeDonnees"
 flask run
 ```
+
+Vous pouvez aussi utiliser `sqlite:///chemin/vers/la/base/de/donnees.db` pour utiliser SQLite au lieu de MySQL.
 
 ## Description générale du projet
 
