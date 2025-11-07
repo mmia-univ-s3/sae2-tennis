@@ -660,10 +660,8 @@
         </table>
     {% endfor %}
     {% if current_user.is_authenticated %}
-        <th style="width: 123px;">
-            <center><a href="{{ url_for('tarifications_categorie_ajout') }}"
-                       class="btn btn-primary">Ajouter
-                une catégorie</a></center>
-        </th>
+        <center><a href="{{ url_for('tarifications_categorie_ajout') }}"
+                   class="btn btn-primary">Ajouter
+            une catégorie</a></center>
     {% endif %}
 {% endblock %}
