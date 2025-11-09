@@ -2,8 +2,8 @@ from flask import render_template, redirect, url_for
 from flask_login import login_required
 
 from appli.app import app, db
-from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer
-from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser
+from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer, Equipe, Participer
+from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser, FormParticiper
 
 
 @app.route('/competitions/calendrier/')
@@ -156,9 +156,8 @@ def participant_indiv_delete(id_championnat: int, id_joueur: int):
     joueur = Joueur.query.get(id_joueur)
     championnat = ChampionnatIndividuel.query.get(id_championnat)
     classer = Classer.query.get((id_championnat, id_joueur))
-    un_joueur = Joueur.query.get(id_joueur)
     form = FormClasser(joueur=id_joueur, rang=classer.rang)
-    form.joueur.choices = [(un_joueur.id, f"{un_joueur.prenom} {un_joueur.nom}")]
+    form.joueur.choices = [(joueur.id, f"{joueur.prenom} {joueur.nom}")]
     if form.validate_on_submit():
         db.session.delete(classer)
         db.session.commit()
@@ -181,9 +180,8 @@ def participant_indiv_update(id_championnat: int, id_joueur: int):
     joueur = Joueur.query.get(id_joueur)
     championnat = ChampionnatIndividuel.query.get(id_championnat)
     classer = Classer.query.get((id_championnat, id_joueur))
-    un_joueur = Joueur.query.get(id_joueur)
     form = FormClasser(joueur=id_joueur, rang=classer.rang)
-    form.joueur.choices = [(un_joueur.id, f"{un_joueur.prenom} {un_joueur.nom}")]
+    form.joueur.choices = [(joueur.id, f"{joueur.prenom} {joueur.nom}")]
     if form.validate_on_submit():
         classer.rang = form.rang.data
         db.session.commit()
@@ -217,6 +215,82 @@ def participant_indiv_add(id_championnat: int):
         return redirect(url_for("tournoi", type_tournoi="individuel",
                                 id_championnat=id_championnat))
     return render_template('participant_indiv_add.html', title="Ajouter un participant",
+                           form=form, championnat=championnat)
+
+
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/delete/',
+           methods=('GET', 'POST'))
+@login_required
+def participant_equipe_delete(id_championnat: int, id_equipe: int):
+    """Permet de supprimer une équipe d'un tournoi par équipe
+
+    Args:
+        id_championnat (int): L'identifiant du tournoi dans la base de données
+        id_equipe (int): L'identifiant d'une équipe dans la base de données
+    """
+    equipe = Equipe.query.get(id_equipe)
+    championnat = ChampionnatEquipe.query.get(id_championnat)
+    participer = Participer.query.get((id_championnat, id_equipe))
+    form = FormParticiper(joueur=id_equipe, rang=participer.rang, poule=participer.poule)
+    form.equipe.choices = [(equipe.id, equipe.nom)]
+    if form.validate_on_submit():
+        db.session.delete(participer)
+        db.session.commit()
+        return redirect(url_for("tournoi", type_tournoi="equipe",
+                                id_championnat=id_championnat))
+    return render_template('participant_equipe_delete.html', title="Supprimer une équipe",
+                           form=form, championnat=championnat, equipe=equipe)
+
+
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/update/',
+           methods=('GET', 'POST'))
+@login_required
+def participant_equipe_update(id_championnat: int, id_equipe: int):
+    """Permet de modifier le résultat d'une équipe lors d'un championnat par équipe
+
+    Args:
+        id_championnat (int): L'identifiant du tournoi dans la base de données
+        id_equipe (int): L'identifiant d'une équipe dans la base de données
+    """
+    equipe = Equipe.query.get(id_equipe)
+    championnat = ChampionnatEquipe.query.get(id_championnat)
+    participer = Participer.query.get((id_championnat, id_equipe))
+    form = FormParticiper(equipe=id_equipe, rang=participer.rang, poule=participer.poule)
+    form.equipe.choices = [(equipe.id, equipe.nom)]
+    if form.validate_on_submit():
+        participer.rang = form.rang.data
+        participer.poule = form.poule.data
+        db.session.commit()
+        return redirect(url_for("tournoi", type_tournoi="equipe",
+                                id_championnat=id_championnat))
+    return render_template('participant_equipe_update.html', title="Modifier une équipe",
+                           form=form, championnat=championnat, equipe=equipe)
+
+
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/add/', methods=('GET', 'POST'))
+@login_required
+def participant_equipe_add(id_championnat: int):
+    """Permet d'ajouter une équipe à un tournoi par équipe
+
+    Args:
+        id_championnat (int): L'identifiant du tournoi dans la base de données
+    """
+    championnat = ChampionnatEquipe.query.get(id_championnat)
+    les_equipes = Equipe.query.filter(~Equipe.participer.any(\
+        Participer.championnat.has(ChampionnatEquipe.id == id_championnat)))
+    choix = []
+    for donnee in les_equipes:
+        choix.append((donnee.id, donnee.nom))
+    form = FormParticiper()
+    form.equipe.choices = choix
+    if form.validate_on_submit():
+        participer = Participer(id_championnat=id_championnat, id_equipe=form.equipe.data,
+                                rang=form.rang.data, poule=form.poule.data)
+        db.session.add(participer)
+        db.session.commit()
+        return redirect(url_for("tournoi", type_tournoi="equipe",
+                                id_championnat=id_championnat))
+    return render_template('participant_equipe_add.html', title="Ajouter une équipe",
                            form=form, championnat=championnat)
 
 

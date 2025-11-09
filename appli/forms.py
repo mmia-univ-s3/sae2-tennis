@@ -134,3 +134,9 @@ class FormClasser(FlaskForm):
     joueur = SelectField("Joueur", validators=[DataRequired()], default=1, coerce=int,
                          choices=[])
     rang = StringField("Rang")
+
+class FormParticiper(FlaskForm):
+    equipe = SelectField("Equipe", validators=[DataRequired()], default=1, coerce=int,
+                         choices=[])
+    rang = StringField("Rang")
+    poule = StringField("Poule", validators=[DataRequired()])

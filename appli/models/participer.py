@@ -17,8 +17,8 @@ class Participer(db.Model):
     equipe = db.relationship("Equipe", backref=db.backref("participer",
                              lazy="dynamic", cascade="all, delete-orphan"))
 
-    def __init__(self, id_cha: int, id_equipe: int, rang: str, poule: int):
-        self._id_championnat = id_cha
+    def __init__(self, id_championnat: int, id_equipe: int, rang: str, poule: int):
+        self._id_championnat = id_championnat
         self._id_equipe = id_equipe
         self.rang = rang
         self.poule = poule
