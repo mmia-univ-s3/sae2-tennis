@@ -2,9 +2,9 @@
 
 {% block main %}
     <body>
-        <h1>Palmarès - {{ annee }}</h1>
+        <h1><center>Palmarès - {{ annee }}</center></h1>
         {% for niveau in indiv %}
-            <h2>Championnat Individuel {{ niveau }}</h2>
+            <h2><center>Championnat Individuel {{ niveau }}</center></h2>
             {% for categorie in indiv[niveau] %}
                 <table class="table table-bordered border-success">
                 <tbody>
