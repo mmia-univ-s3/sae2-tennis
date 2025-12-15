@@ -20,6 +20,18 @@ class ChampionnatIndividuel(db.Model):
         self.serie = serie
         self.niveau = niveau
 
+    def vainqueur(self) -> str:
+        for participant in self.classer:
+            if participant.rang.startswith("1"):
+                return f"{participant.joueur.prenom} {participant.joueur.nom}"
+        return "-"
+    
+    def finaliste(self) -> str:
+        for participant in self.classer:
+            if participant.rang.startswith("2"):
+                return f"{participant.joueur.prenom} {participant.joueur.nom}"
+        return "-"
+
     def __str__(self):
         return f"<ChampionnatIndividuel({self.id}) {self.titre}>"
 

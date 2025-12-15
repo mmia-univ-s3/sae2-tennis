@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <body>
+        <h1>Palmarès - {{ annee }}</h1>
+        {% for niveau in indiv %}
+            <h2>Championnat Individuel {{ niveau }}</h2>
+            {% for categorie in indiv[niveau] %}
+                <table class="table table-bordered border-success">
+                <tbody>
+                    <tr>
+                        <th style="width: 400px;" class="bg-danger-subtle">
+                            <center>Catégorie : {{ categorie }}</center>
+                        </th>
+                        <th style="width: 450px;" class="bg-primary-subtle">
+                            <center>Vainqueur</center>
+                        </th>
+                        <th style="width: 450px;" class="bg-primary-subtle">
+                            <center>Finaliste</center>
+                        </th>
+                        {% for championnat in indiv[niveau][categorie] %}
+                            <tr>
+                                <td><center>{{ championnat.titre }}</center></td>
+                                <td><center>{{ championnat.vainqueur() }}</center></td>
+                                <td><center>{{ championnat.finaliste() }}</center></td>
+                            </tr>
+                        {% endfor %}
+                    </tr>
+                    </tbody>
+                </table>
+            {% endfor %}
+        {% endfor %}
+    </body>
+{% endblock %}

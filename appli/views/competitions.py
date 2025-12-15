@@ -383,6 +383,18 @@ def palmares_list():
                            liste_annee=liste_annee)
 
 
+@app.route('/competitions/palmares/<int:annee>/')
+def palmares_annee(annee: int):
+    liste_champ_indiv:list[ChampionnatIndividuel] = ChampionnatIndividuel.query.all()
+    dict_indiv:dict[str, dict[str, set[ChampionnatIndividuel]]] = {}
+    for championnat in liste_champ_indiv:
+        dict_indiv.setdefault(championnat.niveau, {})
+        dict_indiv[championnat.niveau].setdefault(championnat.categorie, set())
+        dict_indiv[championnat.niveau][championnat.categorie].add(championnat)
+    return render_template('palmares.html', title=f"Palmarès {annee} - Competitions",
+                           annee=annee, indiv=dict_indiv)
+
+
 @app.route('/competitions/tournois-internes/')
 def internes():
     return render_template('internes.html', title="Tournois internes - Competitions")
