@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Participer(db.Model):
+    """Participation/Classement d'une équipe dans un championnat par équipe"""
     __tablename__ = "PARTICIPER"
 
     _id_championnat: int = db.Column("idCha", db.Integer,
@@ -8,7 +9,7 @@ class Participer(db.Model):
                                                   onupdate="CASCADE"), primary_key=True)
     _id_equipe: int = db.Column("idE", db.Integer,
                                db.ForeignKey("EQUIPE.idE"), primary_key=True)
-    rang: int = db.Column("rang", db.Integer)
+    rang: str = db.Column("rang", db.Text)
     poule: str = db.Column("poule", db.Text)
 
     championnat = db.relationship("ChampionnatEquipe", backref=db.backref("participer",
@@ -16,8 +17,8 @@ class Participer(db.Model):
     equipe = db.relationship("Equipe", backref=db.backref("participer",
                              lazy="dynamic", cascade="all, delete-orphan"))
 
-    def __init__(self, id_cha: int, id_equipe: int, rang: int, poule: int):
-        self._id_championnat = id_cha
+    def __init__(self, id_championnat: int, id_equipe: int, rang: str, poule: str):
+        self._id_championnat = id_championnat
         self._id_equipe = id_equipe
         self.rang = rang
         self.poule = poule
