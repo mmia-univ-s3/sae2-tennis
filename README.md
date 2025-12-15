@@ -24,7 +24,7 @@ pip install -r requirements.txt
 flask loaddb appli/data
 ```
 
-Ou si vous devez modifier l'URL de la base de données :
+Ou si vous devez modifier l'URL de la base de données pour utiliser MySQL au lieu de SQLite :
 
 * Sur Linux/macOS :
 
@@ -39,15 +39,13 @@ $Env:DATABASE_URL = "mysql://nomutilisateur:motdepasse@serveur/BaseDeDonnees"
 flask loaddb appli/data
 ```
 
-Vous pouvez aussi utiliser `sqlite:///chemin/vers/la/base/de/donnees.db` pour utiliser SQLite au lieu de MySQL.
-
 ## Lancement
 
 ```
 flask run
 ```
 
-Ou si vous devez modifier l'URL de la base de données :
+Ou si vous devez modifier l'URL de la base de données pour utiliser MySQL au lieu de SQLite :
 
 * Sur Linux/macOS :
 
