@@ -2,6 +2,7 @@ from datetime import date
 from appli.app import db
 
 class Article(db.Model):
+    """Article/Page du site"""
     __tablename__ = "ARTICLE"
 
     id: int = db.Column("idArt", db.Integer, primary_key=True)

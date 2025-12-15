@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Partenaire(db.Model):
+    """Association/Entreprise partenaire du club"""
     __tablename__ = "PARTENAIRE"
 
     id: int = db.Column("idP", db.Integer, primary_key = True)

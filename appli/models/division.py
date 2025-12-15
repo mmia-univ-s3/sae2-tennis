@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Division(db.Model):
+    """Division sportive"""
     __tablename__ = "DIVISION"
 
     id: int = db.Column("idDiv", db.Integer, primary_key=True)

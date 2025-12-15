@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Histoire(db.Model):
+    """Trivia du club"""
     __tablename__ = "HISTOIRE"
 
     id: int = db.Column("idH", db.Integer, primary_key = True)

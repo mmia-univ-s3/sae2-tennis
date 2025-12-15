@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Tarif(db.Model):
+    """Infos du tarif"""
     __tablename__ = "TARIF"
 
     id: int = db.Column("idT", db.Integer, primary_key=True)

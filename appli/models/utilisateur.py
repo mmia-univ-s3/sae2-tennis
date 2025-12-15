@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from appli.app import db
 
 class Utilisateur(db.Model, UserMixin):
+    """Administrateur du site"""
     __tablename__ = "UTILISATEUR"
 
     login: str = db.Column("idU", db.String(32), primary_key=True)

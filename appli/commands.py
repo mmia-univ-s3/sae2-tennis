@@ -105,14 +105,14 @@ def _importer_championnats_equipes(filepath):
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             equipe = Equipe(nom=ligne["nomE"], categorie=ligne["categorieE"],
-                            id_div=int(ligne["idDiv"]), rang=int(ligne["rangDiv"]))
+                            id_div=int(ligne["idDiv"]), rang=ligne["rangDiv"])
             db.session.add(equipe)
 
     with open(filepath + "/participer.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            participer = Participer(id_cha=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
-                                    rang=int(ligne["rang"]), poule=ligne["poule"])
+            participer = Participer(id_championnat=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
+                                    rang=ligne["rang"], poule=ligne["poule"])
             db.session.add(participer)
 
     with open(filepath + "/affronter.csv", newline="", encoding="utf-8") as csvfile:
@@ -122,7 +122,7 @@ def _importer_championnats_equipes(filepath):
                                   id_equipe=int(ligne["idE"]),
                                   adversaire=ligne["nomAdv"],
                                   resultat=ligne["resultat"], score=ligne["score"],
-                                  domicile=bool(ligne["estDomicile"]),
+                                  domicile=ligne["estDomicile"] == "True",
                                   date_match=date.fromisoformat(ligne["dateMatch"]))
             db.session.add(affronter)
     db.session.commit()
