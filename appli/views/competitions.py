@@ -1,9 +1,11 @@
 from flask import render_template, redirect, url_for
 from flask_login import login_required
+from datetime import datetime
+from sqlalchemy.exc import IntegrityError, StatementError
 
 from appli.app import app, db
-from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer, Equipe, Participer
-from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser, FormParticiper
+from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer, Equipe, Participer, Affronter
+from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser, FormParticiper, FormAffronter
 
 
 @app.route('/competitions/calendrier/')
@@ -158,6 +160,7 @@ def participant_indiv_delete(id_championnat: int, id_joueur: int):
     classer = Classer.query.get((id_championnat, id_joueur))
     form = FormClasser(joueur=id_joueur, rang=classer.rang)
     form.joueur.choices = [(joueur.id, f"{joueur.prenom} {joueur.nom}")]
+    form.joueur.data = joueur.id
     if form.validate_on_submit():
         db.session.delete(classer)
         db.session.commit()
@@ -233,6 +236,7 @@ def participant_equipe_delete(id_championnat: int, id_equipe: int):
     participer = Participer.query.get((id_championnat, id_equipe))
     form = FormParticiper(joueur=id_equipe, rang=participer.rang, poule=participer.poule)
     form.equipe.choices = [(equipe.id, equipe.nom)]
+    form.equipe.data = equipe.id
     if form.validate_on_submit():
         db.session.delete(participer)
         db.session.commit()
@@ -293,6 +297,77 @@ def participant_equipe_add(id_championnat: int):
     return render_template('participant_equipe_add.html', title="Ajouter une équipe",
                            form=form, championnat=championnat)
 
+
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<adversaire>/<date_match>/delete/', methods=('GET', 'POST'))
+@login_required
+def affronter_delete(id_championnat: int, id_equipe: int, adversaire: str, date_match: str):
+    date = datetime.strptime(date_match, "%d-%m-%y").date()
+    affronter = Affronter.query.get((id_championnat, id_equipe, date))
+    form = FormAffronter()
+    form.adversaire.data = adversaire
+    form.date.data = date
+    form.resultat.data = affronter.resultat
+    form.score.data = affronter.score
+    form.domicile.data = str(affronter.domicile)
+    if form.validate_on_submit():
+        db.session.delete(affronter)
+        db.session.commit()
+        return redirect(url_for("tournoi", type_tournoi="equipe",
+                                id_championnat=id_championnat))
+    return render_template('affronter_delete.html', title="Supprimer un match",
+                           form=form, championnat=affronter.championnat, equipe=affronter.equipe,
+                           adversaire=adversaire, date_match=date_match)
+
+
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<adversaire>/<date_match>/update/', methods=('GET', 'POST'))
+@login_required
+def affronter_update(id_championnat: int, id_equipe: int, adversaire: str, date_match: str):
+    try:
+        date = datetime.strptime(date_match, "%d-%m-%y").date()
+        affronter = Affronter.query.get((id_championnat, id_equipe, date))
+        form = FormAffronter(date=date, score=affronter.score, domicile=str(affronter.domicile), resultat=affronter.resultat)
+        form.adversaire.data = adversaire
+        if form.validate_on_submit():
+            affronter.date_match = form.date.data
+            affronter.resultat = form.resultat.data
+            affronter.score = form.score.data
+            affronter.domicile = form.domicile.data == 'True'
+            db.session.commit()
+            return redirect(url_for("tournoi", type_tournoi="equipe",
+                                    id_championnat=id_championnat))
+        return render_template('affronter_update.html', title="Modifier un match",
+                               form=form, championnat=affronter.championnat, equipe=affronter.equipe,
+                               adversaire=adversaire, date_match=date_match)
+    except IntegrityError:
+        db.session.rollback()
+        return render_template('affronter_update.html', title="Modifier un match",
+                            form=form, championnat=affronter.championnat, equipe=affronter.equipe,
+                            adversaire=adversaire, date_match=date_match)
+
+
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/add/', methods=('GET', 'POST'))
+@login_required
+def affronter_add(id_championnat: int, id_equipe: int):
+    try:
+        championnat = ChampionnatEquipe.query.get(id_championnat)
+        equipe = Equipe.query.get(id_equipe)
+        form = FormAffronter()
+        if form.validate_on_submit():
+            affronter = Affronter(id_championnat=id_championnat, id_equipe=id_equipe,
+                                  adversaire=form.adversaire.data, resultat=form.resultat.data,
+                                  score=form.score.data, domicile=form.domicile.data == 'True',
+                                  date_match=form.date.data)
+            db.session.add(affronter)
+            db.session.commit()
+            return redirect(url_for("tournoi", type_tournoi="equipe",
+                                    id_championnat=id_championnat))
+        return render_template('affronter_add.html', title="Ajouter un match",
+                               form=form, championnat=championnat, equipe=equipe)
+    except IntegrityError:
+        db.session.rollback()
+        return render_template('affronter_add.html', title="Ajouter un match",
+                               form=form, championnat=championnat, equipe=equipe)
+    
 
 @app.route('/competitions/tournois-internes/')
 def internes():

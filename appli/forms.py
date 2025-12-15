@@ -8,7 +8,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, RadioField, BooleanField, FloatField, SelectField, StringField, \
     HiddenField, DateField
 from wtforms.fields.simple import PasswordField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 
 from appli.models.article import Article
 from appli.models.partenaire import Partenaire
@@ -140,3 +140,15 @@ class FormParticiper(FlaskForm):
                          choices=[])
     rang = StringField("Rang")
     poule = StringField("Poule", validators=[DataRequired()])
+
+class FormAffronter(FlaskForm):
+    adversaire = StringField("Nom de l'adversaire", validators=[DataRequired()])
+    date = DateField("Date du match", validators=[DataRequired()])
+    resultat = RadioField("Victoire de l'équipe du club ?",
+                          choices=[('V', 'Victoire'), ('D', 'Défaire'), ('N', "Nul")],
+                          coerce=str, validators=[Optional()])
+    score = StringField("Score")
+    domicile = RadioField("Lieu du match",
+                          choices=[('True', "Réception"), ('False', "Déplacement")],
+                          coerce=str, validators=[DataRequired()])
+    

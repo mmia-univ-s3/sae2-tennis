@@ -111,7 +111,7 @@ def _importer_championnats_equipes(filepath):
     with open(filepath + "/participer.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            participer = Participer(id_cha=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
+            participer = Participer(id_championnat=int(ligne["idCha"]), id_equipe=int(ligne["idE"]),
                                     rang=ligne["rang"], poule=ligne["poule"])
             db.session.add(participer)
 
