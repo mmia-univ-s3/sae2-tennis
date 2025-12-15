@@ -6,14 +6,15 @@ from hashlib import sha256
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, RadioField, BooleanField, FloatField, SelectField, StringField, \
-    HiddenField
+    HiddenField, DateField
 from wtforms.fields.simple import PasswordField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 
 from appli.models.article import Article
 from appli.models.partenaire import Partenaire
 from appli.models.utilisateur import Utilisateur
 from .app import db
+from .models import ChampionnatIndividuel
 
 
 class FormConfirm(FlaskForm):
@@ -156,3 +157,27 @@ class FormArticleAdd(FlaskForm):
         db.session.add(article)
         db.session.commit()
         return article
+
+class FormInternes(FlaskForm):
+    date = DateField("Date", validators=[DataRequired()])
+    titre = StringField("Nom du championnat interne", validators=[DataRequired()])
+    serie = StringField("Série", validators=[DataRequired()])
+    joueur1 = SelectField("Joueur 1",  validators=[DataRequired()], coerce=int, choices=[])
+    points1 = IntegerField("Points du joueur 1",
+                           validators=[DataRequired(), NumberRange(min=0, max=9999999999,
+                                                                   message='Invalid length')])
+    points2 = IntegerField("Points du joueur 2",
+                           validators=[DataRequired(), NumberRange(min=0, max=9999999999,
+                                                                   message='Invalid length')])
+    joueur2 = SelectField("Joueur 2",  validators=[DataRequired()], coerce=int, choices=[])
+
+
+    def creation_interne(self):
+        if self.joueur1.data != self.joueur2.data:
+            match = ChampionnatIndividuel(self.date.data, self.titre.data, "Interne",
+                                          self.serie.data, "Club", self.joueur1.data,
+                                          self.joueur2.data, self.points1.data, self.points2.data)
+            db.session.add(match)
+            db.session.commit()
+            return match
+        return None
