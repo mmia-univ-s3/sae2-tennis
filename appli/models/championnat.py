@@ -25,7 +25,8 @@ class ChampionnatIndividuel(db.Model):
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str, niveau: str,
-                 id_joueur_1: int|None, id_joueur_2: int|None, score_1: int|None, score_2: int|None):
+                 id_joueur_1: int|None, id_joueur_2: int|None, score_1: int|None,
+                 score_2: int|None):
         self.date_championnat = date_championnat
         self.titre = titre
         self.categorie = categorie
