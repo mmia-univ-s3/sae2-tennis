@@ -1,6 +1,6 @@
 from .articles import article_view, article_create, article_delete, articles
 from .autre import autre
-from .competitions import calendrier, palmares, tournoi, internes
+from .competitions import calendrier, palmares_list, tournoi, internes
 from .contacts import contacts
 from .documents import documents
 from .ecole import ecole
