@@ -15,4 +15,4 @@ class Histoire(db.Model):
         return f"<Histoire({self.id}) {self.annee}>"
 
     def __repr__(self):
-        return self.__repr__()
+        return self.__str__()

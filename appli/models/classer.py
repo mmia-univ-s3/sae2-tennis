@@ -19,7 +19,7 @@ class Classer(db.Model):
         self.rang = rang
 
     def __str__(self):
-        return f"<Classer({self.id_championnat}, {self.id_j}) {self.rang}>"
+        return f"<Classer({self._id_championnat}, {self._id_j}) {self.rang}>"
 
     def __repr__(self):
         return self.__str__()
