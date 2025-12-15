@@ -1,6 +1,7 @@
 from datetime import date
 from appli.app import db
 
+# pylint: disable=too-many-arguments,too-many-instance-attributes
 class ChampionnatIndividuel(db.Model):
     __tablename__ = "CHAMP_INDIV"
 
