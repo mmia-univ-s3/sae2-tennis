@@ -111,11 +111,6 @@ def tournoi_add(type_tournoi: str):
                            type_tournoi=type_tournoi, championnat=championnat)
 
 
-@app.route('/competitions/palmares/')
-def palmares():
-    return render_template('palmares.html', title="Palmarès - Competitions")
-
-
 @app.route('/competitions/tournoi/<type_tournoi>/<int:id_championnat>/')
 def tournoi(type_tournoi: str, id_championnat: int):
     """Permet d'afficher la page d'un tournoi
@@ -374,6 +369,18 @@ def affronter_add(id_championnat: int, id_equipe: int):
         db.session.rollback()
         return render_template('affronter_add.html', title="Ajouter un match",
                                form=form, championnat=championnat, equipe=equipe)
+
+
+@app.route('/competitions/palmares/list/')
+def palmares_list():
+    liste_championnat = ChampionnatIndividuel.query.all() + ChampionnatEquipe.query.all()
+    liste_annee = []
+    for championnat in liste_championnat:
+        if championnat.date_championnat.year not in liste_annee:
+            liste_annee.append(championnat.date_championnat.year)
+    liste_annee.sort(reverse=True)
+    return render_template('palmares_liste.html', title="Palmarès - Competitions",
+                           liste_annee=liste_annee)
 
 
 @app.route('/competitions/tournois-internes/')
