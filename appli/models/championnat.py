@@ -3,6 +3,7 @@ from appli.app import db
 
 # pylint: disable=too-many-arguments,too-many-instance-attributes
 class ChampionnatIndividuel(db.Model):
+    """Championnat individuel"""
     __tablename__ = "CHAMP_INDIV"
 
     id: int = db.Column("idCha", db.Integer, primary_key=True)
@@ -42,6 +43,7 @@ class ChampionnatIndividuel(db.Model):
         return self.__str__()
 
 class ChampionnatEquipe(db.Model):
+    """Championnat par équipe"""
     __tablename__ = "CHAMP_EQUIPE"
 
     id: int = db.Column("idCha", db.Integer, primary_key=True)

@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Joueur(db.Model):
+    """Joueur du club"""
     __tablename__ = "JOUEUR"
 
     id: int = db.Column("idJ", db.Integer, primary_key=True)

@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Reduction(db.Model):
+    """Réduction dans les tarifs"""
     __tablename__ = "REDUCTION"
 
     _id_tarif: int = db.Column("idT", db.Integer,

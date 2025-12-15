@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <body>
+        <h1>Palmarès</h1>
+        <ul>
+            {% for annee in liste_annee %}
+                <li>
+                    <a href="#">{{ annee }}</a> 
+                </li>
+            {% endfor %}
+        </ul>
+    </body>
+{% endblock %}
