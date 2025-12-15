@@ -1,11 +1,13 @@
+from datetime import datetime
 from flask import render_template, redirect, url_for
 from flask_login import login_required
-from datetime import datetime
-from sqlalchemy.exc import IntegrityError, StatementError
+from sqlalchemy.exc import IntegrityError
 
 from appli.app import app, db
-from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer, Equipe, Participer, Affronter
-from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser, FormParticiper, FormAffronter
+from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer,\
+Equipe, Participer
+from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser,\
+FormParticiper, FormAffronter
 
 
 @app.route('/competitions/calendrier/')
@@ -298,7 +300,8 @@ def participant_equipe_add(id_championnat: int):
                            form=form, championnat=championnat)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<adversaire>/<date_match>/delete/', methods=('GET', 'POST'))
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/\
+           <adversaire>/<date_match>/delete/', methods=('GET', 'POST'))
 @login_required
 def affronter_delete(id_championnat: int, id_equipe: int, adversaire: str, date_match: str):
     date = datetime.strptime(date_match, "%d-%m-%y").date()
@@ -319,13 +322,15 @@ def affronter_delete(id_championnat: int, id_equipe: int, adversaire: str, date_
                            adversaire=adversaire, date_match=date_match)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<adversaire>/<date_match>/update/', methods=('GET', 'POST'))
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/\
+           <adversaire>/<date_match>/update/', methods=('GET', 'POST'))
 @login_required
 def affronter_update(id_championnat: int, id_equipe: int, adversaire: str, date_match: str):
     try:
         date = datetime.strptime(date_match, "%d-%m-%y").date()
         affronter = Affronter.query.get((id_championnat, id_equipe, date))
-        form = FormAffronter(date=date, score=affronter.score, domicile=str(affronter.domicile), resultat=affronter.resultat)
+        form = FormAffronter(date=date, score=affronter.score, domicile=str(affronter.domicile),
+                             resultat=affronter.resultat)
         form.adversaire.data = adversaire
         if form.validate_on_submit():
             affronter.date_match = form.date.data
@@ -336,7 +341,8 @@ def affronter_update(id_championnat: int, id_equipe: int, adversaire: str, date_
             return redirect(url_for("tournoi", type_tournoi="equipe",
                                     id_championnat=id_championnat))
         return render_template('affronter_update.html', title="Modifier un match",
-                               form=form, championnat=affronter.championnat, equipe=affronter.equipe,
+                               form=form, championnat=affronter.championnat,
+                               equipe=affronter.equipe,
                                adversaire=adversaire, date_match=date_match)
     except IntegrityError:
         db.session.rollback()
@@ -345,7 +351,8 @@ def affronter_update(id_championnat: int, id_equipe: int, adversaire: str, date_
                             adversaire=adversaire, date_match=date_match)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/add/', methods=('GET', 'POST'))
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/add/',
+           methods=('GET', 'POST'))
 @login_required
 def affronter_add(id_championnat: int, id_equipe: int):
     try:
@@ -367,7 +374,7 @@ def affronter_add(id_championnat: int, id_equipe: int):
         db.session.rollback()
         return render_template('affronter_add.html', title="Ajouter un match",
                                form=form, championnat=championnat, equipe=equipe)
-    
+
 
 @app.route('/competitions/tournois-internes/')
 def internes():

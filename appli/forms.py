@@ -151,4 +151,3 @@ class FormAffronter(FlaskForm):
     domicile = RadioField("Lieu du match",
                           choices=[('True', "Réception"), ('False', "Déplacement")],
                           coerce=str, validators=[DataRequired()])
-    
