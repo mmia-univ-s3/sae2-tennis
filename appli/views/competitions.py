@@ -4,7 +4,7 @@ from sqlalchemy import or_
 
 from appli.app import app, db
 from appli.forms import FormInternes, FormConfirm
-from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Participer, Joueur
+from appli.models import ChampionnatIndividuel, Joueur
 
 
 @app.route('/competitions/calendrier/')
@@ -28,12 +28,12 @@ def internes():
         or_(ChampionnatIndividuel.categorie=="interne", ChampionnatIndividuel.categorie=="Interne"))
     resultat = []
     for match in participant:
-        id = match.id
-        j1 = match.joueur_1
-        j2 = match.joueur_2
+        id_joueur = match.id
+        joueur1 = match.joueur_1
+        joueur2 = match.joueur_2
         score1 = match.score_1
         score2 = match.score_2
-        resultat.append((id, j1, score1, j2, score2))
+        resultat.append((id_joueur, joueur1, score1, joueur2, score2))
     return render_template('internes.html',
                            title="Tournois internes - Competitions", matchs=resultat)
 

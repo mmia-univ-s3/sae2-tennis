@@ -13,14 +13,17 @@ class ChampionnatIndividuel(db.Model):
 
     _id_joueur_1: int = db.Column("idJ1", db.Integer, db.ForeignKey("JOUEUR.idJ"))
     _id_joueur_2: int = db.Column("idJ2", db.Integer, db.ForeignKey("JOUEUR.idJ"))
-    joueur_1 = db.Relationship("Joueur", foreign_keys=[_id_joueur_1], backref=db.backref("championnats_j1", lazy="dynamic", cascade="all, delete-orphan"))
-    joueur_2 = db.Relationship("Joueur", foreign_keys=[_id_joueur_2], backref=db.backref("championnats_j2", lazy="dynamic", cascade="all, delete-orphan"))
+    joueur_1 = db.Relationship("Joueur", foreign_keys=[_id_joueur_1], backref=db.backref(
+        "championnats_j1", lazy="dynamic", cascade="all, delete-orphan"))
+    joueur_2 = db.Relationship("Joueur", foreign_keys=[_id_joueur_2], backref=db.backref(
+        "championnats_j2", lazy="dynamic", cascade="all, delete-orphan"))
 
     score_1: int = db.Column("score1", db.Integer)
     score_2: int = db.Column("score2", db.Integer)
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
-    def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str, niveau: str, id_joueur_1: int, id_joueur_2: int, score_1: int, score_2: int):
+    def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str, niveau: str,
+                 id_joueur_1: int, id_joueur_2: int, score_1: int, score_2: int):
         self.date_championnat = date_championnat
         self.titre = titre
         self.categorie = categorie
