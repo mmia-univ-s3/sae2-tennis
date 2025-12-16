@@ -1,8 +1,7 @@
 # pylint: disable=duplicate-code
-def login(client, next):
+def login(client, callback):
     return client.post('/connexion/', data={
         "login": "michel",
         "password": "1",
-        "next": next
+        "next": callback
     }, follow_redirects=True)
-    

@@ -1,15 +1,15 @@
 # pylint: disable=duplicate-code
-def login(client, next):
+def login(client, callback):
     return client.post('/connexion/', data={
         "login": "michel",
         "password": "1",
-        "next": next
+        "next": callback
     }, follow_redirects=True)
 
 def test_partenaires(client):
     response = client.get('/partenaires/', follow_redirects=True)
     assert b"Partenaires" in response.data
-    
+
 def test_partenaires_delete_confirm(client, testapp):
     with testapp.app_context():
         response = login(client, "/partenaire/1/delete/")
