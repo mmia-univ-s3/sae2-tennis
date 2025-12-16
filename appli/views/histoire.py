@@ -17,7 +17,7 @@ def histoire():
     article = Article.query.filter(
         Article.titre == "_histoire" and Article.type_article == "pages").first()
     if article is None:
-        article = Article("_histoire", "", datetime.date.today(), "pages")
+        article = Article("_histoire", "" ,"", datetime.date.today(), "pages")
         db.session.add(article)
         db.session.commit()
     if current_user.is_authenticated:
