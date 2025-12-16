@@ -1,5 +1,7 @@
 __pycache__
 *.pyc
 venv
+.coverage
+htmlcov
 app.db
 *.db

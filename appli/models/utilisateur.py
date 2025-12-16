@@ -9,6 +9,10 @@ class Utilisateur(db.Model, UserMixin):
     mdp: str = db.Column("mdp", db.Text)
 
     def get_id(self):
+        """Renvoie l'identitifant.
+        
+        Returns:
+            L'identifiant."""
         return self.login
 
     def __init__(self, login: str, mdp: str):
@@ -16,4 +20,4 @@ class Utilisateur(db.Model, UserMixin):
         self.mdp = mdp
 
     def __str__(self):
-        return f"<Utilisateur({self.id}) {self.mdp}>"
+        return f"<Utilisateur({self.login}) {self.mdp}>"

@@ -1,0 +1,28 @@
+# pylint: disable=missing-function-docstring
+
+def test_login(client, testapp):
+    with testapp.app_context():
+        response = client.post('/connexion/', data={
+            "login": "michel",
+            "password": "1"
+        }, follow_redirects=True)
+        assert response.status_code == 200
+        assert "/" in response.request.path
+
+def test_login_bad_password(client, testapp):
+    with testapp.app_context():
+        response = client.post('/connexion/', data={
+            "login": "michel",
+            "password": "2"
+        }, follow_redirects=True)
+        assert response.status_code == 200
+        assert "/connexion/" in response.request.path
+
+def test_login_bad_login(client, testapp):
+    with testapp.app_context():
+        response = client.post('/connexion/', data={
+            "login": "michal",
+            "password": "1"
+        }, follow_redirects=True)
+        assert response.status_code == 200
+        assert "/connexion/" in response.request.path
