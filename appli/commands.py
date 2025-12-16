@@ -37,7 +37,7 @@ def _importer_partenaires(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            partenaire = Partenaire(nom=ligne["nomP"], logo=ligne["logo"])
+            partenaire = Partenaire(nom=ligne["nomP"], logo=ligne["logo"], lien=ligne["lien"])
             db.session.add(partenaire)
     db.session.commit()
 

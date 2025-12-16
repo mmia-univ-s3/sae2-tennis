@@ -80,6 +80,7 @@ class FormPartenaireAdd(FlaskForm):
                      FileAllowed(
                          ['jpg', 'png'],
                          "Merci de n'envoyer que des fichiers JPG ou PNG.")])
+    lien = StringField('Lien vers le partenaire', validators=[DataRequired()])
     next = HiddenField()
 
     def confirm(self, filename):
@@ -89,7 +90,7 @@ class FormPartenaireAdd(FlaskForm):
         Returns:
            Partenaire:  Le partenaire créé
         """
-        partenaire = Partenaire(self.nom.data, filename)
+        partenaire = Partenaire(self.nom.data, filename, self.lien.data)
         db.session.add(partenaire)
         db.session.commit()
         return partenaire
