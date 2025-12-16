@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 import datetime
 from appli.models.article import Article
 from appli.models.categorie_tarif import CategorieTarif
