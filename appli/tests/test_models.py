@@ -21,7 +21,8 @@ def test_models_article():
     assert str(var) == repr(var) == "<Article(None) titre>"
 
 def test_models_championnat_individuel():
-    var = ChampionnatIndividuel(datetime.date(1969, 1, 20), "titre", "categorie", "serie", "niveau")
+    var = ChampionnatIndividuel(datetime.date(1969, 1, 20), "titre", "categorie", "serie",
+                                "niveau", None, None, None, None)
     assert str(var) == repr(var) == "<ChampionnatIndividuel(None) titre>"
 
 def test_models_championnat_equipe():
