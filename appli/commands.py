@@ -27,7 +27,8 @@ def _importer_trivias(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            histoire = Histoire(annee=int(ligne["annee"]), trivia=ligne["trivia"], article=ligne["article"])
+            histoire = Histoire(annee=int(ligne["annee"]),
+                                trivia=ligne["trivia"], article=ligne["article"])
             db.session.add(histoire)
     db.session.commit()
 
