@@ -13,6 +13,7 @@ class Article(db.Model):
     date_publi: date = db.Column("dateArt", db.Date)
     type_article: str = db.Column("typeArt", db.Text)
 
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, titre: str, image:str|None, contenu: str, date_publi: date,
                  type_article: str):
         self.titre = titre
