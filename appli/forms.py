@@ -136,6 +136,7 @@ class FormHistoireAdd(FlaskForm):
     """Formulaire d'ajout d'une date"""
     annee = IntegerField("Année", validators=[DataRequired()])
     trivia = StringField("Texte", validators=[DataRequired()])
+    article = SelectField("Article",  validators=[DataRequired()], coerce=int, choices=[])
 
 
 class FormArticleAdd(FlaskForm):
