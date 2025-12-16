@@ -385,14 +385,26 @@ def palmares_list():
 
 @app.route('/competitions/palmares/<int:annee>/')
 def palmares_annee(annee: int):
-    liste_champ_indiv:list[ChampionnatIndividuel] = ChampionnatIndividuel.query.all()
+    liste_champ_indiv:list[ChampionnatIndividuel] = ChampionnatIndividuel.query.filter(
+        ChampionnatIndividuel.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')).all()
     dict_indiv:dict[str, dict[str, set[ChampionnatIndividuel]]] = {}
     for championnat in liste_champ_indiv:
         dict_indiv.setdefault(championnat.niveau, {})
         dict_indiv[championnat.niveau].setdefault(championnat.categorie, set())
         dict_indiv[championnat.niveau][championnat.categorie].add(championnat)
+
+    liste_champ_equipe:list[ChampionnatEquipe] = ChampionnatEquipe.query.filter(
+        ChampionnatEquipe.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')).all()
+    dict_equipe:dict[str, dict[ChampionnatEquipe, set[Participer]]] = {}
+    for championnat in liste_champ_equipe:
+        dict_equipe.setdefault(championnat.categorie, {})
+        dict_equipe[championnat.categorie].setdefault(championnat, set())
+        for participation in championnat.participer:
+            participation:Participer
+            dict_equipe[championnat.categorie][championnat].add(participation)
+
     return render_template('palmares.html', title=f"Palmarès {annee} - Competitions",
-                           annee=annee, indiv=dict_indiv)
+                           annee=annee, indiv=dict_indiv, equipe=dict_equipe)
 
 
 @app.route('/competitions/tournois-internes/')
