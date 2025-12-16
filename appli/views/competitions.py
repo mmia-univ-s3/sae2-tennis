@@ -385,17 +385,22 @@ def palmares_list():
 
 @app.route('/competitions/palmares/<int:annee>/')
 def palmares_annee(annee: int):
-    liste_champ_indiv:list[ChampionnatIndividuel] = ChampionnatIndividuel.query.filter(
+    """Page affichant le palmarès du club durant une année donnée
+
+    Args:
+        annee (int): L'année
+    """
+    liste_champ_indiv = ChampionnatIndividuel.query.filter(
         ChampionnatIndividuel.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')).all()
-    dict_indiv:dict[str, dict[str, set[ChampionnatIndividuel]]] = {}
+    dict_indiv = {}
     for championnat in liste_champ_indiv:
         dict_indiv.setdefault(championnat.niveau, {})
         dict_indiv[championnat.niveau].setdefault(championnat.categorie, set())
         dict_indiv[championnat.niveau][championnat.categorie].add(championnat)
 
-    liste_champ_equipe:list[ChampionnatEquipe] = ChampionnatEquipe.query.filter(
+    liste_champ_equipe = ChampionnatEquipe.query.filter(
         ChampionnatEquipe.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')).all()
-    dict_equipe:dict[str, dict[ChampionnatEquipe, set[Participer]]] = {}
+    dict_equipe = {}
     for championnat in liste_champ_equipe:
         dict_equipe.setdefault(championnat.categorie, {})
         dict_equipe[championnat.categorie].setdefault(championnat, set())
