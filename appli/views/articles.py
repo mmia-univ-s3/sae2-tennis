@@ -30,8 +30,8 @@ def article_view(id_article):
                 filename = form.filename()
                 image = form.image.data
                 image.save(os.path.join("appli", "static", "upload", filename))
-                if ancienne_image  != "" and ancienne_image is not None:
-                    os.remove(os.path.join("appli", "static", "upload", ancienne_image))
+                if ancienne_image  != "" and ancienne_image is not None and os.path.exists(os.path.join("appli", "static", "upload", ancienne_image)):
+                        os.remove(os.path.join("appli", "static", "upload", ancienne_image))
             form.update_article(article, filename)
 
 
@@ -63,7 +63,7 @@ def article_delete(id_article):
     form = FormConfirm()
     article = Article.query.get(id_article)
     if form.validate_on_submit():
-        if os.path.exists(os.path.join("appli", "static", "upload", article.image)):
+        if article.image  != "" and article.image is not None and os.path.exists(os.path.join("appli", "static", "upload", article.image)):
             os.remove(os.path.join("appli", "static", "upload", article.image))
         db.session.delete(article)
         db.session.commit()

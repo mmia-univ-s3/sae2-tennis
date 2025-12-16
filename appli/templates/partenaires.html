@@ -16,9 +16,11 @@
                              alt="{{ part.nom }}">
                     </a>
                 {% else %}
+                    <a href="{{ part.lien }}">
                     <img src="{{ url_for('static', filename="upload/" + part.logo) }}" width="200"
                          alt="{{ part.nom }}">
-                </a>
+                    </a>
+                {% endif %}
             </div>
         {% endfor %}
     </div>

@@ -7,7 +7,9 @@
         <form action="{{ url_for('article_view', id_article=article.id) }}" method="post"
               class="form-horizontal mb-3" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
-            <article><img src="{{ "/static/upload/" + article.image }}" alt="{{ article.titre }}"> </article>
+            {% if article.image != "" and article.image != None %}
+                <article><img src="{{ "/static/upload/" + article.image }}" alt="{{ article.titre }}"> </article>
+            {% endif %}
             <div class="form-group mb-3">
                 <label for="image" class="col-sm-2 control-label">{{ form.image.label }}</label>
                 <div class="col-sm-10">
@@ -26,7 +28,9 @@
         </form>
         </article>
     {% else %}
-        <article><img src="{{ "/static/upload/" + article.image }}" alt="{{ article.titre }}"> </article>
+        {% if article.image != "" and article.image != None %}
+            <article><img src="{{ "/static/upload/" + article.image }}" alt="{{ article.titre }}"> </article>
+        {% endif %}
         <article>{{ article.contenu|safe }}</article>
     {% endif %}
 {% endblock %}
