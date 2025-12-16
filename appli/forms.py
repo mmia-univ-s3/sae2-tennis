@@ -141,7 +141,7 @@ class FormArticleAdd(FlaskForm):
     """Formulaire de l'ajout d'un article"""
     titre = StringField('Titre', validators=[DataRequired()])
     editor = StringField('Contenu')
-    type_a = RadioField('Type', choices=[('club', 'Club'), ('stade', 'Stade')],
+    type_a = RadioField('Type', choices=[('club', 'Mettre en avant'), ('stade', 'Ne pas mettre en avant')],
                         coerce=str)
     next = HiddenField()
 
