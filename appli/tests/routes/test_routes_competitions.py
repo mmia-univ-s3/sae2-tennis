@@ -56,4 +56,3 @@ def test_internes_delete(client, testapp):
         response = login(client, "/competitions/tournois-internes/2/delete/")
         response = client.post('/competitions/tournois-internes/2/delete/', follow_redirects=True)
         assert b"Tournois internes" in response.data
-
