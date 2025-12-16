@@ -38,12 +38,22 @@ class ChampionnatIndividuel(db.Model):
         self.score_2 = score_2
 
     def vainqueur(self) -> str:
+        """Donne le nom du vainqueur du tournoi
+
+        Returns:
+            str: Le prénom et nom du vainqueur
+        """
         for participant in self.classer:
             if participant.rang.startswith("1"):
                 return f"{participant.joueur.prenom} {participant.joueur.nom}"
         return "-"
 
     def finaliste(self) -> str:
+        """Donne le nom du finaliste autre que le vainqueur du tournoi
+
+        Returns:
+            str: Le prénom et nom du finaliste
+        """
         for participant in self.classer:
             if participant.rang.startswith("2"):
                 return f"{participant.joueur.prenom} {participant.joueur.nom}"
