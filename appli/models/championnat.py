@@ -25,7 +25,7 @@ class ChampionnatIndividuel(db.Model):
             if participant.rang.startswith("1"):
                 return f"{participant.joueur.prenom} {participant.joueur.nom}"
         return "-"
-    
+
     def finaliste(self) -> str:
         for participant in self.classer:
             if participant.rang.startswith("2"):
