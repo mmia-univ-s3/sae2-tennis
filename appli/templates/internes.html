@@ -19,11 +19,19 @@
         <tbody>
             {% for match in matchs %}
                 <tr>
-                    <td>{{ match[1].prenom }} {{ match[1].nom }}</td>
+                    {% if match[2] > match[4] %}
+                        <td class="text-success"><strong>{{ match[1].prenom }} {{ match[1].nom }}</strong></td>
+                    {% else %}
+                        <td>{{ match[1].prenom }} {{ match[1].nom }}</td>
+                    {% endif %}
                     <td>{{ match[2] }}</td>
                     <td>-</td>
                     <td>{{ match[4] }}</td>
-                    <td>{{ match[3].prenom }} {{ match[3].nom }}</td>
+                    {% if match[2] < match[4] %}
+                        <td class="text-success"><strong>{{ match[3].prenom }} {{ match[3].nom }}</strong></td>
+                    {% else %}
+                        <td>{{ match[3].prenom }} {{ match[3].nom }}</td>
+                    {% endif %}
                     {% if current_user.is_authenticated %}
                         <td><a href="{{ url_for('internes_update', id_match=match[0]) }}" class="btn btn-primary">Modifier</a>
                             <a href="{{ url_for('internes_delete', id_match=match[0]) }}" class="btn btn-primary">Supprimer</a></td>
