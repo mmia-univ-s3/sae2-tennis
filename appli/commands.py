@@ -15,7 +15,8 @@ def _importer_articles(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            article = Article(titre=ligne["titreArt"], contenu=ligne["contenu"],
+            article = Article(titre=ligne["titreArt"], image=ligne["image"],
+                              contenu=ligne["contenu"],
                               date_publi=date.fromisoformat(ligne["dateArt"]),
                               type_article=ligne["typeArt"])
             db.session.add(article)

@@ -1,19 +1,23 @@
 from datetime import date
 from appli.app import db
-
+# pylint: disable=too-many-arguments,too-many-instance-attributes
 class Article(db.Model):
     """Article/Page du site"""
     __tablename__ = "ARTICLE"
 
     id: int = db.Column("idArt", db.Integer, primary_key=True)
     titre: str = db.Column("titreArt", db.Text)
+    image:str|None = db.Column("image", db.Text)
     contenu: str = db.Column("contenu", db.Text)
     clics: int = db.Column("nbClics", db.Integer)
     date_publi: date = db.Column("dateArt", db.Date)
     type_article: str = db.Column("typeArt", db.Text)
 
-    def __init__(self, titre: str, contenu: str, date_publi: date, type_article: str):
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def __init__(self, titre: str, image:str|None, contenu: str, date_publi: date,
+                 type_article: str):
         self.titre = titre
+        self.image = image
         self.contenu = contenu
         self.clics = 0
         self.date_publi = date_publi

@@ -10,14 +10,17 @@
     <div class="row">
         {% for part in partenaires %}
             <div class="col-6 col-md-4">
-                <a href="{% if current_user.is_authenticated %}
-                    {{ url_for('partenaire_delete', id_p=part.id) }}
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('partenaire_delete', id_p=part.id) }}">
+                        <img src="{{ url_for('static', filename="upload/" + part.logo) }}" width="200"
+                             alt="{{ part.nom }}">
+                    </a>
                 {% else %}
-                    {{ part.lien }}
-                {% endif %}">
-                    <img src="{{ url_for('static', filename=part.logo) }}" width="200"
+                    <a href="{{ part.lien }}">
+                    <img src="{{ url_for('static', filename="upload/" + part.logo) }}" width="200"
                          alt="{{ part.nom }}">
-                </a>
+                    </a>
+                {% endif %}
             </div>
         {% endfor %}
     </div>

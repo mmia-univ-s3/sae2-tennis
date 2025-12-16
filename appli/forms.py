@@ -142,21 +142,68 @@ class FormHistoireAdd(FlaskForm):
 class FormArticleAdd(FlaskForm):
     """Formulaire de l'ajout d'un article"""
     titre = StringField('Titre', validators=[DataRequired()])
+    image = FileField('Image (JPG ou PNG uniquement)', validators=[
+                               FileAllowed(
+                                   ['jpg', 'png'],
+                                   "Merci de n'envoyer que des fichiers JPG ou PNG.")])
     editor = StringField('Contenu')
     type_a = RadioField('Type', choices=[('club', 'Club'), ('stade', 'Stade')],
                         coerce=str)
     next = HiddenField()
 
-    def creation_article(self):
+    def filename(self):
+        """
+        Donne un nom au logo du partenaire créé
+
+        Returns:
+            str: nom du logo
+        """
+        _, ext = os.path.splitext(self.image.data.filename)
+        filename = f'{hex(random.randrange(16 ** 48))[2:]}'
+        return filename + ext
+
+    def creation_article(self, filename):
         """
         Créé un article et le renvoie
 
         Returns:
             Article: article créé
         """
-        article = Article(self.titre.data, self.editor.data, datetime.date.today(),
+        article = Article(self.titre.data, filename, self.editor.data, datetime.date.today(),
                           self.type_a.data)
         db.session.add(article)
+        db.session.commit()
+        return article
+
+class FormArticleUpdate(FlaskForm):
+    """Formulaire de mise à jour d'un article"""
+    image = FileField('Image (JPG ou PNG uniquement)', validators=[
+        FileAllowed(
+            ['jpg', 'png'],
+            "Merci de n'envoyer que des fichiers JPG ou PNG.")])
+    editor = StringField('Contenu')
+    next = HiddenField()
+
+    def filename(self):
+        """
+        Donne un nom au logo du partenaire créé
+
+        Returns:
+            str: nom du logo
+        """
+        _, ext = os.path.splitext(self.image.data.filename)
+        filename = f'{hex(random.randrange(16 ** 48))[2:]}'
+        return filename + ext
+
+    def update_article(self, article, filename):
+        """
+        Met à jour un article et le renvoie
+
+        Returns:
+            Article: article créé
+        """
+        article.contenu = self.editor.data
+        article.image = filename
         db.session.commit()
         return article
 
