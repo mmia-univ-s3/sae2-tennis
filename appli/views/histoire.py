@@ -29,7 +29,7 @@ def histoire():
     for texte in Histoire.query.order_by(Histoire.annee).all():
         if texte.annee not in dates:
             dates[texte.annee] = []
-        dates[texte.annee].append((texte.id, texte.trivia))
+        dates[texte.annee].append((texte.id, texte.trivia, texte.article))
     return render_template('histoire.html', title="Histoire du club - Club",
                            contenu=article.contenu, form=form, histoire=dates)
 
@@ -39,8 +39,14 @@ def histoire():
 def histoire_ajout():
     """Page d'ajout d'une information sur l'histoire"""
     form = FormHistoireAdd()
+    articles = Article.query.filter(Article.type_article != "pages")
+    choix = [(0, "")]
+    for article in articles:
+        choix.append((article.id, article.titre))
+    form.article.choices = choix
     if form.validate_on_submit():
-        information = Histoire(form.annee.data, form.trivia.data)
+        information = Histoire(form.annee.data, form.trivia.data,
+                               form.article.data if form.article.data != 0 else None)
         db.session.add(information)
         db.session.commit()
         return redirect(url_for("histoire"))
