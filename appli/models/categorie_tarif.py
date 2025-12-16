@@ -1,6 +1,7 @@
 from appli.app import db
 
 class CategorieTarif(db.Model):
+    """Catégorie ou sous-catégorie d'un tarif"""
     __tablename__ = "CATEGORIE_TARIF"
 
     id: int = db.Column("idCat", db.Integer, primary_key=True)

@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <body>
+        <h1>{{ championnat.titre }}</h1>
+        <h2>Début le {{ championnat.date_championnat.strftime("%d/%m/%Y") }}</h2>
+        <ul>
+            {% if type_champ == "individuel" %}
+                <li>Championnnat individuel</li>
+                <li>Niveau : {{ championnat.niveau }}</li>
+            {% else %}
+                <li>Championnat par équipe</li>
+            {% endif %}
+            <li>Catégorie : {{ championnat.categorie }}</li>
+            <li>Série : {{ championnat.serie }}</li>
+        </ul>
+        {% if type_champ == "individuel" %}
+            {% if championnat.classer.all()|length > 0 %}
+                <table class="table table-bordered border-success-subtle">
+                    <thead class="table-bordered border-success-subtle">
+                        <th class="bg-warning-subtle" scope="col"><center>Participant</center></th>
+                        <th class="bg-warning-subtle" scope="col"><center>Classement</center></th>
+                        {% if current_user.is_authenticated %}<th class="bg-warning-subtle" scope="col"><center>Options</center></th>{% endif %}
+                    </thead>
+                    <tbody>
+                        {% for classement in championnat.classer %}
+                            <tr>
+                                <td class="bg-success-subtle table-bordered border-success-subtle"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
+                                <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ classement.rang }}</center></td>
+                                {% if current_user.is_authenticated %}
+                                    <td class="table-bordered border-success-subtle">
+                                        <center><a href="{{ url_for('participant_indiv_delete', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
+                                            class="btn btn-outline-danger">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="lucide lucide-trash-icon lucide-trash">
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                                <path d="M3 6h18"/>
+                                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ url_for('participant_indiv_update', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
+                                            class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24"
+                                                    viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                            </svg>
+                                        </a></center>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucun joueur du club ne participe à ce tournoi</p>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+                <center><a href="{{ url_for('participant_indiv_add', id_championnat=championnat.id) }}"
+                    class="btn btn-primary">Ajouter un participant</a></center>
+            {% endif %}
+        {% else %}
+            {% if championnat.participer.all()|length == 0 %}
+                <p>Aucune équipe du club ne participe à ce tournoi</p>
+            {% else %}
+                {% for participant in championnat.participer %}
+                    <table class="table-responsive table-bordered border-success-subtle table align-middle">
+                        <tbody>
+                            <tr class="table-bordered border-success-subtle">
+                                <th scope="col" class="bg-success-subtle"><center>Equipe : {{ participant.equipe.nom }}</center></th>
+                                <th scope="col" class="bg-success-info"><center>Poule : {{ participant.poule }}</center></th>
+                                <th scope="col" class="bg-success-info"><center>Classement : {{ participant.rang }}</center></th>
+                                {% if current_user.is_authenticated %}
+                                    <th scope="col" class="bg-success-warning"><center>Options</center></th>
+                                {% endif %}
+                            </tr>
+                            <tr class="table-bordered border-success-subtle">
+                                <th class="bg-warning-subtle" scope="col"><center>Date</center></th>
+                                <th class="bg-warning-subtle" scope="col"><center>Adversaire</center></th>
+                                <th class="bg-warning-subtle" scope="col"><center>Resultat</center></th>
+                                {% if current_user.is_authenticated %}
+                                    <td class="table-bordered border-success-subtle">
+                                        <center><a href="{{ url_for('participant_equipe_delete', id_championnat=championnat.id, id_equipe=participant.equipe.id) }}"
+                                            class="btn btn-outline-danger">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="lucide lucide-trash-icon lucide-trash">
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                                <path d="M3 6h18"/>
+                                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ url_for('participant_equipe_update', id_championnat=championnat.id, id_equipe=participant.equipe.id) }}"
+                                            class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24"
+                                                    viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                    class="lucide lucide-pen-icon lucide-pen">
+                                                <path
+                                                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ url_for('affronter_add', id_championnat=championnat.id, id_equipe=participant.equipe.id) }}"
+                                            class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="lucide lucide-circle-plus-icon lucide-circle-plus">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <path d="M8 12h8"/>
+                                                <path d="M12 8v8"/>
+                                            </svg>
+                                        </a></center>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                            {% for date_match in dates[participant.equipe.id] %}
+                                <tr>
+                                    <th class="bg-warning-subtle table-bordered border-success-subtle" scope="row"><center>{{ date_match.strftime("%d/%m/%Y") }}</center></th>
+                                    {% if matchs[participant.equipe.id][date_match].domicile %}
+                                        <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].adversaire }}</center></td>
+                                        <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{% if matchs[participant.equipe.id][date_match].resultat != None %}{{ matchs[participant.equipe.id][date_match].resultat }} {{ matchs[participant.equipe.id][date_match].score }}{% else %} - {% endif %}</center></td>
+                                    {% else %}
+                                        <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].adversaire }}</center></td>
+                                        <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].resultat }} {{ matchs[participant.equipe.id][date_match].score }}</center></td>
+                                    {% endif %}
+                                    {% if current_user.is_authenticated %}
+                                        <td class="table-bordered border-success-subtle">
+                                            <center><a href="{{ url_for('affronter_delete', id_championnat=championnat.id, id_equipe=participant.equipe.id, adversaire=matchs[participant.equipe.id][date_match].adversaire, date_match=date_match.strftime('%d-%m-%y')) }}"
+                                                class="btn btn-outline-danger">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none" stroke="currentColor" stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        class="lucide lucide-trash-icon lucide-trash">
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                                    <path d="M3 6h18"/>
+                                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </a>
+                                            <a href="{{ url_for('affronter_update', id_championnat=championnat.id, id_equipe=participant.equipe.id, adversaire=matchs[participant.equipe.id][date_match].adversaire, date_match=date_match.strftime('%d-%m-%y')) }}"
+                                                class="btn btn-outline-primary">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24"
+                                                        viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                        class="lucide lucide-pen-icon lucide-pen">
+                                                    <path
+                                                            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                                </svg>
+                                            </a></center>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+                <table class="table table-bordered border-info-subtle">
+                    <tbody>
+                        <tr><th class="bg-warning-subtle" colspan="2">Légende</th></tr>
+                        <tr>
+                            <td class="bg-primary-subtle">Réception</td>
+                            <td class="bg-secondary-subtle">Déplacement</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+                <center><a href="{{ url_for('participant_equipe_add', id_championnat=championnat.id) }}"
+                    class="btn btn-primary">Ajouter une équipe</a></center>
+            {% endif %}
+        {% endif %} 
+    </body>
+{% endblock %}

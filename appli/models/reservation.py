@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Reservation(db.Model):
+    """Prix d'un tarif"""
     __tablename__ = "RESERVATION"
 
     _id_tarif: int = db.Column("idT", db.Integer,
