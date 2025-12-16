@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 def login(client, callback):
     return client.post('/connexion/', data={
         "login": "michel",

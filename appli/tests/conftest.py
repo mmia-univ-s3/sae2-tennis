@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from flask import Flask
 import pytest
 from appli import app, db

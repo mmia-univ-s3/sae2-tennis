@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 def test_redirect_club(client):
     response = client.get('/club/', follow_redirects=True)
     assert "/club/histoire/" in response.request.url
