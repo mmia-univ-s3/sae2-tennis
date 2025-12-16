@@ -16,4 +16,4 @@ class Utilisateur(db.Model, UserMixin):
         self.mdp = mdp
 
     def __str__(self):
-        return f"<Utilisateur({self.id}) {self.mdp}>"
+        return f"<Utilisateur({self.login}) {self.mdp}>"
