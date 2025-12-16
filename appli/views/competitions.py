@@ -403,6 +403,35 @@ def palmares_list():
                            liste_annee=liste_annee)
 
 
+@app.route('/competitions/palmares/<int:annee>/')
+def palmares_annee(annee: int):
+    """Page affichant le palmarès du club durant une année donnée
+
+    Args:
+        annee (int): L'année
+    """
+    liste_champ_indiv = ChampionnatIndividuel.query.filter(
+        ChampionnatIndividuel.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')).all()
+    dict_indiv = {}
+    for championnat in liste_champ_indiv:
+        dict_indiv.setdefault(championnat.niveau, {})
+        dict_indiv[championnat.niveau].setdefault(championnat.categorie, set())
+        dict_indiv[championnat.niveau][championnat.categorie].add(championnat)
+
+    liste_champ_equipe = ChampionnatEquipe.query.filter(
+        ChampionnatEquipe.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')).all()
+    dict_equipe = {}
+    for championnat in liste_champ_equipe:
+        dict_equipe.setdefault(championnat.categorie, {})
+        dict_equipe[championnat.categorie].setdefault(championnat, set())
+        for participation in championnat.participer:
+            participation:Participer
+            dict_equipe[championnat.categorie][championnat].add(participation)
+
+    return render_template('palmares.html', title=f"Palmarès {annee} - Competitions",
+                           annee=annee, indiv=dict_indiv, equipe=dict_equipe)
+
+
 @app.route('/competitions/tournois-internes/')
 def internes():
     """Affiche les tournois internes."""

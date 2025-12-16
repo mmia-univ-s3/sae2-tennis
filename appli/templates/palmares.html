@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <body>
+        <h1><center>Palmarès - {{ annee }}</center></h1>
+        {% for niveau in indiv %}
+            <h2><center>Championnat Individuel {{ niveau }}</center></h2>
+            {% for categorie in indiv[niveau] %}
+                <table class="table table-bordered border-success">
+                    <tbody>
+                        <tr>
+                            <th style="width: 400px;" class="bg-danger-subtle">
+                                <center>Catégorie : {{ categorie }}</center>
+                            </th>
+                            <th style="width: 450px;" class="bg-info-subtle">
+                                <center>Vainqueur</center>
+                            </th>
+                            <th style="width: 450px;" class="bg-info-subtle">
+                                <center>Finaliste</center>
+                            </th>
+                            {% for championnat in indiv[niveau][categorie] %}
+                                <tr>
+                                    <th class="bg-primary-subtle"><center><a href="{{ url_for('tournoi', type_tournoi='individuel', id_championnat=championnat.id) }}">{{ championnat.titre }}</a></center></th>
+                                    <td><center>{{ championnat.vainqueur() }}</center></td>
+                                    <td><center>{{ championnat.finaliste() }}</center></td>
+                                </tr>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            {% endfor %}
+        {% endfor %}
+        {% if equipe|length > 0 %}
+            <h2><center>Championnat par équipe</center></h2>
+            {% for categorie in equipe %}
+                <table class="table table-bordered border-success">
+                    <tbody>
+                        <tr>
+                            <th class="bg-danger-subtle" colspan="4"><center>Equipes {{ categorie }}</center></th>
+                        </tr>
+                        {% for championnat in equipe[categorie] %}
+                            <tr>
+                                <th class="bg-primary-subtle" style="width: 400px;"><center><a href="{{ url_for('tournoi', type_tournoi='equipe', id_championnat=championnat.id) }}">{{ championnat.titre }}</a></center></th>
+                                <th class="bg-secondary-subtle" style="width: 300px;"><center>Catégorie</center></th>
+                                <th class="bg-secondary-subtle" style="width: 250px;"><center>Poule</center></th>
+                                <th class="bg-secondary-subtle"><center>Division</center></th>
+                            </tr>
+                            {% for participant in equipe[categorie][championnat] %}
+                                <tr>
+                                    <td><center>{{ participant.equipe.nom }}</center></td>
+                                    <td><center>{{ participant.equipe.categorie }}</center></td>
+                                    <td><center>{{ participant.rang }} de la Poule {{ participant.poule }}</center></td>
+                                    <td><center>{{ participant.equipe.rang }} {{ participant.equipe.division.intitule }}</center></td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        {% endif %}
+    </body>
+{% endblock %}
