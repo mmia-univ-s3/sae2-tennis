@@ -303,7 +303,7 @@ def affronter_delete(id_championnat: int, id_equipe: int, adversaire: str, date_
     """Supprime un affrontement entre 2 équipes.
     
     Args :
-        id_championnat (int): L'identitfiant du championnat.
+        id_championnat (int): L'identifiant du championnat.
         id_equipe (int): L'identifiant de l'équipe.
         adversaire (str): Le nom de l'équipe adverse.
         date_match (str): La date du match."""
@@ -331,7 +331,7 @@ def affronter_delete(id_championnat: int, id_equipe: int, adversaire: str, date_
 def affronter_update(id_championnat: int, id_equipe: int, adversaire: str, date_match: str):
     """Met à jour un affrontement entre 2 équipes.
     Args :
-        id_championnat (int): L'identitfiant du championnat.
+        id_championnat (int): L'identifiant du championnat.
         id_equipe (int): L'identifiant de l'équipe.
         adversaire (str): Le nom de l'équipe adverse.
         date_match (str): La date du match."""
