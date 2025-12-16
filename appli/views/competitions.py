@@ -84,7 +84,7 @@ def tournoi_update(type_tournoi: str, id_championnat: int):
                            type_tournoi=type_tournoi, championnat=championnat)
 
 
-@app.route('/competitions/tournoi/<type_tournoi>/add', methods=('GET', 'POST'))
+@app.route('/competitions/tournoi/<type_tournoi>/add/', methods=('GET', 'POST'))
 @login_required
 def tournoi_add(type_tournoi: str):
     """Permet d'ajouter un tournoi dans la base de données
@@ -297,20 +297,20 @@ def participant_equipe_add(id_championnat: int):
 
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/\
-           <adversaire>/<date_match>/delete/', methods=('GET', 'POST'))
+           <date_match>/delete/', methods=('GET', 'POST'))
 @login_required
-def affronter_delete(id_championnat: int, id_equipe: int, adversaire: str, date_match: str):
+def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
     """Supprime un affrontement entre 2 équipes.
     
     Args :
         id_championnat (int): L'identifiant du championnat.
         id_equipe (int): L'identifiant de l'équipe.
-        adversaire (str): Le nom de l'équipe adverse.
-        date_match (str): La date du match."""
+        date_match (str): La date du match.
+    """
     date = datetime.strptime(date_match, "%d-%m-%y").date()
     affronter = Affronter.query.get((id_championnat, id_equipe, date))
     form = FormAffronter()
-    form.adversaire.data = adversaire
+    form.adversaire.data = affronter.adversaire
     form.date.data = date
     form.resultat.data = affronter.resultat
     form.score.data = affronter.score
@@ -322,25 +322,25 @@ def affronter_delete(id_championnat: int, id_equipe: int, adversaire: str, date_
                                 id_championnat=id_championnat))
     return render_template('affronter_delete.html', title="Supprimer un match",
                            form=form, championnat=affronter.championnat, equipe=affronter.equipe,
-                           adversaire=adversaire, date_match=date_match)
+                           adversaire=affronter.adversaire, date_match=date_match)
 
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/\
-           <adversaire>/<date_match>/update/', methods=('GET', 'POST'))
+           <date_match>/update/', methods=('GET', 'POST'))
 @login_required
-def affronter_update(id_championnat: int, id_equipe: int, adversaire: str, date_match: str):
+def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
     """Met à jour un affrontement entre 2 équipes.
     Args :
         id_championnat (int): L'identifiant du championnat.
         id_equipe (int): L'identifiant de l'équipe.
-        adversaire (str): Le nom de l'équipe adverse.
-        date_match (str): La date du match."""
+        date_match (str): La date du match.
+    """
     try:
         date = datetime.strptime(date_match, "%d-%m-%y").date()
         affronter = Affronter.query.get((id_championnat, id_equipe, date))
         form = FormAffronter(date=date, score=affronter.score, domicile=str(affronter.domicile),
                              resultat=affronter.resultat)
-        form.adversaire.data = adversaire
+        form.adversaire.data = affronter.adversaire
         if form.validate_on_submit():
             affronter.date_match = form.date.data
             affronter.resultat = form.resultat.data
@@ -352,12 +352,13 @@ def affronter_update(id_championnat: int, id_equipe: int, adversaire: str, date_
         return render_template('affronter_update.html', title="Modifier un match",
                                form=form, championnat=affronter.championnat,
                                equipe=affronter.equipe,
-                               adversaire=adversaire, date_match=date_match)
+                               adversaire=affronter.adversaire, date_match=date_match)
     except IntegrityError:
         db.session.rollback()
         return render_template('affronter_update.html', title="Modifier un match",
-                            form=form, championnat=affronter.championnat, equipe=affronter.equipe,
-                            adversaire=adversaire, date_match=date_match)
+                               form=form, championnat=affronter.championnat,
+                               equipe=affronter.equipe,
+                               adversaire=affronter.adversaire, date_match=date_match)
 
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/add/',
