@@ -12,11 +12,11 @@
             <div class="col-6 col-md-4">
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('partenaire_delete', id_p=part.id) }}">
-                        <img src="{{ url_for('static', filename=part.logo) }}" width="200"
+                        <img src="{{ url_for('static', filename="upload/" + part.logo) }}" width="200"
                              alt="{{ part.nom }}">
                     </a>
                 {% else %}
-                    <img src="{{ url_for('static', filename=part.logo) }}" width="200"
+                    <img src="{{ url_for('static', filename="upload/" + part.logo) }}" width="200"
                          alt="{{ part.nom }}">
                 {% endif %}
             </div>

@@ -5,3 +5,5 @@ venv
 htmlcov
 app.db
 *.db
+.idea
+appli/static/upload

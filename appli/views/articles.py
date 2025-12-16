@@ -1,10 +1,10 @@
-import datetime
+import os
 
 from flask import render_template, redirect, url_for
 from flask_login import login_required, current_user
 
 from appli.app import app, db
-from appli.forms import FormArticleAdd, FormConfirm, FormPageEdit
+from appli.forms import FormArticleAdd, FormConfirm, FormPageEdit, FormArticleUpdate
 from appli.models import Article
 
 
@@ -20,13 +20,21 @@ def articles():
 def article_view(id_article):
     """Page d'un article choisi"""
     article = Article.query.get(id_article)
-    form = FormPageEdit()
+    ancienne_image = article.image
+    form = FormArticleUpdate()
     # pylint: disable=duplicate-code
     if current_user.is_authenticated:
         if form.validate_on_submit():
-            article.contenu = form.editor.data
-            article.date = datetime.date.today()
-            db.session.commit()
+            filename = None
+            if form.image.data is not None:
+                filename = form.filename()
+                image = form.image.data
+                image.save(os.path.join("appli", "static", "upload", filename))
+                if ancienne_image  != "" and ancienne_image is not None:
+                    os.remove(os.path.join("appli", "static", "upload", ancienne_image))
+            form.update_article(article, filename)
+
+
     return render_template("article_view.html", title=article.titre, article=article, form=form,
                            contenu=article.contenu)
 
@@ -36,9 +44,15 @@ def article_view(id_article):
 def article_create():
     """Page de création d'un article"""
     form = FormArticleAdd()
-    if form.validate_on_submit():
-        article = form.creation_article()
-        return redirect(form.next.data or url_for("article_view", id_article=article.id))
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            filename = None
+            if form.image.data is not None:
+                filename = form.filename()
+                image = form.image.data
+                image.save(os.path.join("appli", "static", "upload", filename))
+            article = form.creation_article(filename)
+            return redirect(form.next.data or url_for("article_view", id_article=article.id))
     return render_template("article_add.html", title="Ajout d'un article", form=form)
 
 
@@ -49,6 +63,8 @@ def article_delete(id_article):
     form = FormConfirm()
     article = Article.query.get(id_article)
     if form.validate_on_submit():
+        if os.path.exists(os.path.join("appli", "static", "upload", article.image)):
+            os.remove(os.path.join("appli", "static", "upload", article.image))
         db.session.delete(article)
         db.session.commit()
         return redirect(url_for("articles"))
