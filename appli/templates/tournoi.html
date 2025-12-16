@@ -141,7 +141,7 @@
                                     {% endif %}
                                     {% if current_user.is_authenticated %}
                                         <td class="table-bordered border-success-subtle">
-                                            <center><a href="{{ url_for('affronter_delete', id_championnat=championnat.id, id_equipe=participant.equipe.id, date_match=date_match.strftime('%d-%m-%y')) }}"
+                                            <center><a href="{{ url_for('affronter_delete', id_championnat=championnat.id, id_equipe=participant.equipe.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
                                                 class="btn btn-outline-danger">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                         viewBox="0 0 24 24"
@@ -154,7 +154,7 @@
                                                     <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                                 </svg>
                                             </a>
-                                            <a href="{{ url_for('affronter_update', id_championnat=championnat.id, id_equipe=participant.equipe.id, date_match=date_match.strftime('%d-%m-%y')) }}"
+                                            <a href="{{ url_for('affronter_update', id_championnat=championnat.id, id_equipe=participant.equipe.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
                                                 class="btn btn-outline-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                         height="24"

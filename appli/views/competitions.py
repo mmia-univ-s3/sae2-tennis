@@ -296,8 +296,8 @@ def participant_equipe_add(id_championnat: int):
                            form=form, championnat=championnat)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/\
-           <date_match>/delete/', methods=('GET', 'POST'))
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<date_match>/'\
+           + 'delete/', methods=('GET', 'POST'))
 @login_required
 def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
     """Supprime un affrontement entre 2 équipes.
@@ -307,7 +307,7 @@ def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
         id_equipe (int): L'identifiant de l'équipe.
         date_match (str): La date du match.
     """
-    date = datetime.strptime(date_match, "%d-%m-%y").date()
+    date = datetime.strptime(date_match, "%d-%m-%Y").date()
     affronter = Affronter.query.get((id_championnat, id_equipe, date))
     form = FormAffronter()
     form.adversaire.data = affronter.adversaire
@@ -325,8 +325,8 @@ def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
                            adversaire=affronter.adversaire, date_match=date_match)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/\
-           <date_match>/update/', methods=('GET', 'POST'))
+@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<date_match>/'\
+           + 'update/', methods=('GET', 'POST'))
 @login_required
 def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
     """Met à jour un affrontement entre 2 équipes.
@@ -336,7 +336,7 @@ def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
         date_match (str): La date du match.
     """
     try:
-        date = datetime.strptime(date_match, "%d-%m-%y").date()
+        date = datetime.strptime(date_match, "%d-%m-%Y").date()
         affronter = Affronter.query.get((id_championnat, id_equipe, date))
         form = FormAffronter(date=date, score=affronter.score, domicile=str(affronter.domicile),
                              resultat=affronter.resultat)
