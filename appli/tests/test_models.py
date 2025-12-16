@@ -19,7 +19,7 @@ def test_models_utilisateur():
     assert str(var) == "<Utilisateur(login) password>"
 
 def test_models_article():
-    var = Article("titre", "contenu", datetime.date(1969, 1, 20), "type")
+    var = Article("titre", "","contenu", datetime.date(1969, 1, 20), "type")
     assert str(var) == repr(var) == "<Article(None) titre>"
 
 def test_models_championnat_individuel():
@@ -52,15 +52,15 @@ def test_models_division():
     assert str(var) == repr(var) == "<Division(None) intitule>"
 
 def test_models_histoire():
-    var = Histoire(2020, "trivia")
-    assert str(var) == repr(var) == "<Histoire(None) 2020>"
+    var = Histoire(2020, "trivia", 1)
+    assert str(var) == repr(var) == "<Histoire(None) 2020 lié à 1>"
 
 def test_models_joueur():
     var = Joueur("nom", "prenom", 1)
     assert str(var) == repr(var) == "<Joueur(None) nom prenom>"
 
 def test_models_partenaires():
-    var = Partenaire("nom", "logo")
+    var = Partenaire("nom", "logo", "https://example.com")
     assert str(var) == repr(var) == "<Partenaire(None) nom>"
 
 def test_models_tarif():

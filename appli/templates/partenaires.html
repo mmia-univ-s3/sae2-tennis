@@ -4,7 +4,7 @@
     <h1>Partenaires</h1>
     {% if current_user.is_authenticated %}
         <p>
-            Cliquez sur un partenaire pour le supprimer.
+            Cliquez sur un partenaire pour le supprimer. Déconnectez-vous pour consulter les liens des partenaires.
         </p>
     {% endif %}
     <div class="row">
@@ -12,12 +12,14 @@
             <div class="col-6 col-md-4">
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('partenaire_delete', id_p=part.id) }}">
-                        <img src="{{ url_for('static', filename=part.logo) }}" width="200"
+                        <img src="{{ url_for('static', filename="upload/" + part.logo) }}" width="200"
                              alt="{{ part.nom }}">
                     </a>
                 {% else %}
-                    <img src="{{ url_for('static', filename=part.logo) }}" width="200"
+                    <a href="{{ part.lien }}">
+                    <img src="{{ url_for('static', filename="upload/" + part.logo) }}" width="200"
                          alt="{{ part.nom }}">
+                    </a>
                 {% endif %}
             </div>
         {% endfor %}
