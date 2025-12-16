@@ -25,6 +25,9 @@ def test_models_championnat_individuel(testapp):
         championnat = ChampionnatIndividuel.query.get(1)
         assert championnat.vainqueur() == "Jean Claude"
         assert championnat.finaliste() == "Jean Pierre"
+        championnat = ChampionnatIndividuel.query.get(2)
+        assert championnat.vainqueur() == "-"
+        assert championnat.finaliste() == "-"
 
 def test_models_championnat_equipe():
     var = ChampionnatEquipe(datetime.date(1969, 1, 20), "titre", "categorie", "serie")
