@@ -174,27 +174,27 @@ def loaddb(filepath):
 
     try:
         _importer_articles(filename=filepath + "/article.csv")
-        lg.warning('Articles importés')
+        lg.info('Articles importés')
 
         _importer_trivias(filename=filepath + "/histoire.csv")
-        lg.warning('Trivias importées')
+        lg.info('Trivias importées')
 
         _importer_partenaires(filename=filepath + "/partenaire.csv")
-        lg.warning('Partenaires importés')
+        lg.info('Partenaires importés')
 
         _importer_users(filename=filepath + "/utilisateur.csv")
-        lg.warning('Utilisateurs importés')
+        lg.info('Utilisateurs importés')
 
         _importer_tarifs(filepath=filepath)
-        lg.warning('Tarifs importés')
+        lg.info('Tarifs importés')
 
         _importer_championnats_equipes(filepath=filepath)
-        lg.warning('Championnats par équipes importés')
+        lg.info('Championnats par équipes importés')
 
         _importer_championnats_individuels(filepath=filepath)
-        lg.warning('Championnats individuels importés')
+        lg.info('Championnats individuels importés')
 
-        lg.warning('Base de données créée')
+        lg.info('Base de données créée')
     except FileNotFoundError as err:
         lg.error("FileNotFoundError: %s", err)
     except NotADirectoryError as err:
