@@ -159,6 +159,7 @@ class FormArticleAdd(FlaskForm):
         return article
 
 class FormInternes(FlaskForm):
+    """ Formulaire pour la création et modification d'un match en interne """
     date = DateField("Date", validators=[DataRequired()])
     titre = StringField("Nom du championnat interne", validators=[DataRequired()])
     serie = StringField("Série", validators=[DataRequired()])
@@ -173,6 +174,12 @@ class FormInternes(FlaskForm):
 
 
     def creation_interne(self):
+        """
+        Créer un match en interne
+        :return:
+            ChampionnatIndividuel: match
+            None: si les deux joueurs sont les mêmes
+        """
         if self.joueur1.data != self.joueur2.data:
             match = ChampionnatIndividuel(self.date.data, self.titre.data, "Interne",
                                           self.serie.data, "Club", self.joueur1.data,

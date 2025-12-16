@@ -386,6 +386,7 @@ def palmares_list():
 
 @app.route('/competitions/tournois-internes/')
 def internes():
+    """ Page de la liste des matchs en interne """
     participant = ChampionnatIndividuel.query.filter(
         or_(ChampionnatIndividuel.categorie=="interne", ChampionnatIndividuel.categorie=="Interne"))
     resultat = []
@@ -402,6 +403,7 @@ def internes():
 @app.route('/competitions/tournois-internes/add/', methods=("GET", "POST"))
 @login_required
 def internes_add():
+    """ Page d'ajout d'un match en interne """
     form = FormInternes()
     joueurs = Joueur.query.all()
     choix = []
@@ -423,6 +425,7 @@ def internes_add():
 @app.route('/competitions/tournois-internes/<id_match>/update/', methods=("GET", "POST"))
 @login_required
 def internes_update(id_match):
+    """ Page de modification d'un match en interne """
     match = ChampionnatIndividuel.query.get(id_match)
     form = FormInternes(date=match.date_championnat, titre=match.titre, serie=match.serie,
                         categorie=match.categorie, niveau=match.niveau, joueur1=match.joueur_1,
@@ -449,6 +452,7 @@ def internes_update(id_match):
 @app.route('/competitions/tournois-internes/<id_match>/delete/', methods=("GET", "POST"))
 @login_required
 def internes_delete(id_match):
+    """ Page de suppression d'un match en interne """
     match = ChampionnatIndividuel.query.get(id_match)
     form = FormConfirm()
     if form.validate_on_submit():
