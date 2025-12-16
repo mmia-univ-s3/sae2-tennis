@@ -1,3 +1,4 @@
+# pylint: disable=duplicate-code
 def login(client, next):
     return client.post('/connexion/', data={
         "login": "michel",

@@ -1,7 +1,7 @@
 from appli.models.article import Article
 from appli.app import db
 
-
+# pylint: disable=duplicate-code
 def login(client, next):
     return client.post('/connexion/', data={
         "login": "michel",
