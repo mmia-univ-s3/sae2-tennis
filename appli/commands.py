@@ -143,7 +143,11 @@ def _importer_championnats_individuels(filepath):
             champ = ChampionnatIndividuel(date_championnat=date.fromisoformat(ligne["dateCha"]),
                                           titre=ligne["titreCha"],
                                           categorie=ligne["categorieSport"], serie=ligne["serie"],
-                                          niveau=ligne["niveau"])
+                                          niveau=ligne["niveau"],
+                                          id_joueur_1=ligne["idJ1"],
+                                          id_joueur_2=ligne["idJ2"],
+                                          score_1=ligne["score1"],
+                                          score_2=ligne["score2"])
             db.session.add(champ)
 
     with open(filepath + "/classer.csv", newline="", encoding="utf-8") as csvfile:
