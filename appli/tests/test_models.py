@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 import datetime
 from appli.models.article import Article
 from appli.models.categorie_tarif import CategorieTarif
@@ -50,15 +52,15 @@ def test_models_division():
     assert str(var) == repr(var) == "<Division(None) intitule>"
 
 def test_models_histoire():
-    var = Histoire(2020, "trivia")
-    assert str(var) == repr(var) == "<Histoire(None) 2020>"
+    var = Histoire(2020, "trivia", 1)
+    assert str(var) == repr(var) == "<Histoire(None) 2020 lié à 1>"
 
 def test_models_joueur():
     var = Joueur("nom", "prenom", 1)
     assert str(var) == repr(var) == "<Joueur(None) nom prenom>"
 
 def test_models_partenaires():
-    var = Partenaire("nom", "logo")
+    var = Partenaire("nom", "logo", "https://example.com")
     assert str(var) == repr(var) == "<Partenaire(None) nom>"
 
 def test_models_tarif():

@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 def test_login(client, testapp):
     with testapp.app_context():
         response = client.post('/connexion/', data={

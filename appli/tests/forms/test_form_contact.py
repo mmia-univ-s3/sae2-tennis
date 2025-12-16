@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from appli.models.article import Article
 from appli.app import db
 

@@ -4,7 +4,7 @@
     <h1>Partenaires</h1>
     {% if current_user.is_authenticated %}
         <p>
-            Cliquez sur un partenaire pour le supprimer.
+            Cliquez sur un partenaire pour le supprimer. Déconnectez-vous pour consulter les liens des partenaires.
         </p>
     {% endif %}
     <div class="row">
@@ -18,7 +18,7 @@
                 {% else %}
                     <img src="{{ url_for('static', filename="upload/" + part.logo) }}" width="200"
                          alt="{{ part.nom }}">
-                {% endif %}
+                </a>
             </div>
         {% endfor %}
     </div>
