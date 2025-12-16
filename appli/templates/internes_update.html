@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <h1> Ajout d'un match en interne</h1>
+    <h1> Modification d'un match en interne</h1>
     <form action="{{ url_for('internes_update', id_match=id_match) }}" method="POST">
         {{  form.hidden_tag() }}
         <div class="form-group mb-3">

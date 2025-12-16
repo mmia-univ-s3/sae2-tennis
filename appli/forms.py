@@ -223,7 +223,12 @@ class FormInternes(FlaskForm):
 
 
     def creation_interne(self):
-        """Crée un tournoi interne."""
+        """
+        Créer un match en interne
+        :return:
+            ChampionnatIndividuel: match
+            None: si les deux joueurs sont les mêmes
+        """
         if self.joueur1.data != self.joueur2.data:
             match = ChampionnatIndividuel(self.date.data, self.titre.data, "Interne",
                                           self.serie.data, "Club", self.joueur1.data,
