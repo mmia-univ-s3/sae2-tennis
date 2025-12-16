@@ -35,7 +35,7 @@ class Affronter(db.Model):
         self.date_match = date_match
 
     def __str__(self):
-        texte = f"<Affronter({self._id_championnat}) {self.equipe.nom} vs " + \
+        texte = f"<Affronter({self._id_championnat}) {self.equipe} vs " + \
                 f"{self.adversaire} ({self.resultat})>"
         return texte
 
