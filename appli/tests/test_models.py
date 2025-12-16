@@ -17,7 +17,7 @@ def test_models_utilisateur():
     assert str(var) == "<Utilisateur(login) password>"
 
 def test_models_article():
-    var = Article("titre", "contenu", datetime.date(1969, 1, 20), "type")
+    var = Article("titre", "","contenu", datetime.date(1969, 1, 20), "type")
     assert str(var) == repr(var) == "<Article(None) titre>"
 
 def test_models_championnat_individuel():

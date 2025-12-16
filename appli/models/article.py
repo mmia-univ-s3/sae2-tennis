@@ -1,6 +1,6 @@
 from datetime import date
 from appli.app import db
-
+# pylint: disable=too-many-arguments,too-many-instance-attributes
 class Article(db.Model):
     """Article/Page du site"""
     __tablename__ = "ARTICLE"
@@ -13,7 +13,8 @@ class Article(db.Model):
     date_publi: date = db.Column("dateArt", db.Date)
     type_article: str = db.Column("typeArt", db.Text)
 
-    def __init__(self, titre: str, image:str|None, contenu: str, date_publi: date, type_article: str):
+    def __init__(self, titre: str, image:str|None, contenu: str, date_publi: date,
+                 type_article: str):
         self.titre = titre
         self.image = image
         self.contenu = contenu

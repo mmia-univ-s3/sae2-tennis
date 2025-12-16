@@ -4,7 +4,7 @@ from flask import render_template, redirect, url_for
 from flask_login import login_required, current_user
 
 from appli.app import app, db
-from appli.forms import FormArticleAdd, FormConfirm, FormPageEdit, FormArticleUpdate
+from appli.forms import FormArticleAdd, FormConfirm, FormArticleUpdate
 from appli.models import Article
 
 
