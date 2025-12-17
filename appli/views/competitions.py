@@ -13,7 +13,9 @@ FormParticiper, FormAffronter, FormInternes, FormConfirm
 @app.route('/competitions/calendrier/')
 def calendrier():
     """Permet d'afficher la page concernant le calendrier des tournois"""
-    list_comp_indiv = ChampionnatIndividuel.query.order_by(\
+    list_comp_indiv = ChampionnatIndividuel.query.filter(
+        ChampionnatIndividuel.categorie != "interne",
+        ChampionnatIndividuel.categorie != "Interne").order_by(\
         ChampionnatIndividuel.date_championnat.desc()).all()
     list_comp_equipe = ChampionnatEquipe.query.order_by(\
         ChampionnatEquipe.date_championnat.desc()).all()
@@ -126,7 +128,6 @@ def tournoi(type_tournoi: str, id_championnat: int):
         donnees = {}
     else:
         champ = ChampionnatEquipe.query.get(id_championnat)
-        print(champ.en_cours())
         liste_dates = {}
         donnees = {}
         for participant in champ.participer:
@@ -280,7 +281,8 @@ def participant_equipe_add(id_championnat: int):
     """
     championnat = ChampionnatEquipe.query.get(id_championnat)
     les_equipes = Equipe.query.filter(~Equipe.participer.any(\
-        Participer.championnat.has(ChampionnatEquipe.id == id_championnat)))
+        Participer.championnat.has(ChampionnatEquipe.id == id_championnat)),
+        Equipe.saison == championnat.date_championnat.year)
     choix = []
     for donnee in les_equipes:
         choix.append((donnee.id, donnee.nom))
@@ -395,7 +397,8 @@ def affronter_add(id_championnat: int, id_equipe: int):
 @app.route('/competitions/palmares/list/')
 def palmares_list():
     """Affiche la liste des palmarès."""
-    liste_championnat = ChampionnatIndividuel.query.all() + ChampionnatEquipe.query.all()
+    liste_championnat = ChampionnatIndividuel.query.filter(ChampionnatIndividuel.categorie != "interne",
+            ChampionnatIndividuel.categorie != "Interne").all() + ChampionnatEquipe.query.all()
     liste_annee = []
     for championnat in liste_championnat:
         if championnat.date_championnat.year not in liste_annee:
@@ -413,6 +416,7 @@ def palmares_annee(annee: int):
         annee (int): L'année
     """
     liste_champ_indiv = ChampionnatIndividuel.query.filter(
+        ChampionnatIndividuel.categorie != "interne", ChampionnatIndividuel.categorie != "Interne",
         ChampionnatIndividuel.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')).all()
     dict_indiv = {}
     for championnat in liste_champ_indiv:
@@ -460,7 +464,7 @@ def internes_add():
     for joueur in joueurs:
         choix.append((joueur.id, joueur.prenom + " " + joueur.nom))
 
-    form.joueur1.choices =  choix
+    form.joueur1.choices = choix
     form.joueur2.choices = choix
 
     if form.validate_on_submit():

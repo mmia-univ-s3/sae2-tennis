@@ -3,13 +3,13 @@ HISTOIRE[<u>idH</u>, annee, trivia]
 PARTENAIRE[<u>idP</u>, nomP, logo]  
 UTILISATEUR[<u>idU</u>, mdp]  
 
-CHAMP_INDIV[<u>idCha</u>, dateCha, titreCha, categorieSport, serie, niveau]  
+CHAMP_INDIV[<u>idCha</u>, dateCha, titreCha, categorieSport, serie, niveau, #idJ1, score1, #idJ2, score2]  
 JOUEUR[<u>idJ</u>, nomJ, prenomJ, #idE]  
 CLASSER[<u>#idCha, #idJ</u>, rang]  
 
 DIVISION[<u>idDiv</u>, intituleDiv]  
 CHAMP_EQUIPE[<u>idCha</u>, dateCha, titreCha, categorieSport, serie]  
-EQUIPE[<u>idE</u>, nomE, categorieE, #idDiv, rangDiv]  
+EQUIPE[<u>idE</u>, nomE, saison, categorieE, #idDiv, rangDiv]  
 PARTICIPER[<u>#idCha, #idE</u>, rang, poule]  
 AFFRONTER[<u>#idCha, #idE, nomAdv, dateMatch</u>, resultat, score, estDomicile]  
 

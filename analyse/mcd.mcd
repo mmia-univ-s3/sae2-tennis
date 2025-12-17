@@ -4,26 +4,27 @@ PARTENAIRE: idP, nomP, logo
 UTILISATEUR: idU, mdp
 
 /T\ CHAMPIONNAT -> CHAMP_INDIV, CHAMP_EQUIPE
-CHAMPIONNAT: idCha, dateCha, titreCha, categorieSport, serie
-
-CHAMP_INDIV: niveau
-CHAMP_EQUIPE:
-DIVISION: idDiv, intituleDiv
 
 CLASSER, 0N CHAMP_INDIV, 0N JOUEUR: rang
+CHAMP_INDIV: niveau
+CHAMPIONNAT: idCha, dateCha, titreCha, categorieSport, serie
+CHAMP_EQUIPE:
+
+JOUER, 02 CHAMP_INDIV, 0N> JOUEUR: score1, score2
 PARTICIPER, 0N CHAMP_EQUIPE, 0N EQUIPE: rang, poule
 AFFRONTER, 0N CHAMP_EQUIPE, 0N EQUIPE: nomAdv, dateMatch, resultat, score, estDomicile
-CONCOURIR, 01 EQUIPE, 0N> DIVISION: rang
 
 JOUEUR: idJ, nomJ, prenomJ
 REJOINDRE, 01 JOUEUR, 0N> EQUIPE
-EQUIPE: idE, nomE, categorieE
+EQUIPE: idE, nomE, saison, categorieE
+CONCOURIR, 01 EQUIPE, 0N> DIVISION: rang
+DIVISION: idDiv, intituleDiv
 
+SOUS_CATEGORIE, 0N> CATEGORIE_TARIF, 01 CATEGORIE_TARIF
 CATEGORIE_TARIF: idCat, sport, intituleCat
 APPARTENIR, 0N> CATEGORIE_TARIF, 01 TARIF
 TARIF: idT, intituleT
 
-SOUS_CATEGORIE, 0N> CATEGORIE_TARIF, 01 CATEGORIE_TARIF
 REDUCTION: taux, surLicence
 /T\ TARIF -> REDUCTION, RESERVATION
 RESERVATION: montant

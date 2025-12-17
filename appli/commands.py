@@ -106,8 +106,9 @@ def _importer_championnats_equipes(filepath):
     with open(filepath + "/equipe.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            equipe = Equipe(nom=ligne["nomE"], categorie=ligne["categorieE"],
-                            id_div=int(ligne["idDiv"]), rang=ligne["rangDiv"])
+            equipe = Equipe(nom=ligne["nomE"], saison=int(ligne["saison"]),
+                            categorie=ligne["categorieE"], id_div=int(ligne["idDiv"]),
+                            rang=ligne["rangDiv"])
             db.session.add(equipe)
 
     with open(filepath + "/participer.csv", newline="", encoding="utf-8") as csvfile:
@@ -176,34 +177,26 @@ def loaddb(filepath):
 
     try:
         _importer_articles(filename=filepath + "/article.csv")
-        print('Articles importés')
         lg.info('Articles importés')
 
         _importer_trivias(filename=filepath + "/histoire.csv")
-        print('Trivias importées')
         lg.info('Trivias importées')
 
         _importer_partenaires(filename=filepath + "/partenaire.csv")
-        print('Partenaires importés')
         lg.info('Partenaires importés')
 
         _importer_users(filename=filepath + "/utilisateur.csv")
-        print('Utilisateurs importés')
         lg.info('Utilisateurs importés')
 
         _importer_tarifs(filepath=filepath)
-        print('Tarifs importés')
         lg.info('Tarifs importés')
 
         _importer_championnats_equipes(filepath=filepath)
-        print('Championnats par équipes importés')
         lg.info('Championnats par équipes importés')
 
         _importer_championnats_individuels(filepath=filepath)
-        print('Championnats individuels importés')
         lg.info('Championnats individuels importés')
 
-        print('Base de données créée')
         lg.info('Base de données créée')
     except FileNotFoundError as err:
         lg.error("FileNotFoundError: %s", err)
