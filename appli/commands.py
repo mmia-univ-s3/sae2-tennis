@@ -106,8 +106,9 @@ def _importer_championnats_equipes(filepath):
     with open(filepath + "/equipe.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            equipe = Equipe(nom=ligne["nomE"], categorie=ligne["categorieE"],
-                            id_div=int(ligne["idDiv"]), rang=ligne["rangDiv"])
+            equipe = Equipe(nom=ligne["nomE"], saison=int(ligne["saison"]),
+                            categorie=ligne["categorieE"], id_div=int(ligne["idDiv"]),
+                            rang=ligne["rangDiv"])
             db.session.add(equipe)
 
     with open(filepath + "/participer.csv", newline="", encoding="utf-8") as csvfile:

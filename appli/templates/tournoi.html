@@ -26,7 +26,7 @@
                         {% for classement in championnat.classer %}
                             <tr>
                                 <td class="bg-success-subtle table-bordered border-success-subtle"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
-                                <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ classement.rang }}</center></td>
+                                <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{% if classement.rang | length > 0 %}{{ classement.rang }}{% else %}-{% endif %}</center></td>
                                 {% if current_user.is_authenticated %}
                                     <td class="table-bordered border-success-subtle">
                                         <center><a href="{{ url_for('participant_indiv_delete', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
@@ -75,11 +75,11 @@
                     <table class="table-responsive table-bordered border-success-subtle table align-middle">
                         <tbody>
                             <tr class="table-bordered border-success-subtle">
-                                <th scope="col" class="bg-success-subtle"><center>Equipe : {{ participant.equipe.nom }}</center></th>
+                                <th scope="col" class="bg-success-subtle" style="width: 400px;"><center>Equipe : {{ participant.equipe.nom }}</center></th>
                                 <th scope="col" class="bg-success-info"><center>Poule : {{ participant.poule }}</center></th>
-                                <th scope="col" class="bg-success-info"><center>Classement : {{ participant.rang }}</center></th>
+                                <th scope="col" class="bg-success-info" style="width: 250px;"><center>Classement : {% if participant.rang | length > 0 %}{{ participant.rang }}{% else %}-{% endif %}</center></th>
                                 {% if current_user.is_authenticated %}
-                                    <th scope="col" class="bg-success-warning"><center>Options</center></th>
+                                    <th scope="col" class="bg-success-warning" style="width: 200px;"><center>Options</center></th>
                                 {% endif %}
                             </tr>
                             <tr class="table-bordered border-success-subtle">

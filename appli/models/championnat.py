@@ -82,6 +82,17 @@ class ChampionnatEquipe(db.Model):
         self.categorie = categorie
         self.serie = serie
 
+    def en_cours(self) -> bool:
+        """Indique si un championnat par équipe est toujours en cours
+
+        Returns:
+            bool: True si le championnat est en cours, False sinon
+        """
+        for match in self.affronter:
+            if match.date_match > date.today():
+                return True
+        return False
+
     def __str__(self):
         return f"<ChampionnatEquipe({self.id}) {self.titre}>"
 

@@ -24,13 +24,18 @@ def test_models_championnat_individuel(testapp):
         assert championnat.vainqueur() == "-"
         assert championnat.finaliste() == "-"
 
-def test_models_championnat_equipe():
+def test_models_championnat_equipe(testapp):
     var = ChampionnatEquipe(datetime.date(1969, 1, 20), "titre", "categorie", "serie")
     assert str(var) == repr(var) == "<ChampionnatEquipe(None) titre>"
+    with testapp.app_context():
+        championnat = ChampionnatEquipe.query.get(1)
+        assert championnat.en_cours() is False
+        championnat = ChampionnatEquipe.query.get(10)
+        assert championnat.en_cours() is True
 
 def test_models_equipe():
-    var = Equipe("nom", "categorie", 1, 2)
-    assert str(var) == repr(var) == "<Equipe(None) nom>"
+    var = Equipe("nom", 2025, "categorie", 1, 2)
+    assert str(var) == repr(var) == "<Equipe(None) nom 2025>"
 
 def test_models_participer():
     var = Participer(1, 2, 3, 4)
