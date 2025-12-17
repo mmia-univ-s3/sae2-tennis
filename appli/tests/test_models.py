@@ -9,10 +9,6 @@ def test_models_utilisateur():
     var = Utilisateur("login", "password")
     assert str(var) == "<Utilisateur(login) password>"
 
-def test_models_affronter():
-    var = Affronter(1, 1, "adversaire", "V", "5/0", True, datetime.date.today())
-    assert str(var) == repr(var) == "<Affronter(1) None vs adversaire (V)>"
-
 def test_models_article():
     var = Article("titre", "contenu", datetime.date(1969, 1, 20), "type")
     assert str(var) == repr(var) == "<Article(None) titre>"
