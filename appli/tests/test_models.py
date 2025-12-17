@@ -1,9 +1,8 @@
 # pylint: disable=missing-function-docstring
 
 import datetime
-from appli.models import Affronter, Article, CategorieTarif, ChampionnatEquipe,\
-    ChampionnatIndividuel, Classer, Division, Equipe, Histoire, Joueur, Partenaire, Participer, Tarif, Utilisateur
-from appli import db
+from appli.models import Article, CategorieTarif, ChampionnatEquipe, ChampionnatIndividuel,\
+    Classer, Division, Equipe, Histoire, Joueur, Partenaire, Participer, Tarif, Utilisateur
 
 def test_models_utilisateur():
     var = Utilisateur("login", "password")
