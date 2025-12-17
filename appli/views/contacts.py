@@ -118,5 +118,6 @@ def contacts_modif_reseaux():
             article.date = datetime.date.today()
             db.session.commit()
             return redirect(url_for('contacts'))
-    return render_template('contacts_modif_reseaux.html', title="Modification des réseaux sociaux - Contacts",
-                           form=form, contenu=article.contenu)
+    return render_template('contacts_modif_reseaux.html',
+                           title="Modification des réseaux sociaux - Contacts", form=form,
+                           contenu=article.contenu)
