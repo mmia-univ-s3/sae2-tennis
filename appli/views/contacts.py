@@ -28,8 +28,14 @@ def contacts():
         mail = Article("_mail", "" ,"", datetime.date.today(), "pages")
         db.session.add(mail)
         db.session.commit()
+    reseaux = Article.query.filter(
+        Article.titre == "_reseaux" and Article.type_article == "pages").first()
+    if reseaux is None:
+        reseaux = Article("_reseaux", "" ,"", datetime.date.today(), "pages")
+        db.session.add(reseaux)
+        db.session.commit()
     return render_template('contacts.html', title="Contacts", adresse=adresse.contenu,
-                           tel=tel.contenu, mail=mail.contenu)
+                           tel=tel.contenu, mail=mail.contenu, reseaux=reseaux.contenu)
 
 
 @app.route('/contacts/adresse/', methods=("GET", "POST",))
@@ -94,3 +100,24 @@ def contacts_modif_mail():
             return redirect(url_for('contacts'))
     return render_template('contacts_modif_mail.html', title="Modification de l'email - Contacts",
                            form=form, contenu=article.contenu)
+
+@app.route('/contacts/reseaux/', methods=("GET", "POST",))
+@login_required
+def contacts_modif_reseaux():
+    """Page de modification des réseaux sociaux"""
+    form = FormPageEdit()
+    article = Article.query.filter(
+        Article.titre == "_reseaux" and Article.type_article == "pages").first()
+    if article is None:
+        article = Article("_reseaux", "" ,"", datetime.date.today(), "pages")
+        db.session.add(article)
+        db.session.commit()
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            article.contenu = form.editor.data
+            article.date = datetime.date.today()
+            db.session.commit()
+            return redirect(url_for('contacts'))
+    return render_template('contacts_modif_reseaux.html',
+                           title="Modification des réseaux sociaux - Contacts", form=form,
+                           contenu=article.contenu)
