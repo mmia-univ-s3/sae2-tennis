@@ -80,6 +80,7 @@ class FormPartenaireAdd(FlaskForm):
                      FileAllowed(
                          ['jpg', 'png'],
                          "Merci de n'envoyer que des fichiers JPG ou PNG.")])
+    lien = StringField('Lien vers le partenaire', validators=[DataRequired()])
     next = HiddenField()
 
     def confirm(self, filename):
@@ -89,7 +90,7 @@ class FormPartenaireAdd(FlaskForm):
         Returns:
            Partenaire:  Le partenaire créé
         """
-        partenaire = Partenaire(self.nom.data, filename)
+        partenaire = Partenaire(self.nom.data, filename, self.lien.data)
         db.session.add(partenaire)
         db.session.commit()
         return partenaire
@@ -135,31 +136,80 @@ class FormHistoireAdd(FlaskForm):
     """Formulaire d'ajout d'une date"""
     annee = IntegerField("Année", validators=[DataRequired()])
     trivia = StringField("Texte", validators=[DataRequired()])
+    article = SelectField("Article",  validators=[DataRequired()], coerce=int, choices=[])
 
 
 class FormArticleAdd(FlaskForm):
     """Formulaire de l'ajout d'un article"""
     titre = StringField('Titre', validators=[DataRequired()])
+    image = FileField('Image (JPG ou PNG uniquement)', validators=[
+                               FileAllowed(
+                                   ['jpg', 'png'],
+                                   "Merci de n'envoyer que des fichiers JPG ou PNG.")])
     editor = StringField('Contenu')
     type_a = RadioField('Type', choices=[('club', 'Mettre en avant'),
                                          ('stade', 'Ne pas mettre en avant')],
                         coerce=str)
     next = HiddenField()
 
-    def creation_article(self):
+    def filename(self):
+        """
+        Donne un nom au logo du partenaire créé
+
+        Returns:
+            str: nom du logo
+        """
+        _, ext = os.path.splitext(self.image.data.filename)
+        filename = f'{hex(random.randrange(16 ** 48))[2:]}'
+        return filename + ext
+
+    def creation_article(self, filename):
         """
         Créé un article et le renvoie
 
         Returns:
             Article: article créé
         """
-        article = Article(self.titre.data, self.editor.data, datetime.date.today(),
+        article = Article(self.titre.data, filename, self.editor.data, datetime.date.today(),
                           self.type_a.data)
         db.session.add(article)
         db.session.commit()
         return article
 
+class FormArticleUpdate(FlaskForm):
+    """Formulaire de mise à jour d'un article"""
+    image = FileField('Image (JPG ou PNG uniquement)', validators=[
+        FileAllowed(
+            ['jpg', 'png'],
+            "Merci de n'envoyer que des fichiers JPG ou PNG.")])
+    editor = StringField('Contenu')
+    next = HiddenField()
+
+    def filename(self):
+        """
+        Donne un nom au logo du partenaire créé
+
+        Returns:
+            str: nom du logo
+        """
+        _, ext = os.path.splitext(self.image.data.filename)
+        filename = f'{hex(random.randrange(16 ** 48))[2:]}'
+        return filename + ext
+
+    def update_article(self, article, filename):
+        """
+        Met à jour un article et le renvoie
+
+        Returns:
+            Article: article créé
+        """
+        article.contenu = self.editor.data
+        article.image = filename
+        db.session.commit()
+        return article
+
 class FormInternes(FlaskForm):
+    """Formulaire pour ajouter et mettre à jour des tournois internes."""
     date = DateField("Date", validators=[DataRequired()])
     titre = StringField("Nom du championnat interne", validators=[DataRequired()])
     serie = StringField("Série", validators=[DataRequired()])
@@ -174,6 +224,12 @@ class FormInternes(FlaskForm):
 
 
     def creation_interne(self):
+        """
+        Créer un match en interne
+        :return:
+            ChampionnatIndividuel: match
+            None: si les deux joueurs sont les mêmes
+        """
         if self.joueur1.data != self.joueur2.data:
             match = ChampionnatIndividuel(self.date.data, self.titre.data, "Interne",
                                           self.serie.data, "Club", self.joueur1.data,
@@ -184,6 +240,7 @@ class FormInternes(FlaskForm):
         return None
 
 class FormChampionnatIndividuel(FlaskForm):
+    """Formulaire de création et de mise à jour d'un championnat individuel."""
     titre = StringField('Titre', validators=[DataRequired()])
     date_championnat = DateField('Date de début', validators=[DataRequired()])
     categorie = StringField('Catégorie')
@@ -191,23 +248,27 @@ class FormChampionnatIndividuel(FlaskForm):
     niveau = StringField('Niveau')
 
 class FormChampionnatEquipe(FlaskForm):
+    """Formulaire de création et de mise à jour d'un championnat par équipe."""
     titre = StringField('Titre', validators=[DataRequired()])
     date_championnat = DateField('Date de début', validators=[DataRequired()])
     categorie = StringField('Catégorie')
     serie = StringField('Série')
 
 class FormClasser(FlaskForm):
+    """Formulaire de création et de mise à jour d'un classement d'un joueur."""
     joueur = SelectField("Joueur", validators=[DataRequired()], default=1, coerce=int,
                          choices=[])
     rang = StringField("Rang")
 
 class FormParticiper(FlaskForm):
+    """Formulaire de création et de mise à jour d'inscription d'une équipe."""
     equipe = SelectField("Equipe", validators=[DataRequired()], default=1, coerce=int,
                          choices=[])
     rang = StringField("Rang")
     poule = StringField("Poule", validators=[DataRequired()])
 
 class FormAffronter(FlaskForm):
+    """Formulaire de création et de mise à jour d'affrontement entre 2 équipes."""
     adversaire = StringField("Nom de l'adversaire", validators=[DataRequired()])
     date = DateField("Date du match", validators=[DataRequired()])
     resultat = RadioField("Victoire de l'équipe du club ?",

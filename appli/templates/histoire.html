@@ -24,7 +24,7 @@
                 <div class="histoire-annee-contenu">
                     <h3>{{ annee }}</h3>
                     <ul class="histoire-textes">
-                        {% for id_h, texte in textes %}
+                        {% for id_h, texte, article in textes %}
                             <li class="histoire-texte">
                                 {% if current_user.is_authenticated %}
                                     <a href="{{ url_for('histoire_delete', id_h=id_h) }}"
@@ -41,7 +41,11 @@
                                         </svg>
                                     </a>
                                 {% endif %}
-                                <span>{{ texte }}</span>
+                                {% if article %}
+                                    <a href="{{ url_for('article_view', id_article=article) }}">{{ texte }}</a>
+                                {% else %}
+                                    <span>{{ texte }}</span>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>

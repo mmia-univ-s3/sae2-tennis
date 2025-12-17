@@ -6,7 +6,7 @@
         <ul>
             {% for annee in liste_annee %}
                 <li>
-                    <a href="#">{{ annee }}</a> 
+                    <a href="{{ url_for('palmares_annee', annee=annee) }}">{{ annee }}</a> 
                 </li>
             {% endfor %}
         </ul>
