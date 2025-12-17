@@ -126,6 +126,7 @@ def tournoi(type_tournoi: str, id_championnat: int):
         donnees = {}
     else:
         champ = ChampionnatEquipe.query.get(id_championnat)
+        print(champ.en_cours())
         liste_dates = {}
         donnees = {}
         for participant in champ.participer:
