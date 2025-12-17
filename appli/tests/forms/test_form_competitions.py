@@ -156,6 +156,7 @@ def test_form_affronter_delete(client, testapp):
 
 def test_form_affronter_update(client, testapp):
     with testapp.app_context():
+        #Test dans le cas où la modification s'est bien effectuée
         response = login(client, "/competitions/tournoi/equipe/5/5/08-10-2025/update/")
         response = client.post('/competitions/tournoi/equipe/5/5/08-10-2025/update/',
             follow_redirects=True, data={"adversaire" : "equipe 4", "date" : date.today(),
@@ -163,8 +164,19 @@ def test_form_affronter_update(client, testapp):
 
         assert response.status_code == 200
         assert "/competitions/tournoi/equipe/5/" in response.request.path
-        print(response.data)
         assert f"{date.today().strftime('%d/%m/%Y')}".encode("utf-8") in response.data
+
+        #Test dans le cas où la modification ne s'est pas bien effectuée
+        response = login(client, "/competitions/tournoi/equipe/11/12/26-03-2023/update/")
+        response = client.post('/competitions/tournoi/equipe/11/12/26-03-2023/update/',
+            follow_redirects=True, data={"adversaire" : "Malemort ASV",
+                                         "date" : datetime.strptime("02-04-2023", "%d-%m-%Y")\
+                                            .date(),
+                                         "resultat": 'D', "score" : "10/12", "domicile" : "True"})
+
+        assert response.status_code == 200
+        assert "/competitions/tournoi/equipe/11/12/26-03-2023/update/" in response.request.path
+        assert b"Modification du match" in response.data
 
 
 def test_form_affronter_add(client, testapp):
@@ -188,3 +200,4 @@ def test_form_affronter_add(client, testapp):
         assert response.status_code == 200
         assert "/competitions/tournoi/equipe/5/5/add/" in response.request.path
         assert b"Ajout d'un match" in response.data
+
