@@ -103,7 +103,7 @@ def test_affronter_add(client, testapp):
                               follow_redirects=True)
         assert b"Ajout d'un match" in response.data
 
-def test_palmares_list(client, testapp):
+def test_palmares_list(client):
     response = client.get('/competitions/palmares/list/', follow_redirects=True)
     assert "Palmarès".encode("utf-8") in response.data
 

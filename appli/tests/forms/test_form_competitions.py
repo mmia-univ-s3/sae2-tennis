@@ -200,4 +200,3 @@ def test_form_affronter_add(client, testapp):
         assert response.status_code == 200
         assert "/competitions/tournoi/equipe/5/5/add/" in response.request.path
         assert b"Ajout d'un match" in response.data
-
