@@ -397,8 +397,9 @@ def affronter_add(id_championnat: int, id_equipe: int):
 @app.route('/competitions/palmares/list/')
 def palmares_list():
     """Affiche la liste des palmarès."""
-    liste_championnat = ChampionnatIndividuel.query.filter(ChampionnatIndividuel.categorie != "interne",
-            ChampionnatIndividuel.categorie != "Interne").all() + ChampionnatEquipe.query.all()
+    liste_championnat = ChampionnatIndividuel.query.filter(
+        ChampionnatIndividuel.categorie != "interne",
+        ChampionnatIndividuel.categorie != "Interne").all() + ChampionnatEquipe.query.all()
     liste_annee = []
     for championnat in liste_championnat:
         if championnat.date_championnat.year not in liste_annee:

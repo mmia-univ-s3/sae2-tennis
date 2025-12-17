@@ -29,9 +29,9 @@ def test_models_championnat_equipe(testapp):
     assert str(var) == repr(var) == "<ChampionnatEquipe(None) titre>"
     with testapp.app_context():
         championnat = ChampionnatEquipe.query.get(1)
-        assert championnat.en_cours() == False
+        assert championnat.en_cours() is False
         championnat = ChampionnatEquipe.query.get(10)
-        assert championnat.en_cours() == True
+        assert championnat.en_cours() is True
 
 def test_models_equipe():
     var = Equipe("nom", 2025, "categorie", 1, 2)

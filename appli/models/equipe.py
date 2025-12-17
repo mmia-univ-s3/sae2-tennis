@@ -16,6 +16,7 @@ class Equipe(db.Model):
 
     __table_args__ = (db.UniqueConstraint("nomE", "saison", name="equipe_saison"),)
 
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, nom: str, saison: int, categorie: str, id_div: int, rang: int):
         self.nom = nom
         self.saison = saison
