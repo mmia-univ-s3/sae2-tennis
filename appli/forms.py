@@ -147,7 +147,8 @@ class FormArticleAdd(FlaskForm):
                                    ['jpg', 'png'],
                                    "Merci de n'envoyer que des fichiers JPG ou PNG.")])
     editor = StringField('Contenu')
-    type_a = RadioField('Type', choices=[('club', 'Club'), ('stade', 'Stade')],
+    type_a = RadioField('Type', choices=[('club', 'Mettre en avant'),
+                                         ('stade', 'Ne pas mettre en avant')],
                         coerce=str)
     next = HiddenField()
 
