@@ -1,18 +1,8 @@
 # pylint: disable=missing-function-docstring
 
 import datetime
-from appli.models.article import Article
-from appli.models.categorie_tarif import CategorieTarif
-from appli.models.championnat import ChampionnatEquipe, ChampionnatIndividuel
-from appli.models.classer import Classer
-from appli.models.division import Division
-from appli.models.equipe import Equipe
-from appli.models.histoire import Histoire
-from appli.models.joueur import Joueur
-from appli.models.partenaire import Partenaire
-from appli.models.participer import Participer
-from appli.models.tarif import Tarif
-from appli.models.utilisateur import Utilisateur
+from appli.models import Article, CategorieTarif, ChampionnatEquipe, ChampionnatIndividuel,\
+    Classer, Division, Equipe, Histoire, Joueur, Partenaire, Participer, Tarif, Utilisateur
 
 def test_models_utilisateur():
     var = Utilisateur("login", "password")
@@ -22,10 +12,17 @@ def test_models_article():
     var = Article("titre", "","contenu", datetime.date(1969, 1, 20), "type")
     assert str(var) == repr(var) == "<Article(None) titre>"
 
-def test_models_championnat_individuel():
+def test_models_championnat_individuel(testapp):
     var = ChampionnatIndividuel(datetime.date(1969, 1, 20), "titre", "categorie", "serie",
                                 "niveau", None, None, None, None)
     assert str(var) == repr(var) == "<ChampionnatIndividuel(None) titre>"
+    with testapp.app_context():
+        championnat = ChampionnatIndividuel.query.get(1)
+        assert championnat.vainqueur() == "Jean Claude"
+        assert championnat.finaliste() == "Jean Pierre"
+        championnat = ChampionnatIndividuel.query.get(2)
+        assert championnat.vainqueur() == "-"
+        assert championnat.finaliste() == "-"
 
 def test_models_championnat_equipe():
     var = ChampionnatEquipe(datetime.date(1969, 1, 20), "titre", "categorie", "serie")
