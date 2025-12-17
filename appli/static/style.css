@@ -73,3 +73,7 @@ body {
 #contacts p {
     display: inline;
 }
+
+article img {
+    max-width: 100%;
+}

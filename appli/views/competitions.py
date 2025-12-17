@@ -301,7 +301,7 @@ def participant_equipe_add(id_championnat: int):
 @login_required
 def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
     """Supprime un affrontement entre 2 équipes.
-    
+
     Args :
         id_championnat (int): L'identifiant du championnat.
         id_equipe (int): L'identifiant de l'équipe.
@@ -366,7 +366,7 @@ def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
 @login_required
 def affronter_add(id_championnat: int, id_equipe: int):
     """Ajoute un affrontement.
-    
+
     Args:
         id_championnat (int): L'identifiant du championnat.
         id_equipe (int): L'identifiant de l'équipe."""
@@ -435,7 +435,7 @@ def palmares_annee(annee: int):
 
 @app.route('/competitions/tournois-internes/')
 def internes():
-    """Affiche les tournois internes."""
+    """ Page de la liste des matchs en interne """
     participant = ChampionnatIndividuel.query.filter(
         or_(ChampionnatIndividuel.categorie=="interne", ChampionnatIndividuel.categorie=="Interne"))
     resultat = []
@@ -452,7 +452,7 @@ def internes():
 @app.route('/competitions/tournois-internes/add/', methods=("GET", "POST"))
 @login_required
 def internes_add():
-    """Ajoute un tournoi interne."""
+    """ Page d'ajout d'un match en interne """
     form = FormInternes()
     joueurs = Joueur.query.all()
     choix = []
@@ -475,7 +475,7 @@ def internes_add():
 @login_required
 def internes_update(id_match):
     """Met à jour un tournoi interne.
-    
+
     Args:
         id_match (int): L'identifiant du match."""
     match = ChampionnatIndividuel.query.get(id_match)
@@ -505,7 +505,7 @@ def internes_update(id_match):
 @login_required
 def internes_delete(id_match):
     """Supprime un tournoi interne.
-    
+
     Args:
         id_match (int): L'identifiant du match."""
     match = ChampionnatIndividuel.query.get(id_match)
