@@ -160,7 +160,7 @@ def _importer_championnats_individuels(filepath):
             db.session.add(classer)
     db.session.commit()
 
-
+# pylint: disable=protected-access
 def _exporter_articles(filepath):
     """Permet d'exporter les articles"""
     liste_articles = Article.query.all()
@@ -177,7 +177,7 @@ def _exporter_articles(filepath):
                                "dateArt" : article.date_publi.strftime("%Y-%m-%d"),
                                "typeArt" : article.type_article})
 
-
+# pylint: disable=protected-access
 def _exporter_trivias(filepath):
     """Permet d'exporter les trivias liés à l'histoire du club"""
     liste_trivias = Histoire.query.all()
@@ -191,7 +191,7 @@ def _exporter_trivias(filepath):
                                "trivia" : trivia.trivia,
                                "article" : "" if trivia.article is None else str(trivia.article)})
 
-
+# pylint: disable=protected-access
 def _exporter_partenaires(filepath):
     """Permet d'exporter les partenaires du club"""
     liste_partenaires = Partenaire.query.all()
@@ -205,7 +205,7 @@ def _exporter_partenaires(filepath):
                                "logo" : partenaire.logo,
                                "lien" : partenaire.lien})
 
-
+# pylint: disable=protected-access
 def _exporter_users(filepath):
     """Permet d'exporter les utilisateurs"""
     liste_utilisateurs = Utilisateur.query.all()
@@ -217,7 +217,7 @@ def _exporter_users(filepath):
             ecriture.writerow({"idU" : utilisateur.login,
                                "mdp" : utilisateur.mdp})
 
-
+# pylint: disable=protected-access
 def _exporter_tarifs(filepath):
     """Permet d'exporter les tarifs"""
     liste_categories = CategorieTarif.query.all()
@@ -226,19 +226,19 @@ def _exporter_tarifs(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for categorie in liste_categories:
-            ecriture.writerow({"idCat" : str(categorie.id), 
+            ecriture.writerow({"idCat" : str(categorie.id),
                                "sport" : categorie.sport,
                                "intituleCat" : categorie.intitule,
                                "idCatParent" : "" if categorie._id_parent is None\
                                 else str(categorie._id_parent)})
-    
+
     liste_tarifs = Tarif.query.all()
     with open(f"{filepath}/tarif.csv", 'w', newline="", encoding="utf-8") as csvfile:
         colonnes = ["idT", "intituleT", "idCat"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for tarif in liste_tarifs:
-            ecriture.writerow({"idT" : str(tarif.id), 
+            ecriture.writerow({"idT" : str(tarif.id),
                                "intituleT" : tarif.intitule,
                                "idCat" : str(tarif._id_cat)})
 
@@ -249,7 +249,7 @@ def _exporter_tarifs(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for reservation in liste_reservations:
-            ecriture.writerow({"idT" : str(reservation._id_tarif), 
+            ecriture.writerow({"idT" : str(reservation._id_tarif),
                                "montant" : str(reservation.montant)})
 
 
@@ -259,11 +259,11 @@ def _exporter_tarifs(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for reduction in liste_reductions:
-            ecriture.writerow({"idT" : str(reduction._id_tarif), 
+            ecriture.writerow({"idT" : str(reduction._id_tarif),
                                "taux" : reduction.taux,
                                "estCumulable" : str(reduction.cumulable)})
 
-
+# pylint: disable=protected-access
 def _exporter_championnats_equipes(filepath):
     """Permet d'exporter les données relatives aux championnats par équipes"""
     liste_divisions = Division.query.all()
@@ -272,7 +272,7 @@ def _exporter_championnats_equipes(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for division in liste_divisions:
-            ecriture.writerow({"idDiv" : str(division.id), 
+            ecriture.writerow({"idDiv" : str(division.id),
                                "intituleDiv" : division.intitule})
 
     liste_championnat = ChampionnatEquipe.query.all()
@@ -281,7 +281,7 @@ def _exporter_championnats_equipes(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for championnat in liste_championnat:
-            ecriture.writerow({"idCha" : str(championnat.id), 
+            ecriture.writerow({"idCha" : str(championnat.id),
                                "dateCha" : championnat.date_championnat.strftime("%Y-%m-%d"),
                                "titreCha" : championnat.titre,
                                "categorieSport" : championnat.categorie,
@@ -293,7 +293,7 @@ def _exporter_championnats_equipes(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for equipe in liste_equipes:
-            ecriture.writerow({"idE" : str(equipe.id), 
+            ecriture.writerow({"idE" : str(equipe.id),
                                "nomE" : equipe.nom,
                                "saison" : str(equipe.saison),
                                "categorieE" : equipe.categorie,
@@ -306,7 +306,7 @@ def _exporter_championnats_equipes(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for participant in liste_participants:
-            ecriture.writerow({"idCha" : str(participant._id_championnat), 
+            ecriture.writerow({"idCha" : str(participant._id_championnat),
                                "idE" : str(participant._id_equipe),
                                "rang" : participant.rang,
                                "poule" : participant.poule})
@@ -317,7 +317,7 @@ def _exporter_championnats_equipes(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for match in liste_matchs:
-            ecriture.writerow({"idCha" : str(match._id_championnat), 
+            ecriture.writerow({"idCha" : str(match._id_championnat),
                                "idE" : str(match._id_equipe),
                                "nomAdv" : match.adversaire,
                                "resultat" : match.resultat,
@@ -325,7 +325,7 @@ def _exporter_championnats_equipes(filepath):
                                "estDomicile" : str(match.domicile),
                                "dateMatch" : match.date_match.strftime("%Y-%m-%d")})
 
-
+# pylint: disable=protected-access
 def _exporter_championnats_individuels(filepath):
     """Permet d'exporter les données relatives aux championnats individuels"""
     liste_joueurs = Joueur.query.all()
@@ -335,12 +335,12 @@ def _exporter_championnats_individuels(filepath):
         ecriture.writeheader()
         liste_joueurs:list[Joueur]
         for joueur in liste_joueurs:
-            ecriture.writerow({"idJ" : str(joueur.id), 
+            ecriture.writerow({"idJ" : str(joueur.id),
                                "nomJ" : joueur.nom,
                                "prenomJ" : joueur.prenom,
                                "idE" : "" if joueur._id_equipe is None\
                                 else str(joueur._id_equipe)})
-    
+
     liste_championnats = ChampionnatIndividuel.query.all()
     with open(f"{filepath}/champ_indiv.csv", 'w', newline="", encoding="utf-8") as csvfile:
         colonnes = ["idCha", "dateCha", "titreCha", "categorieSport", "serie", "niveau",
@@ -348,7 +348,7 @@ def _exporter_championnats_individuels(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for championnat in liste_championnats:
-            ecriture.writerow({"idCha" : str(championnat.id), 
+            ecriture.writerow({"idCha" : str(championnat.id),
                                "dateCha" : championnat.date_championnat.strftime("%Y-%m-%d"),
                                "titreCha" : championnat.titre,
                                "categorieSport" : championnat.categorie,
@@ -370,7 +370,7 @@ def _exporter_championnats_individuels(filepath):
         ecriture.writeheader()
         liste_classements:list[Classer]
         for classement in liste_classements:
-            ecriture.writerow({"idCha" : str(classement._id_championnat), 
+            ecriture.writerow({"idCha" : str(classement._id_championnat),
                                "idJ" : str(classement._id_j),
                                "rang" : classement.rang})
 
