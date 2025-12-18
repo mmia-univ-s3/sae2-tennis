@@ -137,8 +137,8 @@ def test_internes_update_not_work(client):
     assert "/competitions/tournois-internes/2/update/" in response.request.path
 
 def test_internes_update_work(client):
-    response = login(client, "/competitions/tournois-internes/2/update/")
-    response = client.post('competitions/tournois-internes/2/update/', data={
+    response = login(client, "/competitions/tournois-internes/10/update/")
+    response = client.post('competitions/tournois-internes/10/update/', data={
         "date":"2025-12-14",
         "titre":"Test",
         "serie":"test",
@@ -147,11 +147,12 @@ def test_internes_update_work(client):
         'points2': '7',
         'joueur2':'2'
     }, follow_redirects=True)
+    print(response.data)
     assert b"Tournois internes" in response.data
     assert "/competitions/tournois-internes/" in response.request.path
 
 def test_internes_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournois-internes/2/delete/")
-        response = client.post('/competitions/tournois-internes/2/delete/', follow_redirects=True)
+        response = login(client, "/competitions/tournois-internes/10/delete/")
+        response = client.post('/competitions/tournois-internes/10/delete/', follow_redirects=True)
         assert b"Tournois internes" in response.data

@@ -11,13 +11,13 @@ from appli.commands import _importer_articles, _importer_championnats_equipes,\
 with app.app_context():
     db.drop_all()
     db.create_all()
-    _importer_articles(filename="./appli/data/article.csv")
-    _importer_trivias(filename="./appli/data/histoire.csv")
-    _importer_partenaires(filename="./appli/data/partenaire.csv")
-    _importer_users(filename="./appli/data/utilisateur.csv")
-    _importer_tarifs(filepath="./appli/data")
-    _importer_championnats_equipes(filepath="./appli/data")
-    _importer_championnats_individuels(filepath="./appli/data")
+    _importer_articles(filename="./appli/data/init/article.csv")
+    _importer_trivias(filename="./appli/data/init/histoire.csv")
+    _importer_partenaires(filename="./appli/data/init/partenaire.csv")
+    _importer_users(filename="./appli/data/init/utilisateur.csv")
+    _importer_tarifs(filepath="./appli/data/init")
+    _importer_championnats_equipes(filepath="./appli/data/init")
+    _importer_championnats_individuels(filepath="./appli/data/init")
 
 @pytest.fixture
 def testapp():
