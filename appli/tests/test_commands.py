@@ -7,4 +7,3 @@ def test_commands_loaddb(runner):
 def test_commands_savedb(runner):
     result = runner.invoke(args=["savedb", "./appli/data/init"])
     assert result.output == ""
-
