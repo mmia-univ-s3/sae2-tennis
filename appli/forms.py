@@ -272,7 +272,7 @@ class FormAffronter(FlaskForm):
     adversaire = StringField("Nom de l'adversaire", validators=[DataRequired()])
     date = DateField("Date du match", validators=[DataRequired()])
     resultat = RadioField("Victoire de l'équipe du club ?",
-                          choices=[('V', 'Victoire'), ('D', 'Défaire'), ('N', "Nul")],
+                          choices=[('V', 'Victoire'), ('D', 'Défaite'), ('N', "Nul")],
                           coerce=str, validators=[Optional()])
     score = StringField("Score")
     domicile = RadioField("Lieu du match",
