@@ -230,9 +230,9 @@ def _exporter_tarifs(filepath):
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for sport in liste_sports:
-            ecriture.writerow({"idSport" : str(sport._id_sport),
+            ecriture.writerow({"idSport" : str(sport.id),
                                "nom" : sport.nom,
-                               "commenataire" : sport.commentaire})
+                               "commentaire" : sport.commentaire})
 
     liste_categories = CategorieTarif.query.all()
     with open(f"{filepath}/categorie.csv", 'w', newline="", encoding="utf-8") as csvfile:
@@ -268,7 +268,7 @@ def _exporter_tarifs(filepath):
         ecriture.writeheader()
         for reduction in liste_reductions:
             ecriture.writerow({"idT" : str(reduction.id),
-                               "ordreT" : str(reduction),
+                               "ordreT" : str(reduction.ordre),
                                "intituleT" : reduction.intitule,
                                "idCat" : str(reduction._id_cat),
                                "taux" : reduction.taux,
