@@ -65,8 +65,9 @@ def tarifications_categorie_ajout():
 @login_required
 def tarifications_tarif_ajout(id_cat):
     """Page d'ajout d'un tarif"""
+    categorie = CategorieTarif.query.get(id_cat)
     return render_template('tarifications_tarif_add.html',
-                           title="Ajouter un tarif dans une catégorie", id_cat=id_cat)
+                           title="Ajouter un tarif dans une catégorie", categorie=categorie)
 
 
 @app.route('/formation/tarifications/categorie/<id_cat>/delete/', methods=('GET', 'POST'))

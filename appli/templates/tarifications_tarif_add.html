@@ -3,10 +3,14 @@
 {% block main %}
     <h1>Ajout d'un tarif</h1>
     <div class="col-sm-offset-2 col-sm-10">
-        <a href="{{ url_for('tarifications_ajout_tarif_reservation', id_cat=id_cat) }}"
+        <a href="{{ url_for('tarifications_ajout_tarif_reservation', id_cat=categorie.id) }}"
            class="btn btn-primary">Ajouter une réservation</a>
-        <a href="{{ url_for('tarifications_ajout_tarif_reduction', id_cat=id_cat) }}"
+        <a href="{{ url_for('tarifications_ajout_tarif_reduction', id_cat=categorie.id) }}"
            class="btn btn-primary">Ajouter une réduction</a>
+        {% if not categorie.est_sous_categorie() %}
+            <a href="{{ url_for('tarifications_souscategorie_ajout', id_cat=categorie.id) }}"
+                class="btn btn-warning">Ajouter une sous-catégorie</a>
+        {% endif %}
         <a href="{{ url_for('tarifications') }}" class="btn btn-secondary">Annuler</a>
     </div>
 {% endblock %}
