@@ -20,6 +20,12 @@ class Championnat(db.Model):
         self.titre = titre
         self.categorie = categorie
         self.serie = serie
+    
+    def __str__(self):
+        return f"<Championnat({self.id}) {self.titre}>"
+
+    def __repr__(self):
+        return self.__str__()
 
 # pylint: disable=too-many-arguments,too-many-instance-attributes
 class ChampionnatIndividuel(Championnat):
@@ -90,7 +96,7 @@ class ChampionnatEquipe(Championnat):
 
     id = db.Column("idCha", db.ForeignKey('CHAMPIONNAT.idCha'), primary_key=True)
 
-    # pylint: disable=too-many-arguments,too-many-positional-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments, useless-parent-delegation
     def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str):
         super().__init__(date_championnat, titre, categorie, serie)
 

@@ -13,10 +13,10 @@ class Tarif(db.Model):
 
     categorie = db.relationship("CategorieTarif", backref=db.backref("tarifs",
                                 lazy="dynamic", cascade="all, delete-orphan"))
-    
+
     __mapper_args__ = {"polymorphic_on": type_tarif}
 
-        
+
     __table_args__ = (
         UniqueConstraint("ordreT", "idCat"),
     )
@@ -39,6 +39,7 @@ class Reduction(Tarif):
     taux: str = db.Column("taux", db.Text)
     licence: bool = db.Column("surLicence", db.Boolean)
 
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, ordre:int, intitule: str, id_cat: int, taux: str, licence: bool):
         super().__init__(ordre, intitule, id_cat)
         self.taux = taux

@@ -49,13 +49,15 @@ def test_tournoi(client, testapp):
 def test_participant_indiv_delete(client, testapp):
     with testapp.app_context():
         response = login(client, "/competitions/tournoi/individuel/12/1/delete/")
-        response = client.get('/competitions/tournoi/individuel/12/1/delete/', follow_redirects=True)
+        response = client.get('/competitions/tournoi/individuel/12/1/delete/',
+                              follow_redirects=True)
         assert "Suppression d'un participant".encode("utf-8") in response.data
 
 def test_participant_indiv_update(client, testapp):
     with testapp.app_context():
         response = login(client, "/competitions/tournoi/individuel/12/1/update/")
-        response = client.get('/competitions/tournoi/individuel/12/1/update/', follow_redirects=True)
+        response = client.get('/competitions/tournoi/individuel/12/1/update/',
+                              follow_redirects=True)
         assert b"Modification du participant" in response.data
 
 def test_participant_indiv_add(client, testapp):

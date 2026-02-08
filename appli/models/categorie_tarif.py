@@ -16,14 +16,14 @@ class CategorieTarif(db.Model):
                                                         cascade="all, delete-orphan"))
     enfants = db.relationship("CategorieTarif", backref=db.backref("parent", remote_side=[id]),
                               cascade="all, delete-orphan",)
-    
+
     __table_args__ = (
         UniqueConstraint("ordreCat", "idCatParent"),
         Index(
             "idCatParentNull",
             "ordreCat",
-            unique=True, 
-            sqlite_where=(_id_parent == None)
+            unique=True,
+            sqlite_where=(_id_parent is None)
         )
     )
 
@@ -34,6 +34,11 @@ class CategorieTarif(db.Model):
         self._id_parent = id_parent
 
     def est_sous_categorie(self):
+        """Indique si une catégorie est enfant d'une autre catégorie
+
+        Returns:
+            bool: True si la catégorie est une sous-catégorie, False sinon
+        """
         return self._id_parent is not None
 
     def __str__(self):

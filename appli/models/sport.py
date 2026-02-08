@@ -14,6 +14,6 @@ class Sport(db.Model):
 
     def __str__(self):
         return f"<Sport({self.id}) {self.nom}>"
-    
+
     def __repr__(self):
         return self.__str__()
