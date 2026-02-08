@@ -1,1 +1,52 @@
-- str() et __repr__ pour le modèle (bonus)
+- Tournois internes -> a revoir
+[•] Points -> score 
+[•] Classement a faire 
+[•] Preparationlisye joueur 
+[•] Ajout match 
+[•] Possibilite score
+[•] Faire classement selon score 
+[•] Difference match gagné, set gagné, jeu gagné 
+
+- Histoire
+[•]classement indiv -> demi-final, 1seul finaliste
+
+- Article
+[•] image supp/save si update, redimensionner
+
+- User 
+[•] (differents rôles)
+
+- Site
+[•] Possibilité ajout page
+
+- Tarification
+[•] deplacer position
+[•] Ajout encadré
+[•] Ajout sport (nom, com)
+
+
+- Partenaire
+[•] Centrer logo
+[•] Catégorie
+[•] Ordre alphabétique 
+
+- Calendrier
+[•] Filtre 
+[•] Par date (année)
+[•] Liste déroulante
+
+- Article
+[•] Trier par année 
+[•] Image -> Envoyé fichier
+[•] Option : importer une image
+[•] Modification taille image
+
+- Accueil
+[•] Image en guise de baniere "bienvenue .."
+[•] Bloque 
+[•] Trois articles plus recents 
+[•] Boutons redirections articles
+[•] Competitions -> 3 championnants les plus recents en equipe/indiv
+[•] Pied de page
+[•] Partenaires
+[•] Contact

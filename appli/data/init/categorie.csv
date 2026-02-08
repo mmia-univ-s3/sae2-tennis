@@ -1,25 +1,25 @@
-idCat;sport;intituleCat;idCatParent
-1;tennis;Adhésion Jeune né en 2008 et après;
-2;tennis;Adhésion Adulte né entre 1997 et 2007;
-3;tennis;Adhésion Adulte né en 1996 et avant;
-4;tennis;Réservation à l'heure et Carte;
-5;tennis;Réductions;
-6;tennis;Réservation sans cours;1
-7;tennis;Réservation sans cours;2
-8;tennis;Réservation sans cours;3
-9;tennis;Réservation avec cours;1
-10;tennis;Réservation avec cours;2
-11;tennis;Réservation avec cours;3
-12;tennis;Jeune Compétition Réservation des cours 9h/semaine;1
-13;tennis;Court à l'heure;4
-14;tennis;Cartes membres;4
-15;tennis;Participation aux compétitions par équipe en fonction du classement;5
-16;tennis;Famille;5
-17;tennis;Parrainage;5
-18;padel;A l'heure;
-19;padel;Abonnement;
-20;padel;Licence;
-21;padel;Location;
-22;padel;Vente;
-23;padel;Licencié club;19
-24;padel;Licencié FFT;19
+idCat;sport;intituleCat;typeTarif;idCatParent
+1;tennis;Adhésion Jeune né en 2008 et après;reservation;
+2;tennis;Adhésion Adulte né entre 1997 et 2007;reservation;
+3;tennis;Adhésion Adulte né en 1996 et avant;reservation;
+4;tennis;Réservation à l'heure et Carte;reservation;
+5;tennis;Réductions;reduction;
+6;tennis;Réservation sans cours;reservation;1
+7;tennis;Réservation sans cours;reservation;2
+8;tennis;Réservation sans cours;reservation;3
+9;tennis;Réservation avec cours;reservation;1
+10;tennis;Réservation avec cours;reservation;2
+11;tennis;Réservation avec cours;reservation;3
+12;tennis;Jeune Compétition Réservation des cours 9h/semaine;reservation;1
+13;tennis;Court à l'heure;reservation;4
+14;tennis;Cartes membres;reservation;4
+15;tennis;Participation aux compétitions par équipe en fonction du classement;reduction;5
+16;tennis;Famille;reduction;5
+17;tennis;Parrainage;reduction;5
+18;padel;A l'heure;reservation;
+19;padel;Abonnement;reservation;
+20;padel;Licence;reservation;
+21;padel;Location;reservation;
+22;padel;Vente;reservation;
+23;padel;Licencié club;reservation;19
+24;padel;Licencié FFT;reservation;19

@@ -48,11 +48,11 @@
                             <center>{{ tarif.intitule }}</center>
                         </td>
                         <td style="width: 200px;">
-                            {% if tarif.reservations[0] %}
-                                <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                            {% if tarif.type_tarif == "reservation" %}
+                                <center>{{ "%.2f" % tarif.montant }} €</center>
                             {% else %}
-                                <center>{{ tarif.reductions[0].taux }}
-                                    {% if tarif.reductions[0].cumulable %}
+                                <center>{{ tarif.taux }}
+                                    {% if not tarif.licence %}
                                         <span class="text-danger">*</span>{% endif %}</center>
                             {% endif %}
                         </td>
@@ -118,17 +118,17 @@
                                 <center>{{ tarif.intitule }}</center>
                             </td>
                             <td style="width: 200px;">
-                                {% if tarif.reservations[0] %}
-                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                {% if tarif.type_tarif == "reservation" %}
+                                    <center>{{ "%.2f" % tarif.montant }} €</center>
                                 {% else %}
-                                    <center>{{ tarif.reductions[0].taux }}
-                                        {% if tarif.reductions[0].cumulable %}
+                                    <center>{{ tarif.taux }}
+                                        {% if not tarif.licence %}
                                             <span class="text-danger">*</span>{% endif %}</center>
                                 {% endif %}
                             </td>
                             {% if current_user.is_authenticated %}
                                 <th style="width: 123px; text-align: right;">
-                                    {% if tarif.reservations[0] %}
+                                    {% if tarif.type_tarif == "reservation" %}
                                         <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
                                            class="btn btn-outline-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -260,17 +260,17 @@
                             <center>{{ tarif.intitule }}</center>
                         </td>
                         <td style="width: 200px;">
-                            {% if tarif.reservations[0] %}
-                                <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                            {% if tarif.type_tarif == "reservation" %}
+                                <center>{{ "%.2f" % tarif.montant }} €</center>
                             {% else %}
-                                <center>{{ tarif.reductions[0].taux }}
-                                    {% if tarif.reductions[0].cumulable %}
+                                <center>{{ tarif.taux }}
+                                    {% if not tarif.licence %}
                                         <span class="text-danger">*</span>{% endif %}</center>
                             {% endif %}
                         </td>
                         {% if current_user.is_authenticated %}
                             <th style="width: 123px; text-align: right;">
-                                {% if tarif.reservations[0] %}
+                                {% if tarif.type_tarif == "reservation" %}
                                     <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
                                        class="btn btn-outline-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -357,17 +357,17 @@
                                 <center>{{ tarif.intitule }}</center>
                             </td>
                             <td style="width: 200px;">
-                                {% if tarif.reservations[0] %}
-                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                {% if tarif.type_tarif == "reservation" %}
+                                    <center>{{ "%.2f" % tarif.montant }} €</center>
                                 {% else %}
-                                    <center>{{ tarif.reductions[0].taux }}
-                                        {% if tarif.reductions[0].cumulable %}
+                                    <center>{{ tarif.taux }}
+                                        {% if not tarif.licence %}
                                             <span class="text-danger">*</span>{% endif %}</center>
                                 {% endif %}
                             </td>
                             {% if current_user.is_authenticated %}
                                 <th style="width: 123px; text-align: right;">
-                                    {% if tarif.reservations[0] %}
+                                    {% if tarif.type_tarif == "reservation" %}
                                         <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
                                            class="btn btn-outline-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -490,17 +490,17 @@
                             <center>{{ tarif.intitule }}</center>
                         </td>
                         <td style="width: 200px;">
-                            {% if tarif.reservations[0] %}
-                                <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                            {% if tarif.type_tarif == "reservation" %}
+                                <center>{{ "%.2f" % tarif.montant }} €</center>
                             {% else %}
-                                <center>{{ tarif.reductions[0].taux }}
-                                    {% if tarif.reductions[0].cumulable %}
+                                <center>{{ tarif.taux }}
+                                    {% if not tarif.licence %}
                                         <span class="text-danger">*</span>{% endif %}</center>
                             {% endif %}
                         </td>
                         {% if current_user.is_authenticated %}
                             <th style="width: 123px; text-align: right;">
-                                {% if tarif.reservations[0] %}
+                                {% if tarif.type_tarif == "reservation" %}
                                     <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
                                        class="btn btn-outline-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -587,17 +587,17 @@
                                 <center>{{ tarif.intitule }}</center>
                             </td>
                             <td style="width: 200px;">
-                                {% if tarif.reservations[0] %}
-                                    <center>{{ "%.2f" % tarif.reservations[0].montant }} €</center>
+                                {% if tarif.type_tarif == "reservation" %}
+                                    <center>{{ "%.2f" % tarif.montant }} €</center>
                                 {% else %}
-                                    <center>{{ tarif.reductions[0].taux }}
-                                        {% if tarif.reductions[0].cumulable %}
+                                    <center>{{ tarif.taux }}
+                                        {% if not tarif.licence %}
                                             <span class="text-danger">*</span>{% endif %}</center>
                                 {% endif %}
                             </td>
                             {% if current_user.is_authenticated %}
                                 <th style="width: 123px; text-align: right;">
-                                    {% if tarif.reservations[0] %}
+                                    {% if tarif.type_tarif == "reservation" %}
                                         <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
                                            class="btn btn-outline-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24"

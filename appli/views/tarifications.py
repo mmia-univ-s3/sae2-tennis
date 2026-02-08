@@ -11,22 +11,14 @@ from appli.models import CategorieTarif, Reduction, Reservation, Tarif
 @app.route('/formation/tarifications/')
 def tarifications():
     """Page des tarifs"""
-    # pylint: disable=protected-access,singleton-comparison
-    list_cate_tennis = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
-                                                   CategorieTarif.sport == "tennis").all()
-    list_cate_rese_tennis = filter(lambda x: (len(x.enfants) > 0 and len(
-        x.enfants[0].tarifs.all()) > 0 and len(x.enfants[0].tarifs[0].reductions.all()) == 0) or (
-                                                         x.parent is None and (
-                                                             len(x.enfants) == 0 or (
-                                                                 len(x.enfants) > 0 and len(
-                                                             x.enfants[0].tarifs.all()) == 0))),
-                                   list_cate_tennis)
-    list_cate_redu_tennis = filter(
-        lambda x: len(x.enfants) > 0 and len(x.enfants[0].tarifs.all()) > 0 and len(
-            x.enfants[0].tarifs[0].reductions.all()) > 0, list_cate_tennis)
-    # pylint: disable=protected-access,singleton-comparison
-    list_cate_padel = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
-                                                  CategorieTarif.sport == "padel").all()
+    list_cate_rese_tennis = filter(lambda catTarif: not catTarif.est_sous_categorie(),
+                                   CategorieTarif.query.filter(CategorieTarif.type_tarif == "reservation",
+                                                               CategorieTarif.sport == "tennis").all())
+    list_cate_redu_tennis = filter(lambda catTarif: not catTarif.est_sous_categorie(),
+                                   CategorieTarif.query.filter(CategorieTarif.type_tarif == "reduction",
+                                                               CategorieTarif.sport == "tennis").all())
+    list_cate_padel = filter(lambda catTarif: not catTarif.est_sous_categorie(),
+                             CategorieTarif.query.filter(CategorieTarif.sport == "padel").all())
     return render_template('tarifications.html', title="Tarifications - Formation",
                            cate_rese=list_cate_rese_tennis, cate_redu=list_cate_redu_tennis,
                            cate_padel=list_cate_padel)
@@ -39,7 +31,7 @@ def tarifications_souscategorie_ajout(id_cat):
     form = FormSouscategorieAdd()
     categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
-        categorie = CategorieTarif(categorie.sport, form.intitule.data, id_cat)
+        categorie = CategorieTarif(categorie.sport, form.intitule.data, categorie.type_tarif, id_cat)
         db.session.add(categorie)
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -105,10 +97,7 @@ def tarifications_ajout_tarif_reservation(id_cat):
     """Page d'ajout d'une réservation"""
     form = FormReservationAdd()
     if form.validate_on_submit():
-        tarif = Tarif(form.intitule.data, id_cat)
-        db.session.add(tarif)
-        db.session.commit()
-        reservation = Reservation(tarif.id, form.montant.data)
+        reservation = Reservation(form.intitule.data, id_cat, form.montant.data)
         db.session.add(reservation)
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -122,10 +111,7 @@ def tarifications_ajout_tarif_reduction(id_cat):
     """Page d'ajout d'une réduction"""
     form = FormReductionAdd()
     if form.validate_on_submit():
-        tarif = Tarif(form.intitule.data, id_cat)
-        db.session.add(tarif)
-        db.session.commit()
-        reduction = Reduction(tarif.id, form.taux.data, form.cumulable.data)
+        reduction = Reduction(form.intitule.data, id_cat, form.taux.data, form.licence.data)
         db.session.add(reduction)
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -138,9 +124,9 @@ def tarifications_ajout_tarif_reduction(id_cat):
 def tarifications_reservations_update(id_tarif):
     """Page de modification d'une réservation"""
     reservation = Reservation.query.get(id_tarif)
-    form = FormReservationAdd(intitule=reservation.tarif.intitule, montant=reservation.montant)
+    form = FormReservationAdd(intitule=reservation.intitule, montant=reservation.montant)
     if form.validate_on_submit():
-        reservation.tarif.intitule = form.intitule.data
+        reservation.intitule = form.intitule.data
         reservation.montant = form.montant.data
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -153,12 +139,11 @@ def tarifications_reservations_update(id_tarif):
 def tarifications_reductions_update(id_tarif):
     """Page de modification d'une réduction"""
     reduction = Reduction.query.get(id_tarif)
-    form = FormReductionAdd(intitule=reduction.tarif.intitule, taux=reduction.taux,
-                            cumulable=reduction.cumulable)
+    form = FormReductionAdd(obj=reduction)
     if form.validate_on_submit():
-        reduction.tarif.intitule = form.intitule.data
+        reduction.intitule = form.intitule.data
         reduction.taux = form.taux.data
-        reduction.cumulable = form.cumulable.data
+        reduction.licence = form.licence.data
         db.session.commit()
         return redirect(url_for("tarifications"))
     return render_template('tarifications_tarif_update_reduction.html',

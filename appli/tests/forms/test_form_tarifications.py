@@ -70,7 +70,7 @@ def test_forms_reduction(client, testapp):
         response = client.post('/formation/tarifications/categorie/6/ajout/reduction/', data={
             "intitule":"redu1",
             "taux":"50%",
-            "cumulable":"true"
+            "licence":"false"
         }, follow_redirects=True)
 
         assert response.status_code == 200
@@ -95,7 +95,7 @@ def test_forms_reduction_update(client, testapp):
         response = client.post('/formation/tarifications/tarif/30/update-reduction/', data={
             "intitule":"redu1",
             "taux":"60%",
-            "cumulable":"true"
+            "licence":"false"
         }, follow_redirects=True)
 
         assert response.status_code == 200

@@ -8,14 +8,12 @@ from .utilisateur import Utilisateur
 from .division import Division
 from .joueur import Joueur
 from .classer import Classer
-from .championnat import ChampionnatEquipe, ChampionnatIndividuel
+from .championnat import ChampionnatEquipe, ChampionnatIndividuel, Championnat
 from .equipe import Equipe
 from .participer import Participer
 from .affronter import Affronter
 from .categorie_tarif import CategorieTarif
-from .tarif import Tarif
-from .reservation import Reservation
-from .reduction import Reduction
+from .tarif import Tarif, Reservation, Reduction
 
 @login_manager.user_loader
 def load_user(login: str):

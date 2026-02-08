@@ -5,9 +5,9 @@ from datetime import date
 import click
 
 from .app import app, db
-from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Tarif, \
-    Reservation, Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, Equipe, \
-    Participer, Affronter, Joueur, Classer
+from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Reservation, \
+    Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, Equipe, Participer, \
+    Affronter, Joueur, Classer
 
 
 def _importer_articles(filename):
@@ -61,27 +61,24 @@ def _importer_tarifs(filepath):
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             categorie = CategorieTarif(sport=ligne["sport"], intitule=ligne["intituleCat"],
+                                       type_tarif=ligne["typeTarif"],
                                        id_parent=int(ligne["idCatParent"])\
                                         if ligne["idCatParent"] != "" else None)
             db.session.add(categorie)
 
-    with open(filepath + "/tarif.csv", newline="", encoding="utf-8") as csvfile:
-        lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
-        for ligne in lecture:
-            tarif = Tarif(intitule=ligne["intituleT"], id_cat=int(ligne["idCat"]))
-            db.session.add(tarif)
-
     with open(filepath + "/reservation.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            reservation = Reservation(id_tarif=int(ligne["idT"]), montant=float(ligne["montant"]))
+            reservation = Reservation(intitule=ligne["intituleT"], id_cat=int(ligne["idCat"]),
+                                      montant=float(ligne["montant"]))
             db.session.add(reservation)
 
     with open(filepath + "/reduction.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            reduction = Reduction(id_tarif=int(ligne["idT"]), taux=ligne["taux"],
-                                  cumulable=ligne["estCumulable"].strip() == "True")
+            reduction = Reduction(intitule=ligne["intituleT"], id_cat=int(ligne["idCat"]),
+                                  taux=ligne["taux"],
+                                  licence=ligne["surLicence"].strip() == "True")
             db.session.add(reduction)
     db.session.commit()
 
@@ -222,46 +219,41 @@ def _exporter_tarifs(filepath):
     """Permet d'exporter les tarifs"""
     liste_categories = CategorieTarif.query.all()
     with open(f"{filepath}/categorie.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCat", "sport", "intituleCat", "idCatParent"]
+        colonnes = ["idCat", "sport", "intituleCat", "typeTarif", "idCatParent"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for categorie in liste_categories:
             ecriture.writerow({"idCat" : str(categorie.id),
                                "sport" : categorie.sport,
                                "intituleCat" : categorie.intitule,
+                               "typeTarif" : categorie.type_tarif,
                                "idCatParent" : "" if categorie._id_parent is None\
                                 else str(categorie._id_parent)})
-
-    liste_tarifs = Tarif.query.all()
-    with open(f"{filepath}/tarif.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idT", "intituleT", "idCat"]
-        ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
-        ecriture.writeheader()
-        for tarif in liste_tarifs:
-            ecriture.writerow({"idT" : str(tarif.id),
-                               "intituleT" : tarif.intitule,
-                               "idCat" : str(tarif._id_cat)})
 
 
     liste_reservations = Reservation.query.all()
     with open(f"{filepath}/reservation.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idT", "montant"]
+        colonnes = ["idT", "intituleT", "idCat", "montant"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for reservation in liste_reservations:
-            ecriture.writerow({"idT" : str(reservation._id_tarif),
+            ecriture.writerow({"idT" : str(reservation.id),
+                               "intituleT" : reservation.intitule,
+                               "idCat" : str(reservation._id_cat),
                                "montant" : str(reservation.montant)})
 
 
     liste_reductions = Reduction.query.all()
     with open(f"{filepath}/reduction.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idT", "taux", "estCumulable"]
+        colonnes = ["idT", "intituleT", "idCat", "taux", "surLicence"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for reduction in liste_reductions:
-            ecriture.writerow({"idT" : str(reduction._id_tarif),
+            ecriture.writerow({"idT" : str(reduction.id),
+                               "intituleT" : reservation.intitule,
+                               "idCat" : str(reservation._id_cat),
                                "taux" : reduction.taux,
-                               "estCumulable" : str(reduction.cumulable)})
+                               "surLicence" : str(reduction.licence)})
 
 # pylint: disable=protected-access
 def _exporter_championnats_equipes(filepath):
@@ -333,7 +325,6 @@ def _exporter_championnats_individuels(filepath):
         colonnes = ["idJ", "nomJ", "prenomJ", "idE"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
-        liste_joueurs:list[Joueur]
         for joueur in liste_joueurs:
             ecriture.writerow({"idJ" : str(joueur.id),
                                "nomJ" : joueur.nom,
