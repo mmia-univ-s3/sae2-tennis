@@ -78,6 +78,7 @@ def _importer_tarifs(filepath):
         for ligne in lecture:
             reservation = Reservation(ordre=int(ligne["ordreT"]), intitule=ligne["intituleT"],
                                       id_cat=int(ligne["idCat"]), montant=float(ligne["montant"]))
+            reservation.id = int(ligne["idT"])
             db.session.add(reservation)
 
     with open(filepath + "/reduction.csv", newline="", encoding="utf-8") as csvfile:
@@ -86,6 +87,7 @@ def _importer_tarifs(filepath):
             reduction = Reduction(ordre=int(ligne["ordreT"]), intitule=ligne["intituleT"],
                                   id_cat=int(ligne["idCat"]), taux=ligne["taux"],
                                   licence=ligne["surLicence"].strip() == "True")
+            reduction.id = int(ligne["idT"])
             db.session.add(reduction)
     db.session.commit()
 
@@ -104,6 +106,7 @@ def _importer_championnats_equipes(filepath):
             champ = ChampionnatEquipe(date_championnat=date.fromisoformat(ligne["dateCha"]),
                                       titre=ligne["titreCha"], categorie=ligne["categorieSport"],
                                       serie=ligne["serie"])
+            champ.id = int(ligne["idCha"])
             db.session.add(champ)
 
     with open(filepath + "/equipe.csv", newline="", encoding="utf-8") as csvfile:
@@ -154,6 +157,7 @@ def _importer_championnats_individuels(filepath):
                                           id_joueur_2=ligne["idJ2"],
                                           score_1=ligne["score1"],
                                           score_2=ligne["score2"])
+            champ.id = int(ligne["idCha"])
             db.session.add(champ)
 
     with open(filepath + "/classer.csv", newline="", encoding="utf-8") as csvfile:
