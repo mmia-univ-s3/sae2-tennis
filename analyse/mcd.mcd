@@ -3,15 +3,15 @@ HISTOIRE: idH, annee, trivia
 PARTENAIRE: idP, nomP, logo, important
 UTILISATEUR: idU, mdp, role
 
+CHAMPIONNAT: idCha, dateCha, titreCha
 /T\ CHAMPIONNAT -> CHAMP_INDIV, CHAMP_EQUIPE, CHAMP_INTER
 
 CHAMP_INTER:
-CHAMP_INDIV: niveau
-CHAMPIONNAT: idCha, dateCha, titreCha, categorieSport, serie
-CHAMP_EQUIPE:
+CHAMP_INDIV: categorieSport, serie, niveau
+CHAMP_EQUIPE: categorieSport, serie
 
-INSCRIRE, 0N CHAMP_INTER, 0N JOUEUR:
 JOUER, 0N CHAMP_INTER, 0N JOUEUR: setsGagnants, score1, score2
+INSCRIRE, 0N CHAMP_INTER, 0N JOUEUR:
 CLASSER, 0N CHAMP_INDIV, 0N JOUEUR: rang
 PARTICIPER, 0N CHAMP_EQUIPE, 0N EQUIPE: rang, poule
 AFFRONTER, 0N CHAMP_EQUIPE, 0N EQUIPE: nomAdv, dateMatch, resultat, score, estDomicile

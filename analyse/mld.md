@@ -3,7 +3,7 @@ HISTOIRE[<u>idH</u>, annee, trivia]
 PARTENAIRE[<u>idP</u>, nomP, logo, important]  
 UTILISATEUR[<u>idU</u>, mdp, role]  
 
-CHAMP_INTER[<u>idCha</u>, dateCha, titreCha, categorieSport, serie]  
+CHAMP_INTER[<u>idCha</u>, dateCha, titreCha]  
 CHAMP_INDIV[<u>idCha</u>, dateCha, titreCha, categorieSport, serie, niveau]  
 JOUEUR[<u>idJ</u>, nomJ, prenomJ, #idE]  
 INSCRIRE[<u>#idCha, #idJ</u>]  
