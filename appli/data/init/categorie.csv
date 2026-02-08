@@ -1,25 +1,25 @@
-idCat;sport;intituleCat;typeTarif;idCatParent
-1;tennis;Adhésion Jeune né en 2008 et après;reservation;
-2;tennis;Adhésion Adulte né entre 1997 et 2007;reservation;
-3;tennis;Adhésion Adulte né en 1996 et avant;reservation;
-4;tennis;Réservation à l'heure et Carte;reservation;
-5;tennis;Réductions;reduction;
-6;tennis;Réservation sans cours;reservation;1
-7;tennis;Réservation sans cours;reservation;2
-8;tennis;Réservation sans cours;reservation;3
-9;tennis;Réservation avec cours;reservation;1
-10;tennis;Réservation avec cours;reservation;2
-11;tennis;Réservation avec cours;reservation;3
-12;tennis;Jeune Compétition Réservation des cours 9h/semaine;reservation;1
-13;tennis;Court à l'heure;reservation;4
-14;tennis;Cartes membres;reservation;4
-15;tennis;Participation aux compétitions par équipe en fonction du classement;reduction;5
-16;tennis;Famille;reduction;5
-17;tennis;Parrainage;reduction;5
-18;padel;A l'heure;reservation;
-19;padel;Abonnement;reservation;
-20;padel;Licence;reservation;
-21;padel;Location;reservation;
-22;padel;Vente;reservation;
-23;padel;Licencié club;reservation;19
-24;padel;Licencié FFT;reservation;19
+idCat;intituleCat;typeTarif;idSport;idCatParent
+1;Adhésion Jeune né en 2008 et après;reservation;1;
+2;Adhésion Adulte né entre 1997 et 2007;reservation;1;
+3;Adhésion Adulte né en 1996 et avant;reservation;1;
+4;Réservation à l'heure et Carte;reservation;1;
+5;Réductions;reduction;1;
+6;Réservation sans cours;reservation;1;1
+7;Réservation sans cours;reservation;1;2
+8;Réservation sans cours;reservation;1;3
+9;Réservation avec cours;reservation;1;1
+10;Réservation avec cours;reservation;1;2
+11;Réservation avec cours;reservation;1;3
+12;Jeune Compétition Réservation des cours 9h/semaine;reservation;1;1
+13;Court à l'heure;reservation;1;4
+14;Cartes membres;reservation;1;4
+15;Participation aux compétitions par équipe en fonction du classement;reduction;1;5
+16;Famille;reduction;1;5
+17;Parrainage;reduction;1;5
+18;A l'heure;reservation;2;
+19;Abonnement;reservation;2;
+20;Licence;reservation;2;
+21;Location;reservation;2;
+22;Vente;reservation;2;
+23;Licencié club;reservation;2;19
+24;Licencié FFT;reservation;2;19

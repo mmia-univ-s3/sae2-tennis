@@ -22,7 +22,11 @@
 - Tarification
 [•] deplacer position
 [•] Ajout encadré
-[•] Ajout sport (nom, com)
+
+
+[x] - Création classe Sport
+[•] -> Tri des tarifs selon le sport
+[•] -> Création, Modification et Supression de sports
 
 
 - Partenaire

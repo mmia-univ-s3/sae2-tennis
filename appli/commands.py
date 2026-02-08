@@ -7,7 +7,7 @@ import click
 from .app import app, db
 from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Reservation, \
     Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, Equipe, Participer, \
-    Affronter, Joueur, Classer
+    Affronter, Joueur, Classer, Sport
 
 
 def _importer_articles(filename):
@@ -57,13 +57,20 @@ def _importer_users(filename):
 
 def _importer_tarifs(filepath):
     """Permet d'importer les tarifs"""
+    with open(filepath + "/sport.csv", newline="", encoding="utf-8") as csvfile:
+        lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
+        for ligne in lecture:
+            sport = Sport(nom=ligne["nom"], commentaire=ligne["commentaire"])
+            db.session.add(sport)
+
     with open(filepath + "/categorie.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            categorie = CategorieTarif(sport=ligne["sport"], intitule=ligne["intituleCat"],
+            categorie = CategorieTarif(intitule=ligne["intituleCat"],
                                        type_tarif=ligne["typeTarif"],
+                                       id_sport=int(ligne["idSport"]),
                                        id_parent=int(ligne["idCatParent"])\
-                                        if ligne["idCatParent"] != "" else None)
+                                       if ligne["idCatParent"] != "" else None)
             db.session.add(categorie)
 
     with open(filepath + "/reservation.csv", newline="", encoding="utf-8") as csvfile:
@@ -217,16 +224,26 @@ def _exporter_users(filepath):
 # pylint: disable=protected-access
 def _exporter_tarifs(filepath):
     """Permet d'exporter les tarifs"""
+    liste_sports = Sport.query.all()
+    with open(f"{filepath}/sport.csv", 'w', newline="", encoding="utf-8") as csvfile:
+        colonnes = ["idSport", "nom", "commentaire"]
+        ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
+        ecriture.writeheader()
+        for sport in liste_sports:
+            ecriture.writerow({"idSport" : str(sport._id_sport),
+                               "nom" : sport.nom,
+                               "commenataire" : sport.commentaire})
+
     liste_categories = CategorieTarif.query.all()
     with open(f"{filepath}/categorie.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCat", "sport", "intituleCat", "typeTarif", "idCatParent"]
+        colonnes = ["idCat", "intituleCat", "typeTarif", "idSport", "idCatParent"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for categorie in liste_categories:
             ecriture.writerow({"idCat" : str(categorie.id),
-                               "sport" : categorie.sport,
                                "intituleCat" : categorie.intitule,
                                "typeTarif" : categorie.type_tarif,
+                               "idSport" : str(categorie._id_sport),
                                "idCatParent" : "" if categorie._id_parent is None\
                                 else str(categorie._id_parent)})
 

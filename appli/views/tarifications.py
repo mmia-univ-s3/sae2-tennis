@@ -4,21 +4,24 @@ from flask_login import login_required
 from appli.app import app, db
 from appli.forms import FormCategorieAdd, FormConfirm, FormSouscategorieAdd, FormReductionAdd, \
     FormReservationAdd
-from appli.models import CategorieTarif, Reduction, Reservation, Tarif
+from appli.models import CategorieTarif, Reduction, Reservation, Tarif, Sport
 
 
 # noinspection PyProtectedMember,PyComparisonWithNone
 @app.route('/formation/tarifications/')
 def tarifications():
     """Page des tarifs"""
-    list_cate_rese_tennis = filter(lambda catTarif: not catTarif.est_sous_categorie(),
-                                   CategorieTarif.query.filter(CategorieTarif.type_tarif == "reservation",
-                                                               CategorieTarif.sport == "tennis").all())
-    list_cate_redu_tennis = filter(lambda catTarif: not catTarif.est_sous_categorie(),
-                                   CategorieTarif.query.filter(CategorieTarif.type_tarif == "reduction",
-                                                               CategorieTarif.sport == "tennis").all())
+    list_cate_tennis = Sport.query.filter(Sport.nom == "Tennis").first().categoriesTarifs
+    list_cate_rese_tennis = []
+    list_cate_redu_tennis = []
+    for categorie in list_cate_tennis:
+        if not categorie.est_sous_categorie():
+            if categorie.type_tarif == "reservation":
+                list_cate_rese_tennis.append(categorie)
+            else:
+                list_cate_redu_tennis.append(categorie)
     list_cate_padel = filter(lambda catTarif: not catTarif.est_sous_categorie(),
-                             CategorieTarif.query.filter(CategorieTarif.sport == "padel").all())
+                             Sport.query.filter(Sport.nom == "Padel").first().categoriesTarifs)
     return render_template('tarifications.html', title="Tarifications - Formation",
                            cate_rese=list_cate_rese_tennis, cate_redu=list_cate_redu_tennis,
                            cate_padel=list_cate_padel)
@@ -31,8 +34,8 @@ def tarifications_souscategorie_ajout(id_cat):
     form = FormSouscategorieAdd()
     categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
-        categorie = CategorieTarif(categorie.sport, form.intitule.data, categorie.type_tarif, id_cat)
-        db.session.add(categorie)
+        sous_categorie = CategorieTarif(form.intitule.data, categorie.type_tarif, categorie.sport.id, id_cat)
+        db.session.add(sous_categorie)
         db.session.commit()
         return redirect(url_for("tarifications"))
     return render_template('tarifications_souscategorie_add.html',
@@ -44,8 +47,10 @@ def tarifications_souscategorie_ajout(id_cat):
 def tarifications_categorie_ajout():
     """Page d'ajout d'une catégorie"""
     form = FormCategorieAdd()
+    liste_sports = Sport.query.all()
+    form.sport.choices = [(s.id, s.nom) for s in liste_sports]
     if form.validate_on_submit():
-        categorie = CategorieTarif(form.sport.data, form.intitule.data)
+        categorie = CategorieTarif(form.intitule.data, form.tarif.data, form.sport.data)
         db.session.add(categorie)
         db.session.commit()
         return redirect(url_for("tarifications"))
