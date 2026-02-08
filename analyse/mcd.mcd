@@ -1,16 +1,18 @@
 ARTICLE: idArt, titreArt, contenu, nbClics, dateArt, typeArt
 HISTOIRE: idH, annee, trivia
-PARTENAIRE: idP, nomP, logo
-UTILISATEUR: idU, mdp
+PARTENAIRE: idP, nomP, logo, important
+UTILISATEUR: idU, mdp, role
 
-/T\ CHAMPIONNAT -> CHAMP_INDIV, CHAMP_EQUIPE
+/T\ CHAMPIONNAT -> CHAMP_INDIV, CHAMP_EQUIPE, CHAMP_INTER
 
-CLASSER, 0N CHAMP_INDIV, 0N JOUEUR: rang
+CHAMP_INTER:
 CHAMP_INDIV: niveau
 CHAMPIONNAT: idCha, dateCha, titreCha, categorieSport, serie
 CHAMP_EQUIPE:
 
-JOUER, 02 CHAMP_INDIV, 0N> JOUEUR: score1, score2
+INSCRIRE, 0N CHAMP_INTER, 0N JOUEUR:
+JOUER, 0N CHAMP_INTER, 0N JOUEUR: setsGagnants, score1, score2
+CLASSER, 0N CHAMP_INDIV, 0N JOUEUR: rang
 PARTICIPER, 0N CHAMP_EQUIPE, 0N EQUIPE: rang, poule
 AFFRONTER, 0N CHAMP_EQUIPE, 0N EQUIPE: nomAdv, dateMatch, resultat, score, estDomicile
 
@@ -21,10 +23,12 @@ CONCOURIR, 01 EQUIPE, 0N> DIVISION: rang
 DIVISION: idDiv, intituleDiv
 
 SOUS_CATEGORIE, 0N> CATEGORIE_TARIF, 01 CATEGORIE_TARIF
-CATEGORIE_TARIF: idCat, sport, intituleCat
+CATEGORIE_TARIF: idCat, ordreCat, intituleCat
 APPARTENIR, 0N> CATEGORIE_TARIF, 01 TARIF
-TARIF: idT, intituleT
+TARIF: idT, ordreT, intituleT
 
+SPORT: idSp, nomSp, commentaireSp
+CONCERNER, 0N> SPORT, 01 CATEGORIE_TARIF
 REDUCTION: taux, surLicence
 /T\ TARIF -> REDUCTION, RESERVATION
 RESERVATION: montant
