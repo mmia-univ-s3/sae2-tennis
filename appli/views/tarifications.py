@@ -53,7 +53,7 @@ def tarifications_categorie_ajout():
     form.sport.choices = [(s.id, s.nom) for s in liste_sports]
     if form.validate_on_submit():
         sport = Sport.query.get(form.sport.data)
-        categorie = CategorieTarif(sport.categoriesTarifs.length + 1, form.intitule.data, sport.id)
+        categorie = CategorieTarif(sport.categoriesTarifs.count() + 1, form.intitule.data, sport.id)
         db.session.add(categorie)
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -85,7 +85,8 @@ def tarifications_categorie_delete(id_cat):
                 enfant.ordre -= 1
         else:
             sport = categorie.sport
-            for cat in sorted(filter(lambda c: c.ordre > categorie.ordre, sport.categoriesTarifs),
+            for cat in sorted(filter(lambda c: c.ordre > categorie.ordre and not c.est_sous_categorie(),
+                                     sport.categoriesTarifs),
                               key=lambda c: c.ordre):
                 cat.ordre -= 1
         db.session.commit()
@@ -122,7 +123,7 @@ def tarifications_ajout_tarif_reservation(id_cat):
     form = FormReservationAdd()
     categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
-        reservation = Reservation(categorie.tarifs.length, form.intitule.data, id_cat,
+        reservation = Reservation(categorie.tarifs.count() + 1, form.intitule.data, id_cat,
                                   form.montant.data)
         db.session.add(reservation)
         db.session.commit()
@@ -138,7 +139,7 @@ def tarifications_ajout_tarif_reduction(id_cat):
     form = FormReductionAdd()
     categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
-        reduction = Reduction(categorie.tarifs.length, form.intitule.data, id_cat, form.taux.data,
+        reduction = Reduction(categorie.tarifs.count() + 1, form.intitule.data, id_cat, form.taux.data,
                               form.licence.data)
         db.session.add(reduction)
         db.session.commit()

@@ -14,8 +14,8 @@ def test_calendrier(client):
 
 def test_tournoi_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/1/delete/")
-        response = client.get('/competitions/tournoi/individuel/1/delete/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/individuel/12/delete/")
+        response = client.get('/competitions/tournoi/individuel/12/delete/', follow_redirects=True)
         assert b"Suppression du tournoi" in response.data
         response = login(client, "/competitions/tournoi/equipe/1/delete/")
         response = client.get('/competitions/tournoi/equipe/1/delete/', follow_redirects=True)
@@ -23,8 +23,8 @@ def test_tournoi_delete(client, testapp):
 
 def test_tournoi_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/1/update/")
-        response = client.get('/competitions/tournoi/individuel/1/update/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/individuel/12/update/")
+        response = client.get('/competitions/tournoi/individuel/12/update/', follow_redirects=True)
         assert b"Modification du tournoi" in response.data
         response = login(client, "/competitions/tournoi/equipe/1/update/")
         response = client.get('/competitions/tournoi/equipe/1/update/', follow_redirects=True)
@@ -41,27 +41,27 @@ def test_tournoi_add(client, testapp):
 
 def test_tournoi(client, testapp):
     with testapp.app_context():
-        response = client.get('/competitions/tournoi/individuel/1/', follow_redirects=True)
+        response = client.get('/competitions/tournoi/individuel/12/', follow_redirects=True)
         assert b"Championnnat individuel" in response.data
         response = client.get('/competitions/tournoi/equipe/1/', follow_redirects=True)
         assert "Championnat par équipe".encode("utf-8") in response.data
 
 def test_participant_indiv_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/1/1/delete/")
-        response = client.get('/competitions/tournoi/individuel/1/1/delete/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/individuel/12/1/delete/")
+        response = client.get('/competitions/tournoi/individuel/12/1/delete/', follow_redirects=True)
         assert "Suppression d'un participant".encode("utf-8") in response.data
 
 def test_participant_indiv_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/1/1/update/")
-        response = client.get('/competitions/tournoi/individuel/1/1/update/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/individuel/12/1/update/")
+        response = client.get('/competitions/tournoi/individuel/12/1/update/', follow_redirects=True)
         assert b"Modification du participant" in response.data
 
 def test_participant_indiv_add(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/1/add/")
-        response = client.get('/competitions/tournoi/individuel/1/add/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/individuel/12/add/")
+        response = client.get('/competitions/tournoi/individuel/12/add/', follow_redirects=True)
         assert "Ajout d'un participant".encode("utf-8") in response.data
 
 def test_participant_equipe_delete(client, testapp):
@@ -123,8 +123,8 @@ def test_internes_add(client):
     assert b"Ajout d'un match en interne" in response.data
 
 def test_internes_update_not_work(client):
-    response = login(client, "/competitions/tournois-internes/2/update/")
-    response = client.post('competitions/tournois-internes/2/update/', data={
+    response = login(client, "/competitions/tournois-internes/12/update/")
+    response = client.post('competitions/tournois-internes/12/update/', data={
         "date":"2025-12-14",
         "titre":"Test",
         "serie":"test",
@@ -134,11 +134,11 @@ def test_internes_update_not_work(client):
         'joueur2':'1'
     }, follow_redirects=True)
     assert b"Modification d'un match" in response.data
-    assert "/competitions/tournois-internes/2/update/" in response.request.path
+    assert "/competitions/tournois-internes/12/update/" in response.request.path
 
 def test_internes_update_work(client):
-    response = login(client, "/competitions/tournois-internes/10/update/")
-    response = client.post('competitions/tournois-internes/10/update/', data={
+    response = login(client, "/competitions/tournois-internes/21/update/")
+    response = client.post('competitions/tournois-internes/21/update/', data={
         "date":"2025-12-14",
         "titre":"Test",
         "serie":"test",
@@ -153,6 +153,6 @@ def test_internes_update_work(client):
 
 def test_internes_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournois-internes/10/delete/")
-        response = client.post('/competitions/tournois-internes/10/delete/', follow_redirects=True)
+        response = login(client, "/competitions/tournois-internes/21/delete/")
+        response = client.post('/competitions/tournois-internes/21/delete/', follow_redirects=True)
         assert b"Tournois internes" in response.data

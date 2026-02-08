@@ -17,10 +17,10 @@ def test_models_championnat_individuel(testapp):
                                 "niveau", None, None, None, None)
     assert str(var) == repr(var) == "<ChampionnatIndividuel(None) titre>"
     with testapp.app_context():
-        championnat = ChampionnatIndividuel.query.get(1)
+        championnat = ChampionnatIndividuel.query.get(12)
         assert championnat.vainqueur() == "Jean Claude"
         assert championnat.finaliste() == "Jean Pierre"
-        championnat = ChampionnatIndividuel.query.get(2)
+        championnat = ChampionnatIndividuel.query.get(13)
         assert championnat.vainqueur() == "-"
         assert championnat.finaliste() == "-"
 
@@ -66,5 +66,5 @@ def test_models_partenaires():
     assert str(var) == repr(var) == "<Partenaire(None) nom>"
 
 def test_models_tarif():
-    var = Tarif("intitule", 1)
+    var = Tarif(1, "intitule", 1)
     assert str(var) == repr(var) == "<Tarif(None) intitule>"
