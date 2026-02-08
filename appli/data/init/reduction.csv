@@ -1,7 +1,7 @@
-idT;intituleT;idCat;taux;surLicence
-42;Joueuses classées entre 15/1 et 3/6 & Joueurs classées entre 5/6 et 1/6;15;50% de réduction;False
-43;Joueuses classées 2/6 ou mieux & Joueurs classés 0 ou mieux;15;Cotisation gratuite;False
-44;Membre de la famille de moins de 30 ans (1997 et après);16;1 part;True
-45;Membre de la famille de plus de 30 ans (1996 et avant);16;2.5 parts;True
-46;Les parts donnent un pourcentage de réduction sur la totalité de l'inscription;16;5% de 3,5 à 5 et 10% pour 5,5 et +;True
-47;Adhésion 1ère année : pour le parrain et le parrainé (Ne s’applique pas sur les étudiants);17;10% de réduction;False
+idT;ordreT;intituleT;idCat;taux;surLicence
+42;1;Joueuses classées entre 15/1 et 3/6 & Joueurs classées entre 5/6 et 1/6;15;50% de réduction;False
+43;2;Joueuses classées 2/6 ou mieux & Joueurs classés 0 ou mieux;15;Cotisation gratuite;False
+44;1;Membre de la famille de moins de 30 ans (1997 et après);16;1 part;True
+45;2;Membre de la famille de plus de 30 ans (1996 et avant);16;2.5 parts;True
+46;3;Les parts donnent un pourcentage de réduction sur la totalité de l'inscription;16;5% de 3,5 à 5 et 10% pour 5,5 et +;True
+47;1;Adhésion 1ère année : pour le parrain et le parrainé (Ne s’applique pas sur les étudiants);17;10% de réduction;False

@@ -1,3 +1,4 @@
+from sqlalchemy import UniqueConstraint, Index
 from appli.app import db
 
 class CategorieTarif(db.Model):
@@ -5,20 +6,30 @@ class CategorieTarif(db.Model):
     __tablename__ = "CATEGORIE_TARIF"
 
     id: int = db.Column("idCat", db.Integer, primary_key=True)
+    ordre: int = db.Column("ordreCat", db.Integer)
     intitule: str = db.Column("intituleCat", db.Text)
-    type_tarif: str = db.Column("typeTarif", db.Text)
     _id_sport: int = db.Column("idSp", db.Integer, db.ForeignKey("SPORT.idSp"))
     _id_parent: int = db.Column("idCatParent", db.Integer, db.ForeignKey("CATEGORIE_TARIF.idCat"))
 
     sport = db.relationship("Sport", backref=db.backref("categoriesTarifs",
                                                         lazy="dynamic",
                                                         cascade="all, delete-orphan"))
-    enfants = db.relationship("CategorieTarif", backref=db.backref("parent", cascade="all",
-                                                                   remote_side=[id]))
+    enfants = db.relationship("CategorieTarif", backref=db.backref("parent", remote_side=[id]),
+                              cascade="all, delete-orphan",)
+    
+    __table_args__ = (
+        UniqueConstraint("ordreCat", "idCatParent"),
+        Index(
+            "idCatParentNull",
+            "ordreCat",
+            unique=True, 
+            sqlite_where=(_id_parent == None)
+        )
+    )
 
-    def __init__(self, intitule: str, type_tarif: str, id_sport:int, id_parent: int=None):
+    def __init__(self, ordre: int, intitule: str, id_sport:int, id_parent: int=None):
+        self.ordre = ordre
         self.intitule = intitule
-        self.type_tarif = type_tarif
         self._id_sport = id_sport
         self._id_parent = id_parent
 

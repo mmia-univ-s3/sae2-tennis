@@ -66,8 +66,8 @@ def _importer_tarifs(filepath):
     with open(filepath + "/categorie.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            categorie = CategorieTarif(intitule=ligne["intituleCat"],
-                                       type_tarif=ligne["typeTarif"],
+            categorie = CategorieTarif(ordre=int(ligne["ordreCat"]),
+                                       intitule=ligne["intituleCat"],
                                        id_sport=int(ligne["idSport"]),
                                        id_parent=int(ligne["idCatParent"])\
                                        if ligne["idCatParent"] != "" else None)
@@ -76,15 +76,15 @@ def _importer_tarifs(filepath):
     with open(filepath + "/reservation.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            reservation = Reservation(intitule=ligne["intituleT"], id_cat=int(ligne["idCat"]),
-                                      montant=float(ligne["montant"]))
+            reservation = Reservation(ordre=int(ligne["ordreT"]), intitule=ligne["intituleT"],
+                                      id_cat=int(ligne["idCat"]), montant=float(ligne["montant"]))
             db.session.add(reservation)
 
     with open(filepath + "/reduction.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            reduction = Reduction(intitule=ligne["intituleT"], id_cat=int(ligne["idCat"]),
-                                  taux=ligne["taux"],
+            reduction = Reduction(ordre=int(ligne["ordreT"]), intitule=ligne["intituleT"],
+                                  id_cat=int(ligne["idCat"]), taux=ligne["taux"],
                                   licence=ligne["surLicence"].strip() == "True")
             db.session.add(reduction)
     db.session.commit()
@@ -236,13 +236,13 @@ def _exporter_tarifs(filepath):
 
     liste_categories = CategorieTarif.query.all()
     with open(f"{filepath}/categorie.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCat", "intituleCat", "typeTarif", "idSport", "idCatParent"]
+        colonnes = ["idCat", "ordreCat", "intituleCat", "idSport", "idCatParent"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for categorie in liste_categories:
             ecriture.writerow({"idCat" : str(categorie.id),
+                               "ordreCat" : str(categorie.ordre),
                                "intituleCat" : categorie.intitule,
-                               "typeTarif" : categorie.type_tarif,
                                "idSport" : str(categorie._id_sport),
                                "idCatParent" : "" if categorie._id_parent is None\
                                 else str(categorie._id_parent)})
@@ -250,11 +250,12 @@ def _exporter_tarifs(filepath):
 
     liste_reservations = Reservation.query.all()
     with open(f"{filepath}/reservation.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idT", "intituleT", "idCat", "montant"]
+        colonnes = ["idT", "ordreT", "intituleT", "idCat", "montant"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for reservation in liste_reservations:
             ecriture.writerow({"idT" : str(reservation.id),
+                               "ordreT" : str(reservation.ordre),
                                "intituleT" : reservation.intitule,
                                "idCat" : str(reservation._id_cat),
                                "montant" : str(reservation.montant)})
@@ -262,13 +263,14 @@ def _exporter_tarifs(filepath):
 
     liste_reductions = Reduction.query.all()
     with open(f"{filepath}/reduction.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idT", "intituleT", "idCat", "taux", "surLicence"]
+        colonnes = ["idT", "ordreT", "intituleT", "idCat", "taux", "surLicence"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for reduction in liste_reductions:
             ecriture.writerow({"idT" : str(reduction.id),
-                               "intituleT" : reservation.intitule,
-                               "idCat" : str(reservation._id_cat),
+                               "ordreT" : str(reduction),
+                               "intituleT" : reduction.intitule,
+                               "idCat" : str(reduction._id_cat),
                                "taux" : reduction.taux,
                                "surLicence" : str(reduction.licence)})
 

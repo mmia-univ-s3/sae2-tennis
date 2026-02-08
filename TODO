@@ -1,3 +1,12 @@
+Nouveau Modèle:
+- Les tables utilisant l`héritage (Tarifs, Championnats) sont maintenant implémentés comme telle en SQLAlchemy
+- Une classe Sport a été ajoutée permettant de modifier, d`ajouter et supprimer un Sport et les tarifs associées
+-> La classe contient un id, une nom de Sport et un commentaire
+- Les Tarifs et Catégorie de Tarifs ont maintenant une notion d`ordre permettant de changer leur ordre d`affichage sur la page des tarifs
+-> La valeur est un entier, dont le couple (ordre, cat_parent) ou bien (ordre, cat), dépendamment du type d`objet, est unique
+- Une catégorie de Tarifs peut maintenant avoir des tarifs et des sous-catégories, ces dernières ne peuvent avoir que des tarifs
+
+
 - Tournois internes -> a revoir
 [•] Points -> score 
 [•] Classement a faire 
@@ -20,6 +29,7 @@
 [•] Possibilité ajout page
 
 - Tarification
+[x] Ordre
 [•] deplacer position
 [•] Ajout encadré
 
@@ -50,7 +60,7 @@
 [•] Bloque 
 [•] Trois articles plus recents 
 [•] Boutons redirections articles
-[•] Competitions -> 3 championnants les plus recents en equipe/indiv
+[•] Competitions -> 3 championnats les plus recents en equipe/indiv
 [•] Pied de page
 [•] Partenaires
 [•] Contact
