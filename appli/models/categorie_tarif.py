@@ -1,4 +1,4 @@
-from sqlalchemy import UniqueConstraint, Index
+from sqlalchemy import UniqueConstraint, Index, text
 from appli.app import db
 
 class CategorieTarif(db.Model):
@@ -23,7 +23,7 @@ class CategorieTarif(db.Model):
             "idCatParentNull",
             "ordreCat",
             unique=True,
-            sqlite_where=(_id_parent is None)
+            sqlite_where=text("idCatParent IS NULL")
         )
     )
 

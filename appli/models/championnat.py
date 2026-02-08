@@ -20,7 +20,7 @@ class Championnat(db.Model):
         self.titre = titre
         self.categorie = categorie
         self.serie = serie
-    
+
     def __str__(self):
         return f"<Championnat({self.id}) {self.titre}>"
 
