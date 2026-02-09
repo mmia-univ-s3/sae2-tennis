@@ -14,7 +14,7 @@ def page_statique(id_p, html, titre, role):
     article = Article.query.filter(
         Article.titre == "_" + id_p and Article.type_article == "pages").first()
     if article is None:
-        article = Article("_" + id_p, "" ,"", datetime.date.today(), "pages")
+        article = Article("_" + id_p, "", datetime.date.today(), "pages", "")
         db.session.add(article)
         db.session.commit()
     if current_user.is_authenticated and current_user.role_au_moins(role):

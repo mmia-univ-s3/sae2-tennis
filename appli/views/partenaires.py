@@ -30,8 +30,8 @@ def partenaire_delete(id_p: int):
     if form.validate_on_submit():
         db.session.delete(part)
         db.session.commit()
-        if os.path.exists(os.path.join("appli", "static", "upload", part.logo)):
-            os.remove(os.path.join("appli", "static", "upload", part.logo))
+        if os.path.exists(os.path.join("appli", "static", "upload", part.logo.nom_fichier)):
+            os.remove(os.path.join("appli", "static", "upload", part.logo.nom_fichier))
         return redirect(url_for("partenaires"))
     return render_template("partenaires_delete.html", form=form,
                            title="Suppression d'un partenaire", parte=part)
