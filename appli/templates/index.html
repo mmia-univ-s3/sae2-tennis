@@ -10,6 +10,37 @@
                 <a href="{{ url_for('article_view', id_article = article.id) }}">{{ article.titre }}</a>
             </p>
             {{ article.contenu|safe }}
+
+            <h3>Futurs championnats</h3>
+            <div class="list-group list-group-flush">
+                {% if championnats_futur == [] %}
+                    <p> Il n'y a pas de championnat prévu pour le moment.</p>
+                {% endif %}
+                {% for i in range(10 if championnats_futur|length >= 10 else
+                championnats_futur|length) %}
+                    {% if championnats_futur[i] != None %}
+                        <a class="list-group-item list-group-item-action"
+                           href="{{ url_for('tournoi',
+                           type_tournoi=championnats_futur[i].type_championnat,
+                           id_championnat=championnats_futur[i].id) }}">
+                            {{ championnats_futur[i].titre }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <h3>Championnats passés</h3>
+            <div class="list-group list-group-flush">
+                {% for i in range(10 if championnats_passes|length >= 10 else
+                championnats_passes|length) %}
+                    <a class="list-group-item list-group-item-action"
+                       href="{{ url_for('tournoi',
+                       type_tournoi=championnats_passes[i].type_championnat,
+                       id_championnat=championnats_passes[i].id) }}">
+                        {{ championnats_passes[i].titre }}
+                    </a>
+                {% endfor %}
+            </div>
         </div>
         <div class="col col-lg-2">
             <div class="list-group list-group-flush">
