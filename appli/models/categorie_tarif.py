@@ -1,4 +1,4 @@
-from sqlalchemy import UniqueConstraint, Index, text
+from sqlalchemy import Index, text
 from appli.app import db
 
 class CategorieTarif(db.Model):

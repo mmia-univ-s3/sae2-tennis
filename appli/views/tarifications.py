@@ -31,6 +31,7 @@ def tarifications():
 @app.route('/formation/tarifications/<id_tarif>/monter/')
 @login_required
 def tarifications_monter_tarif(id_tarif):
+    """Monte un tarif"""
     tarif = Tarif.query.get(id_tarif)
     categorie = tarif.categorie
     for tar in categorie.tarifs:
@@ -56,6 +57,7 @@ def tarifications_monter_tarif(id_tarif):
 @app.route('/formation/tarifications/<id_tarif>/descendre/')
 @login_required
 def tarifications_descendre_tarif(id_tarif):
+    """Descend un tarif"""
     tarif = Tarif.query.get(id_tarif)
     categorie = tarif.categorie
     for tar in categorie.tarifs:
@@ -81,6 +83,7 @@ def tarifications_descendre_tarif(id_tarif):
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/monter/')
 @login_required
 def tarifications_monter_souscategorie(id_cat):
+    """Monte une sous-catégorie"""
     souscategorie = CategorieTarif.query.get(id_cat)
     categorie = souscategorie.parent
     for cate in categorie.enfants:
@@ -106,6 +109,7 @@ def tarifications_monter_souscategorie(id_cat):
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/descendre/')
 @login_required
 def tarifications_descendre_souscategorie(id_cat):
+    """Descend une sous-catégorie"""
     souscategorie = CategorieTarif.query.get(id_cat)
     categorie = souscategorie.parent
     for cate in categorie.enfants:
@@ -131,6 +135,7 @@ def tarifications_descendre_souscategorie(id_cat):
 @app.route('/formation/tarifications/categorie/<id_cat>/monter/')
 @login_required
 def tarifications_monter_categorie(id_cat):
+    """Monte une catégorie"""
     categorie = CategorieTarif.query.get(id_cat)
     sport = categorie.sport
     for cate in sport.categoriesTarifs:
@@ -156,6 +161,7 @@ def tarifications_monter_categorie(id_cat):
 @app.route('/formation/tarifications/categorie/<id_cat>/descendre/')
 @login_required
 def tarifications_descendre_categorie(id_cat):
+    """Descend une catégorie"""
     categorie = CategorieTarif.query.get(id_cat)
     sport = categorie.sport
     for cate in sport.categoriesTarifs:
@@ -177,7 +183,7 @@ def tarifications_descendre_categorie(id_cat):
                 db.session.commit()
             break
     return redirect(url_for("tarifications"))
-    
+
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/', methods=('GET', 'POST'))
 @login_required
 def tarifications_souscategorie_ajout(id_cat):
@@ -209,7 +215,7 @@ def tarifications_categorie_ajout():
         return redirect(url_for("tarifications"))
     return render_template('tarifications_categorie_add.html', title="Ajouter une catégorie",
                            form=form)
-    
+
 @app.route('/formation/tarifications/ajout/sport', methods=('GET', 'POST'))
 @login_required
 def tarifications_sport_ajout():
