@@ -11,7 +11,7 @@
             </p>
             {{ article.contenu|safe }}
 
-            <h3>Futurs Championnats</h3>
+            <h3>Futurs championnats</h3>
             <div class="list-group list-group-flush">
                 {% if championnats_futur == [] %}
                     <p> Il n'y a pas de championnat prévu pour le moment.</p>
@@ -29,9 +29,10 @@
                 {% endfor %}
             </div>
 
-            <h3>Championnats Passés</h3>
+            <h3>Championnats passés</h3>
             <div class="list-group list-group-flush">
-                {% for i in range (10) %}
+                {% for i in range(10 if championnats_passes|length >= 10 else
+                championnats_passes|length) %}
                     <a class="list-group-item list-group-item-action"
                        href="{{ url_for('tournoi',
                        type_tournoi=championnats_passes[i].type_championnat,
