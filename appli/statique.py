@@ -22,5 +22,6 @@ def page_statique(id_p, html, titre, role):
             article.contenu = form.editor.data
             article.date = datetime.date.today()
             db.session.commit()
-    return render_template(html, title=titre, contenu=article.contenu, form=form, role=get_nom_role(role),
-                           get_nom_role=get_nom_role, role_ok=current_user.role_au_moins(role))
+    return render_template(html, title=titre, contenu=article.contenu, form=form,
+                           role=get_nom_role(role), get_nom_role=get_nom_role,
+                           role_ok=current_user.role_au_moins(role))
