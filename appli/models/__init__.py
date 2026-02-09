@@ -15,6 +15,7 @@ from .affronter import Affronter
 from .categorie_tarif import CategorieTarif
 from .tarif import Tarif, Reservation, Reduction
 from .sport import Sport
+from .image import Image
 
 @login_manager.user_loader
 def load_user(login: str):

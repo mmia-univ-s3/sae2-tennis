@@ -90,7 +90,7 @@ class FormPartenaireAdd(FlaskForm):
         Returns:
            Partenaire:  Le partenaire créé
         """
-        partenaire = Partenaire(self.nom.data, filename, self.lien.data)
+        partenaire = Partenaire(self.nom.data, self.lien.data, filename)
         db.session.add(partenaire)
         db.session.commit()
         return partenaire

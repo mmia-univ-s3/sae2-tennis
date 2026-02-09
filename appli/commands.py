@@ -7,7 +7,7 @@ import click
 from .app import app, db
 from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Reservation, \
     Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, Equipe, Participer, \
-    Affronter, Joueur, Classer, Sport
+    Affronter, Joueur, Classer, Sport, Image
 
 
 def _importer_articles(filename):
@@ -15,11 +15,22 @@ def _importer_articles(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            article = Article(titre=ligne["titreArt"], image=ligne["image"],
+            article = Article(titre=ligne["titreArt"],
                               contenu=ligne["contenu"],
                               date_publi=date.fromisoformat(ligne["dateArt"]),
-                              type_article=ligne["typeArt"])
+                              type_article=ligne["typeArt"],
+                              nom_fichier_image=ligne["nom_fichier"])
             db.session.add(article)
+    db.session.commit()
+
+
+def _importer_images(filename):
+    """Permet d'importer les images"""
+    with open(filename, newline="", encoding="utf-8") as csvfile:
+        lecture:csv.DictReader = csv.DictReader(csvfile, delimiter=';')
+        for ligne in lecture:
+            image = Image(nom_image=ligne["nom_fichier"], largeur=ligne["largeur"], description = ligne["description"])
+            db.session.add(image)
     db.session.commit()
 
 
@@ -40,7 +51,7 @@ def _importer_partenaires(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            partenaire = Partenaire(nom=ligne["nomP"], logo=ligne["logo"], lien=ligne["lien"])
+            partenaire = Partenaire(nom=ligne["nomP"], lien=ligne["lien"], nom_fichier_image=ligne["nom_fichier"])
             db.session.add(partenaire)
     db.session.commit()
 
@@ -173,17 +184,17 @@ def _exporter_articles(filepath):
     """Permet d'exporter les articles"""
     liste_articles = Article.query.all()
     with open(f"{filepath}/article.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idArt", "titreArt", "image", "contenu", "nbClics", "dateArt", "typeArt"]
+        colonnes = ["idArt", "titreArt", "contenu", "nbClics", "dateArt", "typeArt", "nom_fichier"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for article in liste_articles:
             ecriture.writerow({"idArt" : str(article.id),
                                "titreArt" : article.titre,
-                               "image" : article.image,
                                "contenu" : article.contenu,
                                "nbClics" : str(article.clics),
                                "dateArt" : article.date_publi.strftime("%Y-%m-%d"),
-                               "typeArt" : article.type_article})
+                               "typeArt" : article.type_article,
+                               "nom_fichier" : article.nom_fichier})
 
 # pylint: disable=protected-access
 def _exporter_trivias(filepath):
@@ -204,14 +215,14 @@ def _exporter_partenaires(filepath):
     """Permet d'exporter les partenaires du club"""
     liste_partenaires = Partenaire.query.all()
     with open(f"{filepath}/partenaire.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idP", "nomP", "logo", "lien"]
+        colonnes = ["idP", "nomP", "lien", "nom_fichier"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for partenaire in liste_partenaires:
             ecriture.writerow({"idP" : str(partenaire.id),
                                "nomP" : partenaire.nom,
-                               "logo" : partenaire.logo,
-                               "lien" : partenaire.lien})
+                               "lien" : partenaire.lien,
+                               "nom_fichier" : partenaire.nom_fichier})
 
 # pylint: disable=protected-access
 def _exporter_users(filepath):
@@ -405,6 +416,9 @@ def loaddb(filepath):
     try:
         _importer_articles(filename=filepath + "/article.csv")
         lg.info('Articles importés')
+
+        _importer_images(filename=filepath + "/images.csv")
+        lg.info('Images importées')
 
         _importer_trivias(filename=filepath + "/histoire.csv")
         lg.info('Trivias importées')
