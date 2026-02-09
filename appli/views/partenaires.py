@@ -1,7 +1,6 @@
 import os
 
 from flask import render_template, redirect, url_for
-from flask_login import login_required
 
 from appli.app import app, db, required_permission_lvl
 from appli.forms import FormConfirm, FormPartenaireAdd

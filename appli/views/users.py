@@ -2,7 +2,7 @@ import random
 from hashlib import sha256
 
 from flask import render_template, redirect, url_for, request
-from flask_login import login_required, login_user, current_user
+from flask_login import login_user, current_user
 
 from appli.app import app, db, required_permission_lvl, get_nom_role
 from appli.forms import FormConfirm, FormLogin, FormRegister

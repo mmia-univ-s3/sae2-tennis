@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from appli.app import db, get_role_permission_lvl, get_nom_role
+from appli.app import db, get_role_permission_lvl
 
 
 class Utilisateur(db.Model, UserMixin):
@@ -32,4 +32,5 @@ class Utilisateur(db.Model, UserMixin):
         return get_role_permission_lvl(self.role) >= get_role_permission_lvl(role)
 
     def __str__(self):
-        return f"<Utilisateur({self.login}) {self.role}({get_role_permission_lvl(self.role)}) {self.mdp}>"
+        return (f"<Utilisateur({self.login}) {self.role}({get_role_permission_lvl(self.role)}) "
+                f"{self.mdp}>")

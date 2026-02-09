@@ -1,4 +1,4 @@
-from appli.app import app, required_permission_lvl
+from appli.app import app
 from appli.statique import page_statique
 
 

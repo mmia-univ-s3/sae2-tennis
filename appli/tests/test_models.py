@@ -5,8 +5,8 @@ from appli.models import Article, CategorieTarif, ChampionnatEquipe, Championnat
     Classer, Division, Equipe, Histoire, Joueur, Partenaire, Participer, Tarif, Utilisateur
 
 def test_models_utilisateur():
-    var = Utilisateur("login", "password")
-    assert str(var) == "<Utilisateur(login) password>"
+    var = Utilisateur("login", "password", "ecrivain")
+    assert str(var) == "<Utilisateur(login) ecrivain(1) password>"
 
 def test_models_article():
     var = Article("titre", "","contenu", datetime.date(1969, 1, 20), "type")
