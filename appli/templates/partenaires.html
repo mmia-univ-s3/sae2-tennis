@@ -17,14 +17,18 @@
                         <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="300"
                              alt="{{ partenaire.nom }}"></center>
                         {% else %}
-                            <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="150"
-                             alt="{{ partenaire.nom }}"></center>
+                            {% if partenaire.logo.nom_fichier != None %}
+                                <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="150"
+                                 alt="{{ partenaire.nom }}"></center>
+                            {% endif %}
                         {% endif %}
                     </a>
                 {% else %}
                     <a href="{{ partenaire.lien }}">
+                    {% if partenaire.logo.nom_fichier != None %}
                     <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="200"
                          alt="{{ partenaire.nom }}"></center>
+                    {% endif %}
                     </a>
                 {% endif %}
             </div>
