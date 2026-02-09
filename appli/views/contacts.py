@@ -14,24 +14,24 @@ def contacts():
     adresse = Article.query.filter(
         Article.titre == "_adresse" and Article.type_article == "pages").first()
     if adresse is None:
-        adresse = Article("_adresse","" ,"", datetime.date.today(), "pages")
+        adresse = Article("_adresse","", datetime.date.today(), "pages", "")
         db.session.add(adresse)
         db.session.commit()
     tel = Article.query.filter(Article.titre == "_tel" and Article.type_article == "pages").first()
     if tel is None:
-        tel = Article("_tel", "" ,"", datetime.date.today(), "pages")
+        tel = Article("_tel", "", datetime.date.today(), "pages", "")
         db.session.add(tel)
         db.session.commit()
     mail = Article.query.filter(
         Article.titre == "_mail" and Article.type_article == "pages").first()
     if mail is None:
-        mail = Article("_mail", "" ,"", datetime.date.today(), "pages")
+        mail = Article("_mail", "", datetime.date.today(), "pages", "")
         db.session.add(mail)
         db.session.commit()
     reseaux = Article.query.filter(
         Article.titre == "_reseaux" and Article.type_article == "pages").first()
     if reseaux is None:
-        reseaux = Article("_reseaux", "" ,"", datetime.date.today(), "pages")
+        reseaux = Article("_reseaux", "", datetime.date.today(), "pages", "")
         db.session.add(reseaux)
         db.session.commit()
     return render_template('contacts.html', title="Contacts", adresse=adresse.contenu,
@@ -46,7 +46,7 @@ def contacts_modif_adresse():
     article = Article.query.filter(
         Article.titre == "_adresse" and Article.type_article == "pages").first()
     if article is None:
-        article = Article("_adresse", "" ,"", datetime.date.today(), "pages")
+        article = Article("_adresse", "", datetime.date.today(), "pages", "")
         db.session.add(article)
         db.session.commit()
     if current_user.is_authenticated:
@@ -68,7 +68,7 @@ def contacts_modif_tel():
     article = Article.query.filter(
         Article.titre == "_tel" and Article.type_article == "pages").first()
     if article is None:
-        article = Article("_tel", "" ,"", datetime.date.today(), "pages")
+        article = Article("_tel", "", datetime.date.today(), "pages", "")
         db.session.add(article)
         db.session.commit()
     if current_user.is_authenticated:
@@ -89,7 +89,7 @@ def contacts_modif_mail():
     article = Article.query.filter(
         Article.titre == "_mail" and Article.type_article == "pages").first()
     if article is None:
-        article = Article("_mail", "" ,"", datetime.date.today(), "pages")
+        article = Article("_mail", "", datetime.date.today(), "pages", "")
         db.session.add(article)
         db.session.commit()
     if current_user.is_authenticated:
@@ -109,7 +109,7 @@ def contacts_modif_reseaux():
     article = Article.query.filter(
         Article.titre == "_reseaux" and Article.type_article == "pages").first()
     if article is None:
-        article = Article("_reseaux", "" ,"", datetime.date.today(), "pages")
+        article = Article("_reseaux", "" , datetime.date.today(), "pages", "")
         db.session.add(article)
         db.session.commit()
     if current_user.is_authenticated:
