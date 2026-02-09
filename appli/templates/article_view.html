@@ -7,7 +7,7 @@
         <form action="{{ url_for('article_view', id_article=article.id) }}" method="post"
               class="form-horizontal mb-3" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
-            {% if article.image.nom_fichier != "" and article.image.nom_fichier != None %}
+            {% if article.image != "" and article.image != None %}
                 <article><img src="{{ "/static/upload/" + article.image.nom_fichier }}" alt="{{ article.titre }}" width="{{ article.image.largeur }}"> </article>
             {% endif %}
             <div class="form-group mb-3">
@@ -28,7 +28,7 @@
         </form>
         </article>
     {% else %}
-        {% if article.image.nom_fichier != "" and article.image.nom_fichier != None %}
+        {% if article.image != "" and article.image != None %}
             <article><img src="{{ "/static/upload/" + article.image.nom_fichier }}" alt="{{ article.titre }}" width="{{ article.image.largeur }}"> </article>
         {% endif %}
         <article>{{ article.contenu|safe }}</article>
