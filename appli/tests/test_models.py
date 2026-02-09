@@ -6,7 +6,7 @@ from appli.models import Article, CategorieTarif, ChampionnatEquipe, Championnat
 
 def test_models_utilisateur():
     var = Utilisateur("login", "password", "ecrivain")
-    assert str(var) == "<Utilisateur(login) ecrivain(1) password>"
+    assert str(var) == "<Utilisateur(login) ecrivain(0) password>"
 
 def test_models_article():
     var = Article("titre", "","contenu", datetime.date(1969, 1, 20), "type")

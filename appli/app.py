@@ -66,7 +66,7 @@ def required_permission_lvl(role):
         @login_required
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            if not current_user.role_au_moins(role):
+            if current_user.is_authenticated or not current_user.role_au_moins(role):
                 return render_template("roles_required.html", title="Accès refusé",
                                        role=get_nom_role(role), get_nom_role=get_nom_role)
             return f(*args, **kwargs)
