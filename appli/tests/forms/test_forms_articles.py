@@ -13,9 +13,9 @@ def test_article_create(client, testapp):
         response = login(client, "/club/articles/create/")
         response = client.post('/club/articles/create/', data={
             "titre": "article89",
-            "image":"",
             "editor":"blabla",
-            "type_a":"club"
+            "type_a":"club",
+            "nom_fichier":"logo.png"
         }, follow_redirects=True)
 
         assert response.status_code == 200
@@ -37,9 +37,9 @@ def test_article_maj(client, testapp):
         response = client.post('/club/articles/2/', follow_redirects=True)
         response = client.post('/club/articles/2/', data={
             "titre": "Stephane a perdu",
-            "image":"",
             "editor":"blabla",
-            "type_a":"club"
+            "type_a":"club",
+            "nom_fichier":"logo.png"
         }, follow_redirects=True)
 
         assert response.status_code == 200

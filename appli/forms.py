@@ -99,7 +99,7 @@ class FormPartenaireAdd(FlaskForm):
         Returns:
            Partenaire:  Le partenaire créé
         """
-        partenaire = Partenaire(self.nom.data, filename, self.lien.data,
+        partenaire = Partenaire(self.nom.data, self.lien.data, filename,
                                 self.important.data=='True')
         db.session.add(partenaire)
         db.session.commit()
@@ -179,8 +179,8 @@ class FormArticleAdd(FlaskForm):
         Returns:
             Article: article créé
         """
-        article = Article(self.titre.data, filename, self.editor.data, datetime.date.today(),
-                          self.type_a.data)
+        article = Article(self.titre.data, self.editor.data, datetime.date.today(),
+                          self.type_a.data, filename)
         db.session.add(article)
         db.session.commit()
         return article

@@ -14,17 +14,23 @@
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('partenaire_delete', id_p=partenaire.id) }}">
                         {% if partenaire.important %}
-                        <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo) }}" width="300"
-                             alt="{{ partenaire.nom }}"></center>
+                            {% if partenaire.logo != "" and partenaire.logo != None %}
+                                <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="300"
+                                     alt="{{ partenaire.nom }}"></center>
+                            {% endif %}
                         {% else %}
-                            <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo) }}" width="150"
-                             alt="{{ partenaire.nom }}"></center>
+                            {% if partenaire.logo != "" and partenaire.logo != None %}
+                                <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="150"
+                                 alt="{{ partenaire.nom }}"></center>
+                            {% endif %}
                         {% endif %}
                     </a>
                 {% else %}
                     <a href="{{ partenaire.lien }}">
-                    <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo) }}" width="200"
+                    {% if partenaire.logo != "" and partenaire.logo != None %}
+                    <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="200"
                          alt="{{ partenaire.nom }}"></center>
+                    {% endif %}
                     </a>
                 {% endif %}
             </div>

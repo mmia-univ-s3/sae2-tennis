@@ -6,14 +6,16 @@ class Partenaire(db.Model):
 
     id: int = db.Column("idP", db.Integer, primary_key = True)
     nom: str = db.Column("nomP", db.Text)
-    logo: str = db.Column("logo", db.Text)
     lien: str = db.Column("lien", db.Text)
+    nom_fichier: str|None = db.Column("nom_fichier", db.Text, db.ForeignKey("IMAGE.nom_fichier"))
     important: bool = db.Column("important", db.Boolean)
 
-    def __init__(self, nom: str, logo: str, lien: str, important: bool):
+    logo = db.relationship("Image")
+
+    def __init__(self, nom: str, lien: str, nom_fichier_image: str, important: bool):
         self.nom = nom
-        self.logo = logo
         self.lien = lien
+        self.nom_fichier = nom_fichier_image
         self.important = important
 
     def __str__(self):
