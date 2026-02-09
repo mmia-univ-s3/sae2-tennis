@@ -4,6 +4,19 @@
     <h1>Tarifications</h1>
     {% for sport in tarifs %}
         <h2>Détail des tarifs {{ sport.nom }}</h2>
+            <a href="{{ url_for('tarifications_sport_delete', id_sport=sport.id) }}"
+                class="btn btn-outline-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-trash-icon lucide-trash">
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                        <path d="M3 6h18"/>
+                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+            </a>
         {% for categorie in tarifs[sport] %}
             <table class="table table-bordered border-success">
                 <tbody>
@@ -12,7 +25,24 @@
                         <center>{{ categorie.intitule }}</center>
                     </th>
                     {% if current_user.is_authenticated %}
-                        <th style="width: 123px;">
+                        <th style="width: 235px;">
+                            <a href="{{ url_for('tarifications_monter_categorie', id_cat=categorie.id) }}"
+                                class="btn btn-outline-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-move-up-icon lucide-move-up">
+                                <path d="M8 6L12 2L16 6"/><path d="M12 2V22"/></svg>
+                            </a>
+                            <a href="{{ url_for('tarifications_descendre_categorie', id_cat=categorie.id) }}"
+                                class="btn btn-outline-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-move-down-icon lucide-move-down">
+                                <path d="M8 18L12 22L16 18"/><path d="M12 2V22"/></svg>
+                            </a>
                             <a href="{{ url_for('tarifications_tarif_ajout', id_cat=categorie.id) }}"
                             class="btn btn-outline-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -57,7 +87,24 @@
                                 {% endif %}
                             </td>
                             {% if current_user.is_authenticated %}
-                                <th style="width: 123px; text-align: right;">
+                                <th style="width: 235px;">
+                                    <a href="{{ url_for('tarifications_descendre_tarif', id_tarif=tarif.id) }}"
+                                        class="btn btn-outline-success">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-move-down-icon lucide-move-down">
+                                        <path d="M8 18L12 22L16 18"/><path d="M12 2V22"/></svg>
+                                    </a>
+                                    <a href="{{ url_for('tarifications_monter_tarif', id_tarif=tarif.id) }}"
+                                        class="btn btn-outline-success">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-move-up-icon lucide-move-up">
+                                        <path d="M8 6L12 2L16 6"/><path d="M12 2V22"/></svg>
+                                    </a>
                                     {% if tarif.type_tarif == "reservation" %}
                                         <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
                                         class="btn btn-outline-primary">
@@ -109,7 +156,24 @@
                                 <center>{{ sous_cat.intitule }}</center>
                             </th>
                             {% if current_user.is_authenticated %}
-                                <th style="width: 123px;">
+                                <th style="width: 235px;">
+                                    <a href="{{ url_for('tarifications_descendre_souscategorie', id_cat=sous_cat.id) }}"
+                                        class="btn btn-outline-success">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-move-down-icon lucide-move-down">
+                                        <path d="M8 18L12 22L16 18"/><path d="M12 2V22"/></svg>
+                                    </a>
+                                    <a href="{{ url_for('tarifications_monter_souscategorie', id_cat=sous_cat.id) }}"
+                                        class="btn btn-outline-success">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-move-up-icon lucide-move-up">
+                                        <path d="M8 6L12 2L16 6"/><path d="M12 2V22"/></svg>
+                                    </a>
                                     <a href="{{ url_for('tarifications_tarif_ajout', id_cat=sous_cat.id) }}"
                                     class="btn btn-outline-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -154,7 +218,24 @@
                                     {% endif %}
                                 </td>
                                 {% if current_user.is_authenticated %}
-                                    <th style="width: 123px; text-align: right;">
+                                    <th style="width: 235px;">
+                                        <a href="{{ url_for('tarifications_descendre_tarif', id_tarif=tarif.id) }}"
+                                            class="btn btn-outline-success">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="lucide lucide-move-down-icon lucide-move-down">
+                                            <path d="M8 18L12 22L16 18"/><path d="M12 2V22"/></svg>
+                                        </a>
+                                         <a href="{{ url_for('tarifications_monter_tarif', id_tarif=tarif.id) }}"
+                                            class="btn btn-outline-success">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-move-up-icon lucide-move-up">
+                                                <path d="M8 6L12 2L16 6"/><path d="M12 2V22"/></svg>
+                                        </a>
                                         {% if tarif.type_tarif == "reservation" %}
                                             <a href="{{ url_for('tarifications_reservations_update', id_tarif=tarif.id) }}"
                                             class="btn btn-outline-primary">
@@ -276,5 +357,9 @@
         <center><a href="{{ url_for('tarifications_categorie_ajout') }}"
                    class="btn btn-primary">Ajouter
             une catégorie</a></center>
+        <br>
+        <center><a href="{{ url_for('tarifications_sport_ajout') }}"
+                    class="btn btn-primary">Ajouter un sport</a>
+        </center>
     {% endif %}
 {% endblock %}
