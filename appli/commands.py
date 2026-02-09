@@ -29,7 +29,8 @@ def _importer_images(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture:csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            image = Image(nom_image=ligne["nom_fichier"], largeur=ligne["largeur"], description = ligne["description"])
+            image = Image(nom_image=ligne["nom_fichier"], largeur=ligne["largeur"],
+                          description = ligne["description"])
             db.session.add(image)
     db.session.commit()
 
@@ -52,7 +53,8 @@ def _importer_partenaires(filename):
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             partenaire = Partenaire(nom=ligne["nomP"], lien=ligne["lien"],
-                                    important=ligne["important"]=="True", nom_fichier_image=ligne["nom_fichier"])
+                                    important=ligne["important"]=="True",
+                                    nom_fichier_image=ligne["nom_fichier"])
             db.session.add(partenaire)
     db.session.commit()
 

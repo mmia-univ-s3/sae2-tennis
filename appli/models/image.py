@@ -1,6 +1,7 @@
 from appli.app import db
 
 class Image (db.Model):
+    """Association/Entreprise Image"""
     __tablename__ = "IMAGE"
 
     nom_fichier:str = db.Column("nom_fichier", db.Text, primary_key=True)
