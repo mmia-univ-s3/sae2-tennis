@@ -11,8 +11,16 @@ from appli.models import Partenaire
 @app.route('/partenaires/')
 def partenaires():
     """Page de la liste des partenaires"""
-    parts = Partenaire.query.all()
-    return render_template('partenaires.html', title="Partenaires", partenaires=parts)
+    partsPremium = []
+    partsNormaux = []
+    for part in Partenaire.query.order_by(Partenaire.nom).all():
+        if part.important:
+            partsPremium.append(part)
+        else:
+            partsNormaux.append(part)
+    partenaires = [partsPremium, partsNormaux]
+    print(partenaires)
+    return render_template('partenaires.html', title="Partenaires", partenaires=partenaires)
 
 
 @app.route('/partenaire/<id_p>/delete/', methods=("GET", "POST",))
