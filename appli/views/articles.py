@@ -20,7 +20,7 @@ def articles():
 def article_view(id_article):
     """Page d'un article choisi"""
     article = Article.query.get(id_article)
-    ancienne_image = article.image.nom_fichier
+    ancienne_image = article.image
     form = FormArticleUpdate()
     # pylint: disable=duplicate-code
     if current_user.is_authenticated and current_user.role_au_moins("ecrivain"):
