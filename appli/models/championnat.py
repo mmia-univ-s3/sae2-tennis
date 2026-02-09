@@ -2,15 +2,40 @@ from datetime import date
 from appli.app import db
 
 # pylint: disable=too-many-arguments,too-many-instance-attributes
-class ChampionnatIndividuel(db.Model):
-    """Championnat individuel"""
-    __tablename__ = "CHAMP_INDIV"
-
+class Championnat(db.Model):
+    """Championnat"""
+    __tablename__ = "CHAMPIONNAT"
     id: int = db.Column("idCha", db.Integer, primary_key=True)
     date_championnat: date = db.Column("dateCha", db.Date)
     titre: str = db.Column("titreCha", db.Text)
     categorie: str = db.Column("categorieSport", db.Text)
     serie: str = db.Column("serie", db.Text)
+    type_championnat: str = db.Column("type_championnat", db.Text, nullable=False)
+
+    __mapper_args__ = {"polymorphic_on": type_championnat}
+
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str):
+        self.date_championnat = date_championnat
+        self.titre = titre
+        self.categorie = categorie
+        self.serie = serie
+
+    def __str__(self):
+        return f"<Championnat({self.id}) {self.titre}>"
+
+    def __repr__(self):
+        return self.__str__()
+
+# pylint: disable=too-many-arguments,too-many-instance-attributes
+class ChampionnatIndividuel(Championnat):
+    """Championnat individuel"""
+    __mapper_args__ = {"polymorphic_identity": "individuel"}
+
+    __tablename__ = "CHAMP_INDIV"
+
+    id = db.Column("idCha", db.ForeignKey('CHAMPIONNAT.idCha'), primary_key=True)
+
     niveau: str = db.Column("niveau", db.Text)
 
     _id_joueur_1: int|None = db.Column("idJ1", db.Integer, db.ForeignKey("JOUEUR.idJ"))
@@ -27,10 +52,7 @@ class ChampionnatIndividuel(db.Model):
     def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str, niveau: str,
                  id_joueur_1: int|None, id_joueur_2: int|None, score_1: int|None,
                  score_2: int|None):
-        self.date_championnat = date_championnat
-        self.titre = titre
-        self.categorie = categorie
-        self.serie = serie
+        super().__init__(date_championnat, titre, categorie, serie)
         self.niveau = niveau
         self._id_joueur_1 = id_joueur_1
         self._id_joueur_2 = id_joueur_2
@@ -65,22 +87,18 @@ class ChampionnatIndividuel(db.Model):
     def __repr__(self):
         return self.__str__()
 
-class ChampionnatEquipe(db.Model):
+# pylint: disable=too-many-arguments,too-many-instance-attributes
+class ChampionnatEquipe(Championnat):
     """Championnat par équipe"""
+    __mapper_args__ = {"polymorphic_identity": "equipe"}
+
     __tablename__ = "CHAMP_EQUIPE"
 
-    id: int = db.Column("idCha", db.Integer, primary_key=True)
-    date_championnat: date = db.Column("dateCha", db.Date)
-    titre: str = db.Column("titreCha", db.Text)
-    categorie : str = db.Column("categorieSport", db.Text)
-    serie : str = db.Column("serie", db.Text)
+    id = db.Column("idCha", db.ForeignKey('CHAMPIONNAT.idCha'), primary_key=True)
 
-    # pylint: disable=too-many-arguments,too-many-positional-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments, useless-parent-delegation
     def __init__(self, date_championnat: date, titre: str, categorie: str, serie: str):
-        self.date_championnat = date_championnat
-        self.titre = titre
-        self.categorie = categorie
-        self.serie = serie
+        super().__init__(date_championnat, titre, categorie, serie)
 
     def en_cours(self) -> bool:
         """Indique si un championnat par équipe est toujours en cours

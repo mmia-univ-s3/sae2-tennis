@@ -13,7 +13,7 @@ def test_forms_categorie(client, testapp):
         response = login(client, "/formation/tarifications/ajout/categorie/")
         response = client.post('/formation/tarifications/ajout/categorie/', data={
             "intitule":"cate1",
-            "sport":"tennis"
+            "sport": 1
         }, follow_redirects=True)
 
         assert response.status_code == 200
@@ -70,7 +70,7 @@ def test_forms_reduction(client, testapp):
         response = client.post('/formation/tarifications/categorie/6/ajout/reduction/', data={
             "intitule":"redu1",
             "taux":"50%",
-            "cumulable":"true"
+            "licence":"false"
         }, follow_redirects=True)
 
         assert response.status_code == 200
@@ -91,11 +91,11 @@ def test_forms_reservation_update(client, testapp):
 
 def test_forms_reduction_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/formation/tarifications/tarif/30/update-reduction/")
-        response = client.post('/formation/tarifications/tarif/30/update-reduction/', data={
+        response = login(client, "/formation/tarifications/tarif/42/update-reduction/")
+        response = client.post('/formation/tarifications/tarif/42/update-reduction/', data={
             "intitule":"redu1",
             "taux":"60%",
-            "cumulable":"true"
+            "licence":"false"
         }, follow_redirects=True)
 
         assert response.status_code == 200
@@ -104,8 +104,8 @@ def test_forms_reduction_update(client, testapp):
 
 def test_forms_tarif_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/formation/tarifications/tarif/47/delete/")
-        response = client.post('/formation/tarifications/tarif/47/delete/', follow_redirects=True)
+        response = login(client, "/formation/tarifications/tarif/41/delete/")
+        response = client.post('/formation/tarifications/tarif/41/delete/', follow_redirects=True)
 
         assert response.status_code == 200
         assert "/formation/tarifications/" in response.request.path

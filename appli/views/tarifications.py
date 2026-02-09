@@ -4,32 +4,29 @@ from flask_login import login_required
 from appli.app import app, db
 from appli.forms import FormCategorieAdd, FormConfirm, FormSouscategorieAdd, FormReductionAdd, \
     FormReservationAdd
-from appli.models import CategorieTarif, Reduction, Reservation, Tarif
+from appli.models import CategorieTarif, Reduction, Reservation, Tarif, Sport
 
 
 # noinspection PyProtectedMember,PyComparisonWithNone
 @app.route('/formation/tarifications/')
 def tarifications():
     """Page des tarifs"""
-    # pylint: disable=protected-access,singleton-comparison
-    list_cate_tennis = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
-                                                   CategorieTarif.sport == "tennis").all()
-    list_cate_rese_tennis = filter(lambda x: (len(x.enfants) > 0 and len(
-        x.enfants[0].tarifs.all()) > 0 and len(x.enfants[0].tarifs[0].reductions.all()) == 0) or (
-                                                         x.parent is None and (
-                                                             len(x.enfants) == 0 or (
-                                                                 len(x.enfants) > 0 and len(
-                                                             x.enfants[0].tarifs.all()) == 0))),
-                                   list_cate_tennis)
-    list_cate_redu_tennis = filter(
-        lambda x: len(x.enfants) > 0 and len(x.enfants[0].tarifs.all()) > 0 and len(
-            x.enfants[0].tarifs[0].reductions.all()) > 0, list_cate_tennis)
-    # pylint: disable=protected-access,singleton-comparison
-    list_cate_padel = CategorieTarif.query.filter(CategorieTarif._id_parent == None,
-                                                  CategorieTarif.sport == "padel").all()
+    dico_categories = {}
+    for sport in Sport.query.all():
+        dico_categories_sport = {}
+        for categorie in sorted(filter(lambda cat: not cat.est_sous_categorie(),
+                                       sport.categoriesTarifs),
+                                key=lambda cat: cat.ordre):
+            dico_sous_categories = {}
+            for sous_cat in sorted(categorie.enfants, key=lambda cat: cat.ordre):
+                dico_sous_categories[sous_cat] = sorted(sous_cat.tarifs,
+                                                        key=lambda tarif: tarif.ordre)
+            dico_categories_sport[categorie] = {"sous_cat" : dico_sous_categories,
+                                                "tarifs" : sorted(categorie.tarifs,
+                                                                  key=lambda tarif: tarif.ordre)}
+        dico_categories[sport] = dico_categories_sport
     return render_template('tarifications.html', title="Tarifications - Formation",
-                           cate_rese=list_cate_rese_tennis, cate_redu=list_cate_redu_tennis,
-                           cate_padel=list_cate_padel)
+                           tarifs = dico_categories)
 
 
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/', methods=('GET', 'POST'))
@@ -39,8 +36,9 @@ def tarifications_souscategorie_ajout(id_cat):
     form = FormSouscategorieAdd()
     categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
-        categorie = CategorieTarif(categorie.sport, form.intitule.data, id_cat)
-        db.session.add(categorie)
+        sous_categorie = CategorieTarif(len(categorie.enfants) + 1, form.intitule.data,
+                                        categorie.sport.id, id_cat)
+        db.session.add(sous_categorie)
         db.session.commit()
         return redirect(url_for("tarifications"))
     return render_template('tarifications_souscategorie_add.html',
@@ -52,8 +50,11 @@ def tarifications_souscategorie_ajout(id_cat):
 def tarifications_categorie_ajout():
     """Page d'ajout d'une catégorie"""
     form = FormCategorieAdd()
+    liste_sports = Sport.query.all()
+    form.sport.choices = [(s.id, s.nom) for s in liste_sports]
     if form.validate_on_submit():
-        categorie = CategorieTarif(form.sport.data, form.intitule.data)
+        sport = Sport.query.get(form.sport.data)
+        categorie = CategorieTarif(sport.categoriesTarifs.count() + 1, form.intitule.data, sport.id)
         db.session.add(categorie)
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -65,8 +66,9 @@ def tarifications_categorie_ajout():
 @login_required
 def tarifications_tarif_ajout(id_cat):
     """Page d'ajout d'un tarif"""
+    categorie = CategorieTarif.query.get(id_cat)
     return render_template('tarifications_tarif_add.html',
-                           title="Ajouter un tarif dans une catégorie", id_cat=id_cat)
+                           title="Ajouter un tarif dans une catégorie", categorie=categorie)
 
 
 @app.route('/formation/tarifications/categorie/<id_cat>/delete/', methods=('GET', 'POST'))
@@ -77,6 +79,19 @@ def tarifications_categorie_delete(id_cat):
     form = FormConfirm()
     if form.validate_on_submit():
         db.session.delete(categorie)
+        db.session.flush()
+        if categorie.est_sous_categorie():
+            parent = categorie.parent
+            for enfant in sorted(filter(lambda c: c.ordre > categorie.ordre, parent.enfants),
+                                 key=lambda c: c.ordre):
+                enfant.ordre -= 1
+        else:
+            sport = categorie.sport
+            for cat in sorted(filter(lambda c: c.ordre > categorie.ordre\
+                                      and not c.est_sous_categorie(),
+                                     sport.categoriesTarifs),
+                              key=lambda c: c.ordre):
+                cat.ordre -= 1
         db.session.commit()
         return redirect(url_for("tarifications"))
     return render_template('tarifications_categorie_delete.html',
@@ -91,7 +106,12 @@ def tarifications_tarif_delete(id_t):
     tarif = Tarif.query.get(id_t)
     form = FormConfirm()
     if form.validate_on_submit():
+        categorie = tarif.categorie
         db.session.delete(tarif)
+        db.session.flush()
+        for autre_tarif in sorted(filter(lambda t: t.ordre > tarif.ordre, categorie.tarifs),
+                                  key=lambda t: t.ordre):
+            autre_tarif.ordre -= 1
         db.session.commit()
         return redirect(url_for("tarifications"))
     return render_template('tarifications_tarif_delete.html', title="Supprimer un tarif",
@@ -104,11 +124,10 @@ def tarifications_tarif_delete(id_t):
 def tarifications_ajout_tarif_reservation(id_cat):
     """Page d'ajout d'une réservation"""
     form = FormReservationAdd()
+    categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
-        tarif = Tarif(form.intitule.data, id_cat)
-        db.session.add(tarif)
-        db.session.commit()
-        reservation = Reservation(tarif.id, form.montant.data)
+        reservation = Reservation(categorie.tarifs.count() + 1, form.intitule.data, id_cat,
+                                  form.montant.data)
         db.session.add(reservation)
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -121,11 +140,10 @@ def tarifications_ajout_tarif_reservation(id_cat):
 def tarifications_ajout_tarif_reduction(id_cat):
     """Page d'ajout d'une réduction"""
     form = FormReductionAdd()
+    categorie = CategorieTarif.query.get(id_cat)
     if form.validate_on_submit():
-        tarif = Tarif(form.intitule.data, id_cat)
-        db.session.add(tarif)
-        db.session.commit()
-        reduction = Reduction(tarif.id, form.taux.data, form.cumulable.data)
+        reduction = Reduction(categorie.tarifs.count() + 1, form.intitule.data, id_cat,
+                              form.taux.data, form.licence.data)
         db.session.add(reduction)
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -138,9 +156,9 @@ def tarifications_ajout_tarif_reduction(id_cat):
 def tarifications_reservations_update(id_tarif):
     """Page de modification d'une réservation"""
     reservation = Reservation.query.get(id_tarif)
-    form = FormReservationAdd(intitule=reservation.tarif.intitule, montant=reservation.montant)
+    form = FormReservationAdd(intitule=reservation.intitule, montant=reservation.montant)
     if form.validate_on_submit():
-        reservation.tarif.intitule = form.intitule.data
+        reservation.intitule = form.intitule.data
         reservation.montant = form.montant.data
         db.session.commit()
         return redirect(url_for("tarifications"))
@@ -153,12 +171,11 @@ def tarifications_reservations_update(id_tarif):
 def tarifications_reductions_update(id_tarif):
     """Page de modification d'une réduction"""
     reduction = Reduction.query.get(id_tarif)
-    form = FormReductionAdd(intitule=reduction.tarif.intitule, taux=reduction.taux,
-                            cumulable=reduction.cumulable)
+    form = FormReductionAdd(obj=reduction)
     if form.validate_on_submit():
-        reduction.tarif.intitule = form.intitule.data
+        reduction.intitule = form.intitule.data
         reduction.taux = form.taux.data
-        reduction.cumulable = form.cumulable.data
+        reduction.licence = form.licence.data
         db.session.commit()
         return redirect(url_for("tarifications"))
     return render_template('tarifications_tarif_update_reduction.html',

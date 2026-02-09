@@ -117,7 +117,7 @@ class FormReductionAdd(FlaskForm):
     """Formulaire d'ajout d'une réduction"""
     intitule = StringField('Intitulé de la réduction', validators=[DataRequired()])
     taux = StringField('Réduction', validators=[DataRequired()])
-    cumulable = BooleanField('Cumulable')
+    licence = BooleanField('Applicable sur Licence ?')
 
 
 class FormSouscategorieAdd(FlaskForm):
@@ -128,8 +128,7 @@ class FormSouscategorieAdd(FlaskForm):
 class FormCategorieAdd(FlaskForm):
     """Formulaire d'ajout d'une catégorie"""
     intitule = StringField("Intitulé de la catégorie", validators=[DataRequired()])
-    sport = SelectField("Sport", validators=[DataRequired()],
-                        choices=[("tennis", "Tennis"), ("padel", "Padel")])
+    sport = SelectField("Sport", validators=[DataRequired()], choices=[])
 
 
 class FormHistoireAdd(FlaskForm):

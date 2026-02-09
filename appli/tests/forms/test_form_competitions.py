@@ -12,8 +12,8 @@ def login(client, callback):
 
 def test_form_tournoi_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/4/delete/")
-        response = client.post('/competitions/tournoi/individuel/4/delete/',
+        response = login(client, "/competitions/tournoi/individuel/15/delete/")
+        response = client.post('/competitions/tournoi/individuel/15/delete/',
             follow_redirects=True)
 
         assert response.status_code == 200
@@ -31,8 +31,8 @@ def test_form_tournoi_delete(client, testapp):
 
 def test_form_tournoi_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/3/update/")
-        response = client.post('/competitions/tournoi/individuel/3/update/',
+        response = login(client, "/competitions/tournoi/individuel/14/update/")
+        response = client.post('/competitions/tournoi/individuel/14/update/',
             follow_redirects=True, data={"titre" : "Championnat individuel 1112",
                                          "date_championnat" : date.today(), "categorie" : "Jeune",
                                          "serie" : "Garçon", "niveau" : "Départemental"})
@@ -79,34 +79,34 @@ def test_form_tournoi_add(client, testapp):
 
 def test_form_participant_indiv_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/1/3/delete/")
-        response = client.post('/competitions/tournoi/individuel/1/3/delete/',
+        response = login(client, "/competitions/tournoi/individuel/12/3/delete/")
+        response = client.post('/competitions/tournoi/individuel/12/3/delete/',
             follow_redirects=True)
 
         assert response.status_code == 200
-        assert "/competitions/tournoi/individuel/1/" in response.request.path
+        assert "/competitions/tournoi/individuel/12/" in response.request.path
         assert b"Jean Michel" not in response.data
 
 
 def test_form_participant_indiv_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/1/1/update/")
-        response = client.post('/competitions/tournoi/individuel/1/1/update/',
+        response = login(client, "/competitions/tournoi/individuel/12/1/update/")
+        response = client.post('/competitions/tournoi/individuel/12/1/update/',
             follow_redirects=True, data={"joueur" : 1, "rang" : "1er"})
 
         assert response.status_code == 200
-        assert "/competitions/tournoi/individuel/1/" in response.request.path
+        assert "/competitions/tournoi/individuel/12/" in response.request.path
         assert b"1er" in response.data
 
 
 def test_form_participant_indiv_add(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/2/add/")
-        response = client.post('/competitions/tournoi/individuel/2/add/',
+        response = login(client, "/competitions/tournoi/individuel/13/add/")
+        response = client.post('/competitions/tournoi/individuel/13/add/',
             follow_redirects=True, data={"joueur" : 1, "rang" : "1er"})
 
         assert response.status_code == 200
-        assert "/competitions/tournoi/individuel/2/" in response.request.path
+        assert "/competitions/tournoi/individuel/13/" in response.request.path
         assert b"Jean Claude" in response.data
 
 

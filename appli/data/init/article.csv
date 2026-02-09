@@ -10,6 +10,6 @@ idArt;titreArt;image;contenu;nbClics;dateArt;typeArt
 9;art6;;<p>Hello</p>;0;2025-05-25;club
 10;art7;;<p>Halo</p>;0;2025-05-26;club
 11;_tel;;01 23 45 67 89;0;2025-01-01;pages
-11;_mail;;contact@example.com;0;2025-01-01;pages
-11;_adresse;;123 Rue du Test, 75001 Paris;0;2025-01-01;pages
-11;_reseaux;;"<a href=""https://example.com/"">Facebook</a> / <a href=""https://example.com/"">Twitter</a> / <a href=""https://example.com/"">Instagram</a>";0;2025-01-01;pages
+12;_mail;;contact@example.com;0;2025-01-01;pages
+13;_adresse;;123 Rue du Test, 75001 Paris;0;2025-01-01;pages
+14;_reseaux;;"<a href=""https://example.com/"">Facebook</a> / <a href=""https://example.com/"">Twitter</a> / <a href=""https://example.com/"">Instagram</a>";0;2025-01-01;pages
