@@ -1,15 +1,15 @@
-idArt;titreArt;image;contenu;nbClics;dateArt;typeArt
-1;Michel a gagné;;<p>Bonjour</p>;0;2025-05-17;stade
-2;Stephane a perdu;;<p>Hi</p>;0;2025-05-18;stade
-3;Décès de Martine;;<p>Hello</p>;0;2025-05-19;stade
-4;art1;;<p>Halo</p>;0;2025-05-20;stade
-5;art2;;<p>Hola</p>;0;2025-05-21;stade
-6;art3;;<p>Gutten Tag</p>;0;2025-05-22;club
-7;art4;;<p>Bonjour</p>;0;2025-05-23;club
-8;art5;;<p>Hi</p>;0;2025-05-24;club
-9;art6;;<p>Hello</p>;0;2025-05-25;club
-10;art7;;<p>Halo</p>;0;2025-05-26;club
-11;_tel;;01 23 45 67 89;0;2025-01-01;pages
-12;_mail;;contact@example.com;0;2025-01-01;pages
-13;_adresse;;123 Rue du Test, 75001 Paris;0;2025-01-01;pages
-14;_reseaux;;"<a href=""https://example.com/"">Facebook</a> / <a href=""https://example.com/"">Twitter</a> / <a href=""https://example.com/"">Instagram</a>";0;2025-01-01;pages
+idArt;titreArt;contenu;nbClics;dateArt;typeArt;nom_fichier
+1;Michel a gagné;<p>Bonjour</p>;0;2025-05-17;stade;
+2;Stephane a perdu;<p>Hi</p>;0;2025-05-18;stade;
+3;Décès de Martine;<p>Hello</p>;0;2025-05-19;stade;
+4;art1;<p>Halo</p>;0;2025-05-20;stade;
+5;art2;<p>Hola</p>;0;2025-05-21;stade;
+6;art3;<p>Gutten Tag</p>;0;2025-05-22;club;
+7;art4;<p>Bonjour</p>;0;2025-05-23;club;
+8;art5;<p>Hi</p>;0;2025-05-24;club;
+9;art6;<p>Hello</p>;0;2025-05-25;club;
+10;art7;<p>Halo</p>;0;2025-05-26;club;
+11;_tel;01 23 45 67 89;0;2025-01-01;pages;
+12;_mail;contact@example.com;0;2025-01-01;pages;
+13;_adresse;123 Rue du Test, 75001 Paris;0;2025-01-01;pages;
+14;_reseaux;"<a href=""https://example.com/"">Facebook</a> / <a href=""https://example.com/"">Twitter</a> / <a href=""https://example.com/"">Instagram</a>";0;2025-01-01;pages;

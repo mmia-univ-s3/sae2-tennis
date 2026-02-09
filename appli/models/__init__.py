@@ -17,6 +17,7 @@ from .tarif import Tarif, Reservation, Reduction
 from .sport import Sport
 from .jouer import Jouer
 from .inscrire import Inscrire
+from .image import Image
 
 @login_manager.user_loader
 def load_user(login: str):
