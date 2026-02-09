@@ -120,6 +120,7 @@
 
 <footer class="muted mt-5 bg-secondary-subtle pt-3 pb-3 pl-3 pr-3 mt-5">
     <div class="container">
+        {% block footer_extra %}{% endblock %}
         <p class="small">
             <a href="{{ url_for("partenaires") }}">Partenaires</a> -
             <a href="{{ url_for("documents") }}">Documents administratifs</a> -

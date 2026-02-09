@@ -7,10 +7,7 @@ from appli.app import app, db, required_permission_lvl
 from appli.forms import FormPageEdit
 from appli.models import Article
 
-
-@app.route('/contacts/')
-def contacts():
-    """Page de contacts"""
+def get_contacts_data():
     adresse = Article.query.filter(
         Article.titre == "_adresse" and Article.type_article == "pages").first()
     if adresse is None:
@@ -34,6 +31,12 @@ def contacts():
         reseaux = Article("_reseaux", "" ,"", datetime.date.today(), "pages")
         db.session.add(reseaux)
         db.session.commit()
+    return adresse, tel, mail, reseaux
+
+@app.route('/contacts/')
+def contacts():
+    """Page de contacts"""
+    adresse, tel, mail, reseaux = get_contacts_data()
     return render_template('contacts.html', title="Contacts", adresse=adresse.contenu,
                            tel=tel.contenu, mail=mail.contenu, reseaux=reseaux.contenu)
 
