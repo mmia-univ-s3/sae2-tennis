@@ -1,9 +1,8 @@
 import os
 
 from flask import render_template, redirect, url_for
-from flask_login import login_required
 
-from appli.app import app, db
+from appli.app import app, db, required_permission_lvl
 from appli.forms import FormConfirm, FormPartenaireAdd
 from appli.models import Partenaire
 
@@ -23,7 +22,7 @@ def partenaires():
 
 
 @app.route('/partenaire/<id_p>/delete/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def partenaire_delete(id_p: int):
     """Page de suppression d'un partenaire choisi"""
     part = Partenaire.query.get(id_p)
@@ -39,7 +38,7 @@ def partenaire_delete(id_p: int):
 
 
 @app.route('/partenaire/ajout/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def partenaire_create():
     """Page de création d'un partenaire"""
     form = FormPartenaireAdd()

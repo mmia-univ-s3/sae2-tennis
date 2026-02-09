@@ -13,6 +13,7 @@ def test_forms_user_create(client, testapp):
         response = login(client, "/utilisateurs/create/")
         response = client.post('/utilisateurs/create/', data={
             "login":"truc123",
+            "role": "ecrivain",
             "password":"bidule123",
             "repeat_password":"bidule123"}
             , follow_redirects=True)
@@ -45,6 +46,7 @@ def test_forms_user_create_bad(client, testapp):
         response = login(client, "/utilisateurs/create/")
         response = client.post('/utilisateurs/create/', data={
             "login":"truc",
+            "role": "ecrivain",
             "password":"bidule",
             "repeat_password":"bad"}
             , follow_redirects=True)
