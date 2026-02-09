@@ -10,7 +10,7 @@ class Inscrire(db.Model):
 
     championnat = db.relationship("ChampionnatInterne", backref=db.backref("inscrire",
                                   lazy="dynamic", cascade="all, delete-orphan"))
-    joueur = db.relationship("Joueur", backref=db.backref("inscire",
+    joueur = db.relationship("Joueur", backref=db.backref("inscrire",
                             lazy="dynamic", cascade="all, delete-orphan"))
 
     def __init__(self, id_championnat: int, id_j: int):

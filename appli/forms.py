@@ -14,7 +14,7 @@ from appli.models.article import Article
 from appli.models.partenaire import Partenaire
 from appli.models.utilisateur import Utilisateur
 from .app import db
-from .models import ChampionnatIndividuel
+from .models import ChampionnatInterne, Jouer
 
 
 class FormConfirm(FlaskForm):
@@ -211,14 +211,10 @@ class FormInternes(FlaskForm):
     """Formulaire pour ajouter et mettre à jour des tournois internes."""
     date = DateField("Date", validators=[DataRequired()])
     titre = StringField("Nom du championnat interne", validators=[DataRequired()])
-    serie = StringField("Série", validators=[DataRequired()])
+    sets = IntegerField("Sets gagnants",  validators=[DataRequired()])
     joueur1 = SelectField("Joueur 1",  validators=[DataRequired()], coerce=int, choices=[])
-    points1 = IntegerField("Points du joueur 1",
-                           validators=[DataRequired(), NumberRange(min=0, max=9999999999,
-                                                                   message='Invalid length')])
-    points2 = IntegerField("Points du joueur 2",
-                           validators=[DataRequired(), NumberRange(min=0, max=9999999999,
-                                                                   message='Invalid length')])
+    points1 = StringField("Points du joueur 1", validators=[DataRequired()])
+    points2 = StringField("Points du joueur 2", validators=[DataRequired()])
     joueur2 = SelectField("Joueur 2",  validators=[DataRequired()], coerce=int, choices=[])
 
 
@@ -226,16 +222,18 @@ class FormInternes(FlaskForm):
         """
         Créer un match en interne
         :return:
-            ChampionnatIndividuel: match
+            ChampionnatInterne: championnat créé à partir du form
             None: si les deux joueurs sont les mêmes
         """
         if self.joueur1.data != self.joueur2.data:
-            match = ChampionnatIndividuel(self.date.data, self.titre.data, "Interne",
-                                          self.serie.data, "Club", self.joueur1.data,
-                                          self.joueur2.data, self.points1.data, self.points2.data)
+            champ = ChampionnatInterne(self.date.data, self.titre.data)
+            db.session.add(champ)
+            db.session.commit()
+            match = Jouer(champ.id, self.joueur1.data, self.joueur2.data, self.sets.data,
+                          self.points1.data, self.points2.data)
             db.session.add(match)
             db.session.commit()
-            return match
+            return champ
         return None
 
 class FormChampionnatIndividuel(FlaskForm):

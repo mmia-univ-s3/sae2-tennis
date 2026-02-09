@@ -2,20 +2,17 @@ from datetime import datetime
 from flask import render_template, redirect, url_for
 from flask_login import login_required
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import or_
 
 from appli.app import app, db
 from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer,\
-Equipe, Participer
+Equipe, Participer, ChampionnatInterne, Jouer, Inscrire
 from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser,\
 FormParticiper, FormAffronter, FormInternes, FormConfirm
 
 @app.route('/competitions/calendrier/')
 def calendrier():
     """Permet d'afficher la page concernant le calendrier des tournois"""
-    list_comp_indiv = ChampionnatIndividuel.query.filter(
-        ChampionnatIndividuel.categorie != "interne",
-        ChampionnatIndividuel.categorie != "Interne").order_by(\
+    list_comp_indiv = ChampionnatIndividuel.query.order_by(\
         ChampionnatIndividuel.date_championnat.desc()).all()
     list_comp_equipe = ChampionnatEquipe.query.order_by(\
         ChampionnatEquipe.date_championnat.desc()).all()
@@ -397,9 +394,7 @@ def affronter_add(id_championnat: int, id_equipe: int):
 @app.route('/competitions/palmares/list/')
 def palmares_list():
     """Affiche la liste des palmarès."""
-    liste_championnat = ChampionnatIndividuel.query.filter(
-        ChampionnatIndividuel.categorie != "interne",
-        ChampionnatIndividuel.categorie != "Interne").all() + ChampionnatEquipe.query.all()
+    liste_championnat = ChampionnatIndividuel.query.all() + ChampionnatEquipe.query.all()
     liste_annee = []
     for championnat in liste_championnat:
         if championnat.date_championnat.year not in liste_annee:
@@ -417,7 +412,6 @@ def palmares_annee(annee: int):
         annee (int): L'année
     """
     liste_champ_indiv = ChampionnatIndividuel.query.filter(
-        ChampionnatIndividuel.categorie != "interne", ChampionnatIndividuel.categorie != "Interne",
         ChampionnatIndividuel.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')).all()
     dict_indiv = {}
     for championnat in liste_champ_indiv:
@@ -442,16 +436,15 @@ def palmares_annee(annee: int):
 @app.route('/competitions/tournois-internes/')
 def internes():
     """ Page de la liste des matchs en interne """
-    participant = ChampionnatIndividuel.query.filter(
-        or_(ChampionnatIndividuel.categorie=="interne", ChampionnatIndividuel.categorie=="Interne"))
+    championnats = ChampionnatInterne.query.all()
     resultat = []
-    for match in participant:
-        id_joueur = match.id
-        joueur1 = match.joueur_1
-        joueur2 = match.joueur_2
-        score1 = match.score_1
-        score2 = match.score_2
-        resultat.append((id_joueur, joueur1, score1, joueur2, score2))
+    for championnat in championnats:
+        for match in championnat.jouer:
+            joueur1 = match.joueur1
+            joueur2 = match.joueur2
+            score1 = match.sets_gagnees_j1()
+            score2 = match.sets_gagnees_j2()
+            resultat.append((championnat, joueur1, score1, joueur2, score2))
     return render_template('internes.html',
                            title="Tournois internes - Competitions", matchs=resultat)
 
@@ -484,22 +477,30 @@ def internes_update(id_match):
 
     Args:
         id_match (int): L'identifiant du match."""
-    match = ChampionnatIndividuel.query.get(id_match)
-    form = FormInternes(date=match.date_championnat, titre=match.titre, serie=match.serie,
-                        categorie=match.categorie, niveau=match.niveau, joueur1=match.joueur_1,
-                        joueur2=match.joueur_2, points1=match.score_1, points2=match.score_1)
+    championnat = ChampionnatInterne.query.get(id_match)
+    match = championnat.jouer.first()
+    form = FormInternes(date=championnat.date_championnat, titre=championnat.titre,
+                        sets=match.sets, joueur1=match.joueur1.id, joueur2=match.joueur2.id,
+                        points1=match.score1, points2=match.score2)
 
     joueurs = Joueur.query.all()
     choix = []
     for joueur in joueurs:
         choix.append((joueur.id, joueur.prenom + " " + joueur.nom))
 
-    form.joueur1.choices =  choix
+    form.joueur1.choices = choix
     form.joueur2.choices = choix
 
     if form.validate_on_submit():
-        match = form.creation_interne()
         if match is not None:
+            championnat.date_championnat = form.date.data
+            championnat.titre = form.titre.data
+            match.sets = form.sets.data
+            match._id_j1 = form.joueur1.data
+            match._id_j2 = form.joueur2.data
+            match.score1 = form.points1.data
+            match.score2 = form.points2.data
+            db.session.commit()
             return redirect(url_for("internes"))
         return render_template("internes_update.html",
                                title="Modification du match", form=form, error=True,
@@ -514,7 +515,7 @@ def internes_delete(id_match):
 
     Args:
         id_match (int): L'identifiant du match."""
-    match = ChampionnatIndividuel.query.get(id_match)
+    match = ChampionnatInterne.query.get(id_match)
     form = FormConfirm()
     if form.validate_on_submit():
         db.session.delete(match)
@@ -522,3 +523,4 @@ def internes_delete(id_match):
         return redirect(url_for('internes'))
     return render_template("internes_delete.html", title="Suppression du match",
                            form=form, id_match=id_match)
+
