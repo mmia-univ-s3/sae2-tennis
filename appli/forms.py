@@ -133,6 +133,11 @@ class FormCategorieAdd(FlaskForm):
     """Formulaire d'ajout d'une catégorie"""
     intitule = StringField("Intitulé de la catégorie", validators=[DataRequired()])
     sport = SelectField("Sport", validators=[DataRequired()], choices=[])
+    
+class FormSportAdd(FlaskForm):
+    """Formulaire d'ajout d'un sport"""
+    nom = StringField("Nom du sport", validators=[DataRequired()])
+    commentaire = StringField("Commentaire")
 
 
 class FormHistoireAdd(FlaskForm):

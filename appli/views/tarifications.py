@@ -3,7 +3,7 @@ from flask_login import login_required
 
 from appli.app import app, db
 from appli.forms import FormCategorieAdd, FormConfirm, FormSouscategorieAdd, FormReductionAdd, \
-    FormReservationAdd
+    FormReservationAdd, FormSportAdd
 from appli.models import CategorieTarif, Reduction, Reservation, Tarif, Sport
 
 
@@ -28,7 +28,156 @@ def tarifications():
     return render_template('tarifications.html', title="Tarifications - Formation",
                            tarifs = dico_categories)
 
+@app.route('/formation/tarifications/<id_tarif>/monter/')
+@login_required
+def tarifications_monter_tarif(id_tarif):
+    tarif = Tarif.query.get(id_tarif)
+    categorie = tarif.categorie
+    for tar in categorie.tarifs:
+        if tar.ordre == tarif.ordre - 1:
+            temp = categorie.tarifs.count() + 1
+            if tarif.id < tar.id:
+                tarif.ordre = temp
+                temp = tar.ordre
+                tar.ordre += 1
+                db.session.flush()
+                tarif.ordre = temp
+                db.session.commit()
+            else:
+                tar.ordre = temp
+                temp = tarif.ordre
+                tarif.ordre -= 1
+                db.session.flush()
+                tar.ordre = temp
+                db.session.commit()
+            break
+    return redirect(url_for("tarifications"))
 
+@app.route('/formation/tarifications/<id_tarif>/descendre/')
+@login_required
+def tarifications_descendre_tarif(id_tarif):
+    tarif = Tarif.query.get(id_tarif)
+    categorie = tarif.categorie
+    for tar in categorie.tarifs:
+        if tar.ordre == tarif.ordre + 1:
+            temp = categorie.tarifs.count() + 1
+            if tarif.id < tar.id:
+                tarif.ordre = temp
+                temp = tar.ordre
+                tar.ordre -= 1
+                db.session.flush()
+                tarif.ordre = temp
+                db.session.commit()
+            else:
+                tar.ordre = temp
+                temp = tarif.ordre
+                tarif.ordre += 1
+                db.session.flush()
+                tar.ordre = temp
+                db.session.commit()
+            break
+    return redirect(url_for("tarifications"))
+
+@app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/monter/')
+@login_required
+def tarifications_monter_souscategorie(id_cat):
+    souscategorie = CategorieTarif.query.get(id_cat)
+    categorie = souscategorie.parent
+    for cate in categorie.enfants:
+        if cate.ordre == souscategorie.ordre - 1:
+            temp = len(categorie.enfants) + 1
+            if souscategorie.id < cate.id:
+                souscategorie.ordre = temp
+                temp = cate.ordre
+                cate.ordre += 1
+                db.session.flush()
+                souscategorie.ordre = temp
+                db.session.commit()
+            else:
+                cate.ordre = temp
+                temp = souscategorie.ordre
+                souscategorie.ordre -= 1
+                db.session.flush()
+                cate.ordre = temp
+                db.session.commit()
+            break
+    return redirect(url_for("tarifications"))
+
+@app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/descendre/')
+@login_required
+def tarifications_descendre_souscategorie(id_cat):
+    souscategorie = CategorieTarif.query.get(id_cat)
+    categorie = souscategorie.parent
+    for cate in categorie.enfants:
+        if cate.ordre == souscategorie.ordre + 1:
+            temp = len(categorie.enfants) + 1
+            if souscategorie.id < cate.id:
+                souscategorie.ordre = temp
+                temp = cate.ordre
+                cate.ordre -= 1
+                db.session.flush()
+                souscategorie.ordre = temp
+                db.session.commit()
+            else:
+                cate.ordre = temp
+                temp = souscategorie.ordre
+                souscategorie.ordre += 1
+                db.session.flush()
+                cate.ordre = temp
+                db.session.commit()
+            break
+    return redirect(url_for("tarifications"))
+
+@app.route('/formation/tarifications/categorie/<id_cat>/monter/')
+@login_required
+def tarifications_monter_categorie(id_cat):
+    categorie = CategorieTarif.query.get(id_cat)
+    sport = categorie.sport
+    for cate in sport.categoriesTarifs:
+        if cate.ordre == categorie.ordre - 1:
+            temp = sport.categoriesTarifs.count() + 1
+            if categorie.id < cate.id:
+                categorie.ordre = temp
+                temp = cate.ordre
+                cate.ordre += 1
+                db.session.flush()
+                categorie.ordre = temp
+                db.session.commit()
+            else:
+                cate.ordre = temp
+                temp = categorie.ordre
+                categorie.ordre -= 1
+                db.session.flush()
+                cate.ordre = temp
+                db.session.commit()
+            break
+    return redirect(url_for("tarifications"))
+
+@app.route('/formation/tarifications/categorie/<id_cat>/descendre/')
+@login_required
+def tarifications_descendre_categorie(id_cat):
+    categorie = CategorieTarif.query.get(id_cat)
+    sport = categorie.sport
+    for cate in sport.categoriesTarifs:
+        if cate.ordre == categorie.ordre + 1:
+            temp = sport.categoriesTarifs.count() + 1
+            if categorie.id < cate.id:
+                categorie.ordre = temp
+                temp = cate.ordre
+                cate.ordre -= 1
+                db.session.flush()
+                categorie.ordre = temp
+                db.session.commit()
+            else:
+                cate.ordre = temp
+                temp = categorie.ordre
+                categorie.ordre += 1
+                db.session.flush()
+                cate.ordre = temp
+                db.session.commit()
+            break
+    return redirect(url_for("tarifications"))
+    
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/', methods=('GET', 'POST'))
 @login_required
 def tarifications_souscategorie_ajout(id_cat):
@@ -60,7 +209,33 @@ def tarifications_categorie_ajout():
         return redirect(url_for("tarifications"))
     return render_template('tarifications_categorie_add.html', title="Ajouter une catégorie",
                            form=form)
+    
+@app.route('/formation/tarifications/ajout/sport', methods=('GET', 'POST'))
+@login_required
+def tarifications_sport_ajout():
+    """Page d'ajout d'un sport"""
+    form = FormSportAdd()
+    if form.validate_on_submit():
+        nom = form.nom.data
+        commentaire = form.commentaire.data
+        sport = Sport(nom, commentaire)
+        db.session.add(sport)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return  render_template('tarifications_sport_ajout.html', title="Ajout d'un sport", form=form)
 
+@app.route('/formation/tarifications/<id_sport>/delete/sport', methods=('GET', 'POST'))
+@login_required
+def tarifications_sport_delete(id_sport):
+    """Page de suppression d'un sport"""
+    form = FormConfirm()
+    sport = Sport.query.get(id_sport)
+    if form.validate_on_submit():
+        db.session.delete(sport)
+        db.session.commit()
+        return redirect(url_for("tarifications"))
+    return render_template("tarifications_sport_delete.html", form=form,
+                           title="Suppression d'un sport", id_sport=id_sport)
 
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/')
 @login_required

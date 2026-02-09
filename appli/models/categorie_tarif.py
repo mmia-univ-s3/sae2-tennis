@@ -18,13 +18,14 @@ class CategorieTarif(db.Model):
                               cascade="all, delete-orphan",)
 
     __table_args__ = (
-        UniqueConstraint("ordreCat", "idCatParent"),
+        #UniqueConstraint("ordreCat", "idCatParent", "idSp"),
         Index(
             "idCatParentNull",
             "ordreCat",
+            "idSp",
             unique=True,
             sqlite_where=text("idCatParent IS NULL")
-        )
+        ),
     )
 
     def __init__(self, ordre: int, intitule: str, id_sport:int, id_parent: int=None):
