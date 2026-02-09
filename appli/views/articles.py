@@ -72,4 +72,3 @@ def article_delete(id_article):
         return redirect(url_for("articles"))
     return render_template("article_delete.html", form=form,
                            title="Suppression d'un article", article=article)
-    

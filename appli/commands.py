@@ -40,7 +40,8 @@ def _importer_partenaires(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            partenaire = Partenaire(nom=ligne["nomP"], logo=ligne["logo"], lien=ligne["lien"], important=ligne["important"]=="True")
+            partenaire = Partenaire(nom=ligne["nomP"], logo=ligne["logo"], lien=ligne["lien"],
+                                    important=ligne["important"]=="True")
             db.session.add(partenaire)
     db.session.commit()
 
@@ -204,14 +205,15 @@ def _exporter_partenaires(filepath):
     """Permet d'exporter les partenaires du club"""
     liste_partenaires = Partenaire.query.all()
     with open(f"{filepath}/partenaire.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idP", "nomP", "logo", "lien"]
+        colonnes = ["idP", "nomP", "logo", "lien", "important"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for partenaire in liste_partenaires:
             ecriture.writerow({"idP" : str(partenaire.id),
                                "nomP" : partenaire.nom,
                                "logo" : partenaire.logo,
-                               "lien" : partenaire.lien})
+                               "lien" : partenaire.lien,
+                               "important" : str(partenaire.important)})
 
 # pylint: disable=protected-access
 def _exporter_users(filepath):
