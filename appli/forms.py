@@ -179,8 +179,8 @@ class FormArticleAdd(FlaskForm):
         Returns:
             Article: article créé
         """
-        article = Article(self.titre.data, filename, self.editor.data, datetime.date.today(),
-                          self.type_a.data)
+        article = Article(self.titre.data, self.editor.data, datetime.date.today(),
+                          self.type_a.data, filename)
         db.session.add(article)
         db.session.commit()
         return article
