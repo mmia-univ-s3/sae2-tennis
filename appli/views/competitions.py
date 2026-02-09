@@ -1,10 +1,9 @@
 from datetime import datetime
 from flask import render_template, redirect, url_for
-from flask_login import login_required
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_
 
-from appli.app import app, db
+from appli.app import app, db, required_permission_lvl
 from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer,\
 Equipe, Participer
 from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser,\
@@ -25,7 +24,7 @@ def calendrier():
 
 @app.route('/competitions/tournoi/<type_tournoi>/<int:id_championnat>/delete/',
            methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tournoi_delete(type_tournoi: str, id_championnat: int):
     """Permet de supprimer un tournoi de la base de données
 
@@ -54,7 +53,7 @@ def tournoi_delete(type_tournoi: str, id_championnat: int):
 
 @app.route('/competitions/tournoi/<type_tournoi>/<int:id_championnat>/update/',
            methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tournoi_update(type_tournoi: str, id_championnat: int):
     """Permet de modifier un tournoi de la base de données
 
@@ -87,7 +86,7 @@ def tournoi_update(type_tournoi: str, id_championnat: int):
 
 
 @app.route('/competitions/tournoi/<type_tournoi>/add/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tournoi_add(type_tournoi: str):
     """Permet d'ajouter un tournoi dans la base de données
 
@@ -147,7 +146,7 @@ def tournoi(type_tournoi: str, id_championnat: int):
 
 @app.route('/competitions/tournoi/individuel/<int:id_championnat>/<int:id_joueur>/delete/',
            methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def participant_indiv_delete(id_championnat: int, id_joueur: int):
     """Permet de supprimer un participant d'un tournoi individuel
 
@@ -172,7 +171,7 @@ def participant_indiv_delete(id_championnat: int, id_joueur: int):
 
 @app.route('/competitions/tournoi/individuel/<int:id_championnat>/<int:id_joueur>/update/',
            methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def participant_indiv_update(id_championnat: int, id_joueur: int):
     """Permet de modifier le résultat d'un participant lors d'un championnat individuel
 
@@ -195,7 +194,7 @@ def participant_indiv_update(id_championnat: int, id_joueur: int):
 
 
 @app.route('/competitions/tournoi/individuel/<int:id_championnat>/add/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def participant_indiv_add(id_championnat: int):
     """Permet d'ajouter un participant à un tournoi individuel
 
@@ -223,7 +222,7 @@ def participant_indiv_add(id_championnat: int):
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/delete/',
            methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def participant_equipe_delete(id_championnat: int, id_equipe: int):
     """Permet de supprimer une équipe d'un tournoi par équipe
 
@@ -248,7 +247,7 @@ def participant_equipe_delete(id_championnat: int, id_equipe: int):
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/update/',
            methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def participant_equipe_update(id_championnat: int, id_equipe: int):
     """Permet de modifier le résultat d'une équipe lors d'un championnat par équipe
 
@@ -272,7 +271,7 @@ def participant_equipe_update(id_championnat: int, id_equipe: int):
 
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/add/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def participant_equipe_add(id_championnat: int):
     """Permet d'ajouter une équipe à un tournoi par équipe
 
@@ -301,7 +300,7 @@ def participant_equipe_add(id_championnat: int):
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<date_match>/'\
            + 'delete/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
     """Supprime un affrontement entre 2 équipes.
 
@@ -330,7 +329,7 @@ def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<date_match>/'\
            + 'update/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
     """Met à jour un affrontement entre 2 équipes.
     Args :
@@ -366,7 +365,7 @@ def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
 
 @app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/add/',
            methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def affronter_add(id_championnat: int, id_equipe: int):
     """Ajoute un affrontement.
 
@@ -456,7 +455,7 @@ def internes():
                            title="Tournois internes - Competitions", matchs=resultat)
 
 @app.route('/competitions/tournois-internes/add/', methods=("GET", "POST"))
-@login_required
+@required_permission_lvl("publicateur")
 def internes_add():
     """ Page d'ajout d'un match en interne """
     form = FormInternes()
@@ -478,7 +477,7 @@ def internes_add():
                            form=form, error=False)
 
 @app.route('/competitions/tournois-internes/<id_match>/update/', methods=("GET", "POST"))
-@login_required
+@required_permission_lvl("publicateur")
 def internes_update(id_match):
     """Met à jour un tournoi interne.
 
@@ -508,7 +507,7 @@ def internes_update(id_match):
                            form=form, error=False,id_match=id_match)
 
 @app.route('/competitions/tournois-internes/<id_match>/delete/', methods=("GET", "POST"))
-@login_required
+@required_permission_lvl("publicateur")
 def internes_delete(id_match):
     """Supprime un tournoi interne.
 

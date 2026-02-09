@@ -1,7 +1,6 @@
 from flask import render_template, redirect, url_for
-from flask_login import login_required
 
-from appli.app import app, db
+from appli.app import app, db, required_permission_lvl
 from appli.forms import FormCategorieAdd, FormConfirm, FormSouscategorieAdd, FormReductionAdd, \
     FormReservationAdd
 from appli.models import CategorieTarif, Reduction, Reservation, Tarif, Sport
@@ -30,7 +29,7 @@ def tarifications():
 
 
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_souscategorie_ajout(id_cat):
     """Page d'ajout d'une sous-catégorie"""
     form = FormSouscategorieAdd()
@@ -46,7 +45,7 @@ def tarifications_souscategorie_ajout(id_cat):
 
 
 @app.route('/formation/tarifications/ajout/categorie/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_categorie_ajout():
     """Page d'ajout d'une catégorie"""
     form = FormCategorieAdd()
@@ -63,7 +62,7 @@ def tarifications_categorie_ajout():
 
 
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/')
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_tarif_ajout(id_cat):
     """Page d'ajout d'un tarif"""
     categorie = CategorieTarif.query.get(id_cat)
@@ -72,7 +71,7 @@ def tarifications_tarif_ajout(id_cat):
 
 
 @app.route('/formation/tarifications/categorie/<id_cat>/delete/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_categorie_delete(id_cat):
     """Page de suppression d'une catégorie ou d'une sous-catégorie"""
     categorie = CategorieTarif.query.get(id_cat)
@@ -100,7 +99,7 @@ def tarifications_categorie_delete(id_cat):
 
 
 @app.route('/formation/tarifications/tarif/<id_t>/delete/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_tarif_delete(id_t):
     """Page de suppression d'un tarif"""
     tarif = Tarif.query.get(id_t)
@@ -120,7 +119,7 @@ def tarifications_tarif_delete(id_t):
 
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/reservation/',
            methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_ajout_tarif_reservation(id_cat):
     """Page d'ajout d'une réservation"""
     form = FormReservationAdd()
@@ -136,7 +135,7 @@ def tarifications_ajout_tarif_reservation(id_cat):
 
 
 @app.route('/formation/tarifications/categorie/<id_cat>/ajout/reduction/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_ajout_tarif_reduction(id_cat):
     """Page d'ajout d'une réduction"""
     form = FormReductionAdd()
@@ -152,7 +151,7 @@ def tarifications_ajout_tarif_reduction(id_cat):
 
 
 @app.route('/formation/tarifications/tarif/<id_tarif>/update-reservation/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_reservations_update(id_tarif):
     """Page de modification d'une réservation"""
     reservation = Reservation.query.get(id_tarif)
@@ -167,7 +166,7 @@ def tarifications_reservations_update(id_tarif):
 
 
 @app.route('/formation/tarifications/tarif/<id_tarif>/update-reduction/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_reductions_update(id_tarif):
     """Page de modification d'une réduction"""
     reduction = Reduction.query.get(id_tarif)

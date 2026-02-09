@@ -1,9 +1,9 @@
 import os
 
 from flask import render_template, redirect, url_for
-from flask_login import login_required, current_user
+from flask_login import current_user
 
-from appli.app import app, db
+from appli.app import app, db, required_permission_lvl
 from appli.forms import FormArticleAdd, FormConfirm, FormArticleUpdate
 from appli.models import Article
 
@@ -23,7 +23,7 @@ def article_view(id_article):
     ancienne_image = article.image
     form = FormArticleUpdate()
     # pylint: disable=duplicate-code
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.role_au_moins("ecrivain"):
         if form.validate_on_submit():
             filename = None
             if form.image.data is not None:
@@ -41,7 +41,7 @@ def article_view(id_article):
 
 
 @app.route('/club/articles/create/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("ecrivain")
 def article_create():
     """Page de création d'un article"""
     form = FormArticleAdd()
@@ -58,7 +58,7 @@ def article_create():
 
 
 @app.route('/club/articles/<id_article>/delete/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("ecrivain")
 def article_delete(id_article):
     """Page de suppression d'un article choisi"""
     form = FormConfirm()
