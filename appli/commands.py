@@ -50,7 +50,7 @@ def _importer_users(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            utilisateur = Utilisateur(login=ligne["idU"], mdp=ligne["mdp"])
+            utilisateur = Utilisateur(login=ligne["idU"], mdp=ligne["mdp"], role=ligne["role"])
             db.session.add(utilisateur)
     db.session.commit()
 

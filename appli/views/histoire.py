@@ -3,7 +3,7 @@ import datetime
 from flask import render_template, redirect, url_for
 from flask_login import login_required, current_user
 
-from appli.app import app, db
+from appli.app import app, db, required_permission_lvl
 from appli.forms import FormConfirm, FormHistoireAdd, FormPageEdit
 from appli.models import Article
 from appli.models.histoire import Histoire
@@ -20,7 +20,7 @@ def histoire():
         article = Article("_histoire", "" ,"", datetime.date.today(), "pages")
         db.session.add(article)
         db.session.commit()
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.role_au_moins("editeur"):
         if form.validate_on_submit():
             article.contenu = form.editor.data
             article.date = datetime.date.today()
@@ -35,7 +35,7 @@ def histoire():
 
 
 @app.route('/club/histoire/ajout/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("editeur")
 def histoire_ajout():
     """Page d'ajout d'une information sur l'histoire"""
     form = FormHistoireAdd()
@@ -54,7 +54,7 @@ def histoire_ajout():
 
 
 @app.route('/club/histoire/<id_h>/delete/', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("editeur")
 def histoire_delete(id_h):
     """Page de suppression d'une information sur l'histoire"""
     form = FormConfirm()

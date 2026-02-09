@@ -3,7 +3,7 @@ import datetime
 from flask import render_template, redirect, url_for
 from flask_login import login_required, current_user
 
-from appli.app import app, db
+from appli.app import app, db, required_permission_lvl
 from appli.forms import FormPageEdit
 from appli.models import Article
 
@@ -39,7 +39,7 @@ def contacts():
 
 
 @app.route('/contacts/adresse/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def contacts_modif_adresse():
     """Page de modification de l'adresse"""
     form = FormPageEdit()
@@ -61,7 +61,7 @@ def contacts_modif_adresse():
 
 
 @app.route('/contacts/telephone/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def contacts_modif_tel():
     """Page de modification du numéro de téléphone"""
     form = FormPageEdit()
@@ -82,7 +82,7 @@ def contacts_modif_tel():
 
 
 @app.route('/contacts/email/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def contacts_modif_mail():
     """Page de modification de l'adresse mail"""
     form = FormPageEdit()
@@ -102,7 +102,7 @@ def contacts_modif_mail():
                            form=form, contenu=article.contenu)
 
 @app.route('/contacts/reseaux/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def contacts_modif_reseaux():
     """Page de modification des réseaux sociaux"""
     form = FormPageEdit()

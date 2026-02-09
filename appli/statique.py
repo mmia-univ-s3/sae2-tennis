@@ -3,12 +3,12 @@ import datetime
 from flask import render_template
 from flask_login import current_user
 
-from appli.app import db
+from appli.app import db, get_nom_role
 from appli.forms import FormPageEdit
 from appli.models import Article
 
 # pylint: disable=duplicate-code
-def page_statique(id_p, html, titre):
+def page_statique(id_p, html, titre, role):
     """Code de base pour une page statique"""
     form = FormPageEdit()
     article = Article.query.filter(
@@ -17,9 +17,9 @@ def page_statique(id_p, html, titre):
         article = Article("_" + id_p, "" ,"", datetime.date.today(), "pages")
         db.session.add(article)
         db.session.commit()
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.role_au_moins(role):
         if form.validate_on_submit():
             article.contenu = form.editor.data
             article.date = datetime.date.today()
             db.session.commit()
-    return render_template(html, title=titre, contenu=article.contenu, form=form)
+    return render_template(html, title=titre, contenu=article.contenu, form=form, role=get_nom_role(role), get_nom_role=get_nom_role, role_ok=current_user.role_au_moins(role))

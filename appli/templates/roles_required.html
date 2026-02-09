@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>Accès refusé</h1>
+<div class="alert alert-danger">
+    <p><b>L'utilisateur connecté n'a pas accès à cette page.</b></p>
+    <p>L'utilisateur actuellement connecté ({{ current_user.login }}) ne permet pas d'accéder à cette page. Vous disposez du rôle "{{ get_nom_role(current_user.role) }}," et vous devez au minimum avoir le rôle "{{ role }}." Contactez un·e administrateur·ice pour en savoir plus.</p>
+    <a href="{{ url_for('deconnexion') }}">Changer d'utilisateur</a> - <a href="{{ url_for('index') }}">Retourner à l'accueil</a>
+</div>
+{% endblock %}

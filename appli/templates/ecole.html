@@ -2,7 +2,7 @@
 
 {% block main %}
     <h1>École de Tennis</h1>
-    {% if current_user.is_authenticated %}
+    {% if current_user.is_authenticated and role_ok %}
         <form action="{{ url_for('ecole') }}" method="post" class="form-horizontal mb-3">
             {{ form.hidden_tag() }}
             {% include "editor.html" %}
@@ -13,6 +13,12 @@
             </div>
         </form>
     {% else %}
+        {% if current_user.is_authenticated %}
+            <div class="alert alert-warning">
+                <b>Accès en lecture seule.</b> L'utilisateur connecté ({{ current_user.login }}, rôle "{{ get_nom_role(current_user.role) }}") ne permet pas de modifier cette page. Le rôle "{{ role }}" permet de modifier la page. Le contenu de la page est affiché ci-dessous.
+                (<a href="{{ url_for('deconnexion') }}">Changer d'utilisateur</a>)
+            </div>
+        {% endif %}
         {{ contenu|safe }}
     {% endif %}
 {% endblock %}

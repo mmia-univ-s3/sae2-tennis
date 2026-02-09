@@ -4,7 +4,7 @@ from hashlib import sha256
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, current_user
 
-from appli.app import app, db
+from appli.app import app, db, required_permission_lvl, get_nom_role
 from appli.forms import FormConfirm, FormLogin, FormRegister
 from appli.models import Utilisateur
 
@@ -25,15 +25,15 @@ def connexion():
 
 
 @app.route('/utilisateurs/')
-@login_required
+@required_permission_lvl("administrateur")
 def utilisateurs():
     """Page de gestion des utilisateurs"""
     return render_template('utilisateurs.html', title="Gestion des utilisateurs",
-                           users=Utilisateur.query.all())
+                           users=Utilisateur.query.all(), get_nom_role=get_nom_role)
 
 
 @app.route('/utilisateurs/create/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def utilisateurs_create():
     """Formulaire de création d'un administrateur"""
     form = FormRegister()
@@ -47,7 +47,7 @@ def utilisateurs_create():
 
 
 @app.route('/utilisateurs/<login>/reset/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def utilisateurs_reset(login: str):
     """Page de réinitialisation de mot de passe d'un administrateur"""
     user = Utilisateur.query.get(login)
@@ -65,7 +65,7 @@ def utilisateurs_reset(login: str):
 
 
 @app.route('/utilisateurs/<login>/delete/', methods=("GET", "POST",))
-@login_required
+@required_permission_lvl("administrateur")
 def utilisateurs_delete(login: str):
     """Formulaire de suppression d'un administrateur"""
     if login == current_user.login:
