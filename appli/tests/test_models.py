@@ -5,8 +5,8 @@ from appli.models import Article, CategorieTarif, ChampionnatEquipe, Championnat
     Classer, Division, Equipe, Histoire, Joueur, Partenaire, Participer, Tarif, Utilisateur
 
 def test_models_utilisateur():
-    var = Utilisateur("login", "password")
-    assert str(var) == "<Utilisateur(login) password>"
+    var = Utilisateur("login", "password", "ecrivain")
+    assert str(var) == "<Utilisateur(login) ecrivain(0) password>"
 
 def test_models_article():
     var = Article("titre", "","contenu", datetime.date(1969, 1, 20), "type")
@@ -62,7 +62,7 @@ def test_models_joueur():
     assert str(var) == repr(var) == "<Joueur(None) nom prenom>"
 
 def test_models_partenaires():
-    var = Partenaire("nom", "logo", "https://example.com")
+    var = Partenaire("nom", "logo", "https://example.com", True)
     assert str(var) == repr(var) == "<Partenaire(None) nom>"
 
 def test_models_tarif():

@@ -8,7 +8,7 @@
               class="form-horizontal mb-3" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             {% if article.image != "" and article.image != None %}
-                <article><img src="{{ "/static/upload/" + article.image }}" alt="{{ article.titre }}"> </article>
+                <article><img src="{{ "/static/upload/" + article.image.nom_fichier }}" alt="{{ article.titre }}" width="{{ article.image.largeur }}"> </article>
             {% endif %}
             <div class="form-group mb-3">
                 <label for="image" class="col-sm-2 control-label">{{ form.image.label }}</label>
@@ -29,7 +29,7 @@
         </article>
     {% else %}
         {% if article.image != "" and article.image != None %}
-            <article><img src="{{ "/static/upload/" + article.image }}" alt="{{ article.titre }}"> </article>
+            <article><img src="{{ "/static/upload/" + article.image.nom_fichier }}" alt="{{ article.titre }}" width="{{ article.image.largeur }}"> </article>
         {% endif %}
         <article>{{ article.contenu|safe }}</article>
     {% endif %}

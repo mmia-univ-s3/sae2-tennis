@@ -12,6 +12,12 @@
             </div>
         </div>
         <div class="form-group mb-3">
+            <label for="role" class="col-sm-2 control-label">{{ form.role.label }}</label>
+            <div class="col-sm-10">
+                {{ form.role(class_="form-select") }}
+            </div>
+        </div>
+        <div class="form-group mb-3">
             <label for="password" class="col-sm-2 control-label">{{ form.password.label }}</label>
             <div class="col-sm-10">
                 {{ form.password(size=50, class_="form-control") }}
@@ -34,4 +40,111 @@
     <div class="mt-2">
         <a href="{{ url_for('utilisateurs') }}">Retour</a>
     </div>
+
+    <hr>
+    <h2>Récapitulatif des permissions</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Écrivain·e</th>
+                <th>Éditeur·ice</th>
+                <th>Publicateur·ice</th>
+                <th>Administrateur·ice</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Articles du club</th>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Histoire du club</th>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Management</th>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>École de Tennis</th>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Autres sports sur le stade</th>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Documents administratifs</th>
+                <td></td>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Calendriers et résultats</th>
+                <td></td>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Palmarès</th>
+                <td></td>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Tournois internes</th>
+                <td></td>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Tarifications</th>
+                <td></td>
+                <td></td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Partenaires</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Contacts</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>✓</td>
+            </tr>
+            <tr>
+                <th>Gestion des utilisateurs</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>✓</td>
+            </tr>
+        </tbody>
+    </table>
 {% endblock %}

@@ -10,9 +10,8 @@
                 <div style="display: flex; align-items: center">
                     <div>
                         {{ user.login }}
-                        {% if current_user.login == user.login %}
-                            <b>(vous)</b>
-                        {% endif %}
+                        ({% if current_user.login == user.login %}<b>vous</b>,
+                        {% endif %}{{ get_nom_role(user.role) }})
                     </div>
                 </div>
                 <div class="btn-group">

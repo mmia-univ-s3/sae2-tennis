@@ -51,6 +51,12 @@ class FormLogin(FlaskForm):
 class FormRegister(FlaskForm):
     """Formulaire de création d'un utilisateur"""
     login = StringField('Identifiant', validators=[DataRequired()])
+    role = SelectField('Rôle', validators=[DataRequired()], choices=[
+        ("ecrivain", "Écrivain·ice"),
+        ("editeur", "Éditeur·ice"),
+        ("publicateur", "Publicateur·ice"),
+        ("editeur", "Administrateur·ice")
+    ])
     password = PasswordField('Mot de passe', validators=[DataRequired()])
     repeat_password = PasswordField('Répétez le mot de passe', validators=[DataRequired()])
     next = HiddenField()
@@ -64,7 +70,7 @@ class FormRegister(FlaskForm):
         """
         m = sha256()
         m.update(self.password.data.encode())
-        user = Utilisateur(self.login.data, m.hexdigest())
+        user = Utilisateur(self.login.data, m.hexdigest(), self.role.data)
         if (self.password.data == self.repeat_password.data and len(
                 self.password.data) >= 8 and len(self.login.data) >= 5):
             db.session.add(user)
@@ -82,6 +88,9 @@ class FormPartenaireAdd(FlaskForm):
                          "Merci de n'envoyer que des fichiers JPG ou PNG.")])
     lien = StringField('Lien vers le partenaire', validators=[DataRequired()])
     next = HiddenField()
+    important = RadioField('Type', choices=[(True, 'Premium'),
+                                         (False, 'Normal')],
+                        coerce=str)
 
     def confirm(self, filename):
         """
@@ -90,7 +99,7 @@ class FormPartenaireAdd(FlaskForm):
         Returns:
            Partenaire:  Le partenaire créé
         """
-        partenaire = Partenaire(self.nom.data, self.lien.data, filename)
+        partenaire = Partenaire(self.nom.data, self.lien.data, filename, self.important.data=='True')
         db.session.add(partenaire)
         db.session.commit()
         return partenaire

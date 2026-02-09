@@ -51,7 +51,8 @@ def _importer_partenaires(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            partenaire = Partenaire(nom=ligne["nomP"], lien=ligne["lien"], nom_fichier_image=ligne["nom_fichier"])
+            partenaire = Partenaire(nom=ligne["nomP"], lien=ligne["lien"],
+                                    important=ligne["important"]=="True", nom_fichier_image=ligne["nom_fichier"])
             db.session.add(partenaire)
     db.session.commit()
 
@@ -61,7 +62,7 @@ def _importer_users(filename):
     with open(filename, newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
-            utilisateur = Utilisateur(login=ligne["idU"], mdp=ligne["mdp"])
+            utilisateur = Utilisateur(login=ligne["idU"], mdp=ligne["mdp"], role=ligne["role"])
             db.session.add(utilisateur)
     db.session.commit()
 
@@ -193,8 +194,8 @@ def _exporter_articles(filepath):
                                "contenu" : article.contenu,
                                "nbClics" : str(article.clics),
                                "dateArt" : article.date_publi.strftime("%Y-%m-%d"),
-                               "typeArt" : article.type_article,
-                               "nom_fichier" : article.nom_fichier})
+                               "nom_fichier" : article.nom_fichier,
+                               "typeArt" : article.type_article})
 
 # pylint: disable=protected-access
 def _exporter_trivias(filepath):
@@ -215,14 +216,15 @@ def _exporter_partenaires(filepath):
     """Permet d'exporter les partenaires du club"""
     liste_partenaires = Partenaire.query.all()
     with open(f"{filepath}/partenaire.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idP", "nomP", "lien", "nom_fichier"]
+        colonnes = ["idP", "nomP", "lien","nom_fichier","important"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for partenaire in liste_partenaires:
             ecriture.writerow({"idP" : str(partenaire.id),
                                "nomP" : partenaire.nom,
                                "lien" : partenaire.lien,
-                               "nom_fichier" : partenaire.nom_fichier})
+                               "nom_fichier" : partenaire.nom_fichier,
+                               "important" : str(partenaire.important)})
 
 # pylint: disable=protected-access
 def _exporter_users(filepath):
