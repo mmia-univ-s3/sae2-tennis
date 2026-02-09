@@ -27,7 +27,7 @@ def _importer_articles(filename):
 def _importer_images(filename):
     """Permet d'importer les images"""
     with open(filename, newline="", encoding="utf-8") as csvfile:
-        lecture:csv.DictReader = csv.DictReader(csvfile, delimiter=';')
+        lecture :csv.DictReader = csv.DictReader(csvfile, delimiter=';')
         for ligne in lecture:
             image = Image(nom_image=ligne["nom_fichier"], largeur=ligne["largeur"],
                           description = ligne["description"])
@@ -218,7 +218,7 @@ def _exporter_partenaires(filepath):
     """Permet d'exporter les partenaires du club"""
     liste_partenaires = Partenaire.query.all()
     with open(f"{filepath}/partenaire.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idP", "nomP", "lien","nom_fichier","important"]
+        colonnes = ["idP", "nomP", "lien", "nom_fichier", "important"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for partenaire in liste_partenaires:
