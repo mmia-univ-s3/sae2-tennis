@@ -88,6 +88,9 @@ class FormPartenaireAdd(FlaskForm):
                          "Merci de n'envoyer que des fichiers JPG ou PNG.")])
     lien = StringField('Lien vers le partenaire', validators=[DataRequired()])
     next = HiddenField()
+    important = RadioField('Type', choices=[(True, 'Premium'),
+                                         (False, 'Normal')],
+                        coerce=str)
 
     def confirm(self, filename):
         """
@@ -96,7 +99,8 @@ class FormPartenaireAdd(FlaskForm):
         Returns:
            Partenaire:  Le partenaire créé
         """
-        partenaire = Partenaire(self.nom.data, filename, self.lien.data)
+        partenaire = Partenaire(self.nom.data, filename, self.lien.data,
+                                self.important.data=='True')
         db.session.add(partenaire)
         db.session.commit()
         return partenaire

@@ -62,7 +62,7 @@ def test_models_joueur():
     assert str(var) == repr(var) == "<Joueur(None) nom prenom>"
 
 def test_models_partenaires():
-    var = Partenaire("nom", "logo", "https://example.com")
+    var = Partenaire("nom", "logo", "https://example.com", True)
     assert str(var) == repr(var) == "<Partenaire(None) nom>"
 
 def test_models_tarif():

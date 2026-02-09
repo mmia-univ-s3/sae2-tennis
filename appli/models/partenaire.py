@@ -8,11 +8,13 @@ class Partenaire(db.Model):
     nom: str = db.Column("nomP", db.Text)
     logo: str = db.Column("logo", db.Text)
     lien: str = db.Column("lien", db.Text)
+    important: bool = db.Column("important", db.Boolean)
 
-    def __init__(self, nom: str, logo: str, lien: str):
+    def __init__(self, nom: str, logo: str, lien: str, important: bool):
         self.nom = nom
         self.logo = logo
         self.lien = lien
+        self.important = important
 
     def __str__(self):
         return f"<Partenaire({self.id}) {self.nom}>"
