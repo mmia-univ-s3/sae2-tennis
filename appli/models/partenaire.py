@@ -7,7 +7,7 @@ class Partenaire(db.Model):
     id: int = db.Column("idP", db.Integer, primary_key = True)
     nom: str = db.Column("nomP", db.Text)
     lien: str = db.Column("lien", db.Text)
-    nom_fichier: str = db.Column("nom_fichier", db.Text, db.ForeignKey("IMAGE.nom_fichier"))
+    nom_fichier: str|None = db.Column("nom_fichier", db.Text, db.ForeignKey("IMAGE.nom_fichier"))
     important: bool = db.Column("important", db.Boolean)
 
     logo = db.relationship("Image")

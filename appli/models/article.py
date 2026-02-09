@@ -11,7 +11,7 @@ class Article(db.Model):
     clics: int = db.Column("nbClics", db.Integer)
     date_publi: date = db.Column("dateArt", db.Date)
     type_article: str = db.Column("typeArt", db.Text)
-    nom_fichier: str = db.Column("nom_fichier", db.Text, db.ForeignKey("IMAGE.nom_fichier"))
+    nom_fichier: str|None = db.Column("nom_fichier", db.Text, db.ForeignKey("IMAGE.nom_fichier"))
 
     image = db.relationship("Image")
 
