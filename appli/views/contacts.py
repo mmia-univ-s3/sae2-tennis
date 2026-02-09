@@ -8,6 +8,9 @@ from appli.forms import FormPageEdit
 from appli.models import Article
 
 def get_contacts_data():
+    """
+    Renvoie les données nécessaires à l'affichage de la page de contact.
+    """
     adresse = Article.query.filter(
         Article.titre == "_adresse" and Article.type_article == "pages").first()
     if adresse is None:
