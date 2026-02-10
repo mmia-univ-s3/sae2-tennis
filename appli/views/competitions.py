@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 
 from appli.app import app, db, required_permission_lvl
 from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer,\
-Equipe, Participer, ChampionnatInterne, Jouer, Inscrire
+Equipe, Participer, ChampionnatInterne, Jouer
 from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser,\
 FormParticiper, FormAffronter, FormInternes, FormConfirm
 
@@ -460,14 +460,21 @@ def internes_add():
     form.joueur2.choices = choix
 
     if form.validate_on_submit():
-        match = form.creation_interne()
-        if match is not None:
+        if len(form.points1.data) == len(form.points2.data) and form.joueur1 != form.joueur2:
+            champ = ChampionnatInterne(form.date.data, form.titre.data)
+            db.session.add(champ)
+            db.session.commit()
+            match = Jouer(champ.id, form.joueur1.data, form.joueur2.data, form.sets.data,
+                        form.points1.data, form.points2.data)
+            db.session.add(match)
+            db.session.commit()
             return redirect(url_for("internes"))
         return render_template("internes_add.html", title="Ajout d'un match",
                                form=form, error=True)
     return render_template("internes_add.html", title="Ajout d'un match",
                            form=form, error=False)
 
+# pylint: disable=protected-access
 @app.route('/competitions/tournois-internes/<id_match>/update/', methods=("GET", "POST"))
 @required_permission_lvl("publicateur")
 def internes_update(id_match):
@@ -490,7 +497,7 @@ def internes_update(id_match):
     form.joueur2.choices = choix
 
     if form.validate_on_submit():
-        if match is not None:
+        if len(form.points1.data) == len(form.points2.data) and form.joueur1 != form.joueur2:
             championnat.date_championnat = form.date.data
             championnat.titre = form.titre.data
             match.sets = form.sets.data
@@ -521,4 +528,3 @@ def internes_delete(id_match):
         return redirect(url_for('internes'))
     return render_template("internes_delete.html", title="Suppression du match",
                            form=form, id_match=id_match)
-

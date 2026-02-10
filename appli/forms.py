@@ -8,7 +8,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, RadioField, BooleanField, FloatField, SelectField, StringField, \
     HiddenField, DateField
 from wtforms.fields.simple import PasswordField
-from wtforms.validators import DataRequired, NumberRange, Optional
+from wtforms.validators import DataRequired, Optional
 
 from appli.models.article import Article
 from appli.models.partenaire import Partenaire
@@ -226,25 +226,6 @@ class FormInternes(FlaskForm):
     points1 = StringField("Points du joueur 1", validators=[DataRequired()])
     points2 = StringField("Points du joueur 2", validators=[DataRequired()])
     joueur2 = SelectField("Joueur 2",  validators=[DataRequired()], coerce=int, choices=[])
-
-
-    def creation_interne(self):
-        """
-        Créer un match en interne
-        :return:
-            ChampionnatInterne: championnat créé à partir du form
-            None: si les deux joueurs sont les mêmes
-        """
-        if self.joueur1.data != self.joueur2.data:
-            champ = ChampionnatInterne(self.date.data, self.titre.data)
-            db.session.add(champ)
-            db.session.commit()
-            match = Jouer(champ.id, self.joueur1.data, self.joueur2.data, self.sets.data,
-                          self.points1.data, self.points2.data)
-            db.session.add(match)
-            db.session.commit()
-            return champ
-        return None
 
 class FormChampionnatIndividuel(FlaskForm):
     """Formulaire de création et de mise à jour d'un championnat individuel."""

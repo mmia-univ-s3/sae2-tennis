@@ -1,8 +1,13 @@
+from sqlalchemy import CheckConstraint
 from appli.app import db
 
 class Jouer(db.Model):
     """Match entre 2 joueurs dans un championnat interne"""
     __tablename__ = "JOUER"
+
+    __table_args__ = (
+        CheckConstraint("idJ1 != idJ2"),
+    )
 
     _id_championnat: int = db.Column("idCha", db.Integer, db.ForeignKey("CHAMP_INTER.idCha"),
                              primary_key=True)
@@ -41,20 +46,28 @@ class Jouer(db.Model):
             return self.joueur1
         if sets2 > sets1:
             return self.joueur2
-        else:
-            return None
-    
+
     def sets_gagnees_j1(self):
+        """Indique le nombre de sets gagnés par le joueur 1
+
+        Returns:
+            int: Le nombre de sets gagnés par le joueur 1
+        """
         cpt = 0
-        for i in range(len(self.score1)):
-            if int(self.score1[i]) > int(self.score2[i]):
+        for i, set1 in enumerate(self.score1):
+            if int(set1) > int(self.score2[i]):
                 cpt += 1
         return cpt
 
     def sets_gagnees_j2(self):
+        """Indique le nombre de sets gagnés par le joueur 2
+
+        Returns:
+            int: Le nombre de sets gagnés par le joueur 2
+        """
         cpt = 0
-        for i in range(len(self.score2)):
-            if int(self.score2[i]) > int(self.score1[i]):
+        for i, set2 in enumerate(self.score2):
+            if int(set2) > int(self.score1[i]):
                 cpt += 1
         return cpt
 
