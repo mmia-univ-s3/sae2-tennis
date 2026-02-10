@@ -15,7 +15,7 @@ def test_article_create(client, testapp):
             "titre": "article89",
             "editor":"blabla",
             "type_a":"club",
-            "nom_fichier":"logo.png",
+            "nom_fichier":"988d47be6c9724edfb93f5760259712c217e004d2d03e7b3.png",
             "largeur":123,
             "description":""
         }, follow_redirects=True)
@@ -41,7 +41,7 @@ def test_article_maj(client, testapp):
             "titre": "Stephane a perdu",
             "editor":"blabla",
             "type_a":"club",
-            "nom_fichier":"logo.png",
+            "nom_fichier":"988d47be6c9724edfb93f5760259712c217e004d2d03e7b3.png",
             "largeur":113,
             "description":"d"
         }, follow_redirects=True)
