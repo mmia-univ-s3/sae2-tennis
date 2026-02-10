@@ -3,9 +3,9 @@
 {% block main %}
     <div class="row">
         <div class="col">
-            <h1>
-                <center>News du Stade Poitevin Tennis</center>
-            </h1>
+            <header class="mb-3">
+                <img src="{{ url_for('static', filename='banner.png') }}" alt="Stade Poitevin Tennis" style="width: 100%;">
+            </header>
             <p>
                 <a href="{{ url_for('article_view', id_article = article.id) }}">{{ article.titre }}</a>
             </p>
@@ -16,7 +16,7 @@
                 {% if championnats_futur == [] %}
                     <p> Il n'y a pas de championnat prévu pour le moment.</p>
                 {% endif %}
-                {% for i in range(10 if championnats_futur|length >= 10 else
+                {% for i in range(3 if championnats_futur|length >= 3 else
                 championnats_futur|length) %}
                     {% if championnats_futur[i] != None %}
                         <a class="list-group-item list-group-item-action"
@@ -31,7 +31,7 @@
 
             <h3>Championnats passés</h3>
             <div class="list-group list-group-flush">
-                {% for i in range(10 if championnats_passes|length >= 10 else
+                {% for i in range(3 if championnats_passes|length >= 3 else
                 championnats_passes|length) %}
                     <a class="list-group-item list-group-item-action"
                        href="{{ url_for('tournoi',
