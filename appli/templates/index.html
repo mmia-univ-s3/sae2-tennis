@@ -141,4 +141,16 @@
             {{ reseaux|safe }}
         </div>
     </div>
+    <div class="row mb-3">
+        {% for partenaire in partenaires %}
+            <div class="col">
+                <a href="{{ partenaire.lien }}">
+                    {% if partenaire.logo != "" and partenaire.logo != None %}
+                        <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="128"
+                                     alt="{{ partenaire.nom }}"></center>
+                    {% endif %}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
