@@ -1,22 +1,43 @@
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from flask import render_template, redirect, url_for
 from sqlalchemy.exc import IntegrityError
 
 from appli.app import app, db, required_permission_lvl
 from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer,\
-Equipe, Participer, ChampionnatInterne, Jouer
+Equipe, Participer, ChampionnatInterne, Jouer, Championnat
 from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser,\
 FormParticiper, FormAffronter, FormInternes, FormConfirm
 
 @app.route('/competitions/calendrier/')
 def calendrier():
     """Permet d'afficher la page concernant le calendrier des tournois"""
+    premiere_date = date.today() - timedelta(days=(int(datetime.today().strftime("%w")) - 1) % 7)
+    derniere_date = date.today() + timedelta(days=(-int(datetime.today().strftime("%w"))) % 7 + 21)
+    list_comp_calendrier = Championnat.query.filter(Championnat.date_championnat <= derniere_date,
+                                                    Championnat.date_championnat >= premiere_date)\
+                                                        .all()
+    date_jour = premiere_date
+    list_dates = []
+    dico_calendrier = {}
+    num_jour = 0
+    num_semaine = -1
+    while date_jour <= derniere_date:
+        if num_jour == 0:
+            list_dates.append([])
+            num_semaine += 1
+        list_dates[num_semaine].append(date_jour)
+        dico_calendrier[date_jour] = []
+        num_jour = (num_jour + 1) % 7
+        date_jour = date_jour + timedelta(days=1)
+    for comp in list_comp_calendrier:
+        dico_calendrier[comp.date_championnat].append(comp)
     list_comp_indiv = ChampionnatIndividuel.query.order_by(\
         ChampionnatIndividuel.date_championnat.desc()).all()
     list_comp_equipe = ChampionnatEquipe.query.order_by(\
         ChampionnatEquipe.date_championnat.desc()).all()
     return render_template('calendrier.html', title="Calendrier - Compétitions",
-                           comp_indiv=list_comp_indiv, comp_equipe=list_comp_equipe)
+                           comp_indiv=list_comp_indiv, comp_equipe=list_comp_equipe,
+                           calendrier=dico_calendrier, dates=list_dates)
 
 
 @app.route('/competitions/tournoi/<type_tournoi>/<int:id_championnat>/delete/',
@@ -305,11 +326,11 @@ def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
         id_equipe (int): L'identifiant de l'équipe.
         date_match (str): La date du match.
     """
-    date = datetime.strptime(date_match, "%d-%m-%Y").date()
-    affronter = Affronter.query.get((id_championnat, id_equipe, date))
+    date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
+    affronter = Affronter.query.get((id_championnat, id_equipe, date_str))
     form = FormAffronter()
     form.adversaire.data = affronter.adversaire
-    form.date.data = date
+    form.date.data = date_str
     form.resultat.data = affronter.resultat
     form.score.data = affronter.score
     form.domicile.data = str(affronter.domicile)
@@ -334,9 +355,9 @@ def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
         date_match (str): La date du match.
     """
     try:
-        date = datetime.strptime(date_match, "%d-%m-%Y").date()
-        affronter = Affronter.query.get((id_championnat, id_equipe, date))
-        form = FormAffronter(date=date, score=affronter.score, domicile=str(affronter.domicile),
+        date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
+        affronter = Affronter.query.get((id_championnat, id_equipe, date_str))
+        form = FormAffronter(date=date_str, score=affronter.score, domicile=str(affronter.domicile),
                              resultat=affronter.resultat)
         form.adversaire.data = affronter.adversaire
         if form.validate_on_submit():

@@ -3,6 +3,47 @@
 {% block main %}
     <body>
         <h1>Calendrier des compétitions</h1>
+        <table class="table table-bordered border-dark">
+            <tbody>
+                <tr>
+                    <th class="bg-warning-subtle" width=185px><center>Lundi</center></th>
+                    <th class="bg-warning-subtle" width=185px><center>Mardi</center></th>
+                    <th class="bg-warning-subtle" width=185px><center>Mercredi</center></th>
+                    <th class="bg-warning-subtle" width=185px><center>Jeudi</center></th>
+                    <th class="bg-warning-subtle" width=185px><center>Vendredi</center></th>
+                    <th class="bg-warning-subtle" width=185px><center>Samedi</center></th>
+                    <th class="bg-warning-subtle" width=185px><center>Dimanche</center></th>
+                </tr>
+                {% for semaine in dates %}
+                    <tr>
+                        {% for date in semaine %}
+                            <td class="bg-success-subtle"><center>{{ date.strftime('%d/%m/%y') }}<br>
+                                {% for championnat in calendrier[date] %}
+                                    {% if championnat.type_championnat == "individuel" %}
+                                        <a href="{{ url_for('tournoi', type_tournoi='individuel', id_championnat=championnat.id) }}" class="text-danger">{{ championnat.titre }}</a>
+                                    {% elif championnat.type_championnat == "equipe" %}
+                                        <a href="{{ url_for('tournoi', type_tournoi='equipe', id_championnat=championnat.id) }}" class="text-primary">{{ championnat.titre }}</a>
+                                    {% else %}
+                                        <a href="{{ url_for('internes') }}" class="text-success">{{ championnat.titre }}</a>
+                                    {% endif %}
+                                    <br>
+                                {% endfor %}
+                            </center></td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td class="bg-info-subtle" colspan="7"><center>Légende</center></td>
+                </tr>
+                <tr>
+                    <td class="bg-info-subtle" colspan="2"><center><p class="text-danger">Compétitions individuelles</p></center></td>
+                    <td class="bg-info-subtle" colspan="3"><center><p class="text-primary">Compétitions en équipe</p></center></td>
+                    <td class="bg-info-subtle" colspan="2"><center><p class="text-success">Compétitions internes</p></center></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h1>Liste des compétitions</h1>
         <h2>Compétitions individuelles</h2>
             <ul>
                 {% for championnat in comp_indiv %}
