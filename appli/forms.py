@@ -161,7 +161,7 @@ class FormArticleAdd(FlaskForm):
                                FileAllowed(
                                    ['jpg', 'png'],
                                    "Merci de n'envoyer que des fichiers JPG ou PNG.")])
-    largeur = IntegerField("Largeur de l'image")
+    largeur = IntegerField("Largeur de l'image", default=200, validators=[DataRequired()])
     description = StringField("Description de l'image au cas où l'image ne s'affiche pas")
     editor = StringField('Contenu')
     type_a = RadioField('Type', choices=[('club', 'Mettre en avant'),
@@ -187,10 +187,10 @@ class FormArticleAdd(FlaskForm):
         Returns:
             Article: article créé
         """
-        image = Image(filename, largeur, description)
         article = Article(self.titre.data, self.editor.data, datetime.date.today(),
                           self.type_a.data, filename)
         if filename != "" and filename is not None:
+            image = Image(filename, largeur or 200, description)
             db.session.add(image)
         db.session.add(article)
         db.session.commit()
@@ -202,7 +202,7 @@ class FormArticleUpdate(FlaskForm):
         FileAllowed(
             ['jpg', 'png'],
             "Merci de n'envoyer que des fichiers JPG ou PNG.")])
-    largeur = IntegerField("Largeur de l'image", validators=[DataRequired()])
+    largeur = IntegerField("Largeur de l'image", default=200, validators=[DataRequired()])
     description = StringField("Description de l'image au cas où l'image ne s'affiche pas")
     editor = StringField("Contenu de l'article")
     next = HiddenField()
