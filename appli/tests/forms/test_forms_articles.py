@@ -43,7 +43,7 @@ def test_article_maj(client, testapp):
             "type_a":"club",
             "nom_fichier":"logo.png",
             "largeur":113,
-            "description":""
+            "description":"d"
         }, follow_redirects=True)
 
         assert response.status_code == 200
