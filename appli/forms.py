@@ -190,8 +190,9 @@ class FormArticleAdd(FlaskForm):
         image = Image(filename, largeur, description)
         article = Article(self.titre.data, self.editor.data, datetime.date.today(),
                           self.type_a.data, filename)
-        db.session.add(image)
-        db.session.add(article)
+        if filename != "" and filename is not None:
+            db.session.add(image)
+            db.session.add(article)
         db.session.commit()
         return article
 
