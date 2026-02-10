@@ -30,7 +30,8 @@ def article_view(id_article):
                 filename = form.filename()
                 image = form.image.data
                 image.save(os.path.join("appli", "static", "upload", filename))
-                if ancienne_image is not None and ancienne_image.nom_fichier != "" and os.path.exists(
+                if ancienne_image is not None and ancienne_image.nom_fichier != ""\
+                and os.path.exists(
                         os.path.join("appli", "static", "upload", ancienne_image.nom_fichier)):
                     os.remove(os.path.join("appli", "static", "upload", ancienne_image.nom_fichier))
             form.update_article(article, filename, form.largeur.data, form.description.data)

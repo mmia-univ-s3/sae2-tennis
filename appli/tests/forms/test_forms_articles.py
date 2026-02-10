@@ -15,7 +15,9 @@ def test_article_create(client, testapp):
             "titre": "article89",
             "editor":"blabla",
             "type_a":"club",
-            "nom_fichier":"logo.png"
+            "nom_fichier":"logo.png",
+            "largeur":123,
+            "description":""
         }, follow_redirects=True)
 
         assert response.status_code == 200
@@ -39,7 +41,9 @@ def test_article_maj(client, testapp):
             "titre": "Stephane a perdu",
             "editor":"blabla",
             "type_a":"club",
-            "nom_fichier":"logo.png"
+            "nom_fichier":"logo.png",
+            "largeur":123,
+            "description":""
         }, follow_redirects=True)
 
         assert response.status_code == 200
