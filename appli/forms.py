@@ -192,7 +192,7 @@ class FormArticleAdd(FlaskForm):
                           self.type_a.data, filename)
         if filename != "" and filename is not None:
             db.session.add(image)
-            db.session.add(article)
+        db.session.add(article)
         db.session.commit()
         return article
 
