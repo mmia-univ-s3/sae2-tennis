@@ -46,6 +46,7 @@ class Jouer(db.Model):
             return self.joueur1
         if sets2 > sets1:
             return self.joueur2
+        return None
 
     def sets_gagnees_j1(self):
         """Indique le nombre de sets gagnés par le joueur 1

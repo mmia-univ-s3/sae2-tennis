@@ -14,7 +14,6 @@ from appli.models.article import Article
 from appli.models.partenaire import Partenaire
 from appli.models.utilisateur import Utilisateur
 from .app import db
-from .models import ChampionnatInterne, Jouer
 
 
 class FormConfirm(FlaskForm):
