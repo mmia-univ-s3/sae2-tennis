@@ -5,16 +5,23 @@ Nouveau Modèle:
 - Les Tarifs et Catégorie de Tarifs ont maintenant une notion d`ordre permettant de changer leur ordre d`affichage sur la page des tarifs
 -> La valeur est un entier, dont le couple (ordre, cat_parent) ou bien (ordre, cat), dépendamment du type d`objet, est unique
 - Une catégorie de Tarifs peut maintenant avoir des tarifs et des sous-catégories, ces dernières ne peuvent avoir que des tarifs
-
+- Séparation des Championnats Internes et Individuels, et ajout des classes Jouer et Inscrire
+-> Inscrire associe un Joueur et un ChampionnatInterne, indique un joueur inscrit au tournoi
+-> Jouer associe 2 Joueurs et un ChampionnatInterne, indique un match entre 2 joueurs durant le tournoi
+--> Jouer a pour attribut le nombre de sets gagnants, et un score par joueur sous la forme d'une suite de chiffres en str, chaque chiffre représentant le nombre de jeux gagnés durant un set
+---> ex: score1 = "77403" -> Le joueur 1 a gagné 7 jeux durant le premier set, 7 durant le 2e, 4 durant le 4e etc.
+--> Jouer contient des méthodes indiquant le nombre de sets gagnées par joueur, et indique qui a gagné le match
 
 - Tournois internes -> a revoir
-[•] Points -> score 
+[x] Points -> score 
 [•] Classement a faire 
-[•] Preparationlisye joueur 
-[•] Ajout match 
+[•] Préparation liste joueur 
+[x] Ajout match 
 [•] Possibilite score
 [•] Faire classement selon score 
-[•] Difference match gagné, set gagné, jeu gagné 
+[x] Difference match gagné, set gagné, jeu gagné
+[•] Faire une page listant les différents Tournois
+[•] Quand on accède aux tournois, on a accès à la liste des matchs et des joueurs
 
 - Histoire
 [•]classement indiv -> demi-final, 1seul finaliste

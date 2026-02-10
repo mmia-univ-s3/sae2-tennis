@@ -2,6 +2,15 @@
 
 {% block main %}
     <h1> Modification d'un match en interne</h1>
+
+    {% if error %}
+        <div class="alert alert-danger">
+            Erreur:<br>
+            -Soit les joueurs sont les mêmes. Veuillez vérifier les informations.<br>
+            -Soit les données rentrées pour les 2 scores ne sont pas de même taille<br>
+        </div>
+    {% endif %}
+
     <form action="{{ url_for('internes_update', id_match=id_match) }}" method="POST">
         {{  form.hidden_tag() }}
         <div class="form-group mb-3">
@@ -17,9 +26,9 @@
             </div>
         </div>
         <div class="form-group mb-3">
-            <label for="Serie" class="col-sm-2 control-label">{{ form.serie.label }}</label>
+            <label for="sets" class="col-sm-2 control-label">{{ form.sets.label }}</label>
             <div class="col-sm-10">
-                {{ form.serie(class_="form-control") }}
+                {{ form.sets(class_="form-control") }}
             </div>
         </div>
         <div class="form-group mb-3">
