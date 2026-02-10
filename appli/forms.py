@@ -225,11 +225,7 @@ class FormInternes(FlaskForm):
     """Formulaire pour ajouter et mettre à jour des tournois internes."""
     date = DateField("Date", validators=[DataRequired()])
     titre = StringField("Nom du championnat interne", validators=[DataRequired()])
-    sets = IntegerField("Sets gagnants",  validators=[DataRequired()])
-    joueur1 = SelectField("Joueur 1",  validators=[DataRequired()], coerce=int, choices=[])
-    points1 = StringField("Points du joueur 1", validators=[DataRequired()])
-    points2 = StringField("Points du joueur 2", validators=[DataRequired()])
-    joueur2 = SelectField("Joueur 2",  validators=[DataRequired()], coerce=int, choices=[])
+    next = HiddenField()
 
 class FormChampionnatIndividuel(FlaskForm):
     """Formulaire de création et de mise à jour d'un championnat individuel."""

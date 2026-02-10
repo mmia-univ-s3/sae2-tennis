@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <form action="{{ url_for('interne_view', id_interne=interne.id) }}" method="post"
+          class="form-horizontal mb-3" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {% if current_user.is_authenticated %}
+            <div class="form-group mb-3">
+                <label for="titre" class="col-sm-10 control-label">{{ form.titre.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.titre(size=50, class_="form-control") }}
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="date" class="col-sm-10 control-label">{{ form.date.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.date(size=50, class_="form-control") }}
+                </div>
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="Sauvegarder" class="btn btn-success">
+                <a href="{{ url_for('interne_delete', id_interne=interne.id) }}"
+                   class="btn btn-danger">Supprimer</a>
+                <a href="{{ url_for('internes') }}" class="btn btn-secondary">Annuler</a>
+            </div>
+        {% else %}
+            <h1>Tournoi interne {{ interne.titre }}</h1>
+            <h3>Se déroule le {{ interne.date_championnat }}. </h3>
+
+        {% endif %}
+    </form>
+
+{% endblock %}
