@@ -22,7 +22,7 @@ def article_view(id_article):
     article = Article.query.get(id_article)
     ancienne_image = article.image
     form = FormArticleUpdate(largeur=article.image.largeur if article.image is not None else 200 ,
-                            description=article.image.description if article.image is not None else "")
+                    description=article.image.description if article.image is not None else "")
     # pylint: disable=duplicate-code
     if current_user.is_authenticated and current_user.role_au_moins("ecrivain"):
         if form.validate_on_submit():
