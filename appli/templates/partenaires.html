@@ -10,7 +10,7 @@
     <div class="row">
         {% for part in partenaires %}
             {% for partenaire in part %}
-            <div class="col-6 col-md-4">
+            <div class="col mb-3">
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('partenaire_delete', id_p=partenaire.id) }}">
                         {% if partenaire.important %}
@@ -28,7 +28,7 @@
                 {% else %}
                     <a href="{{ partenaire.lien }}">
                     {% if partenaire.logo != "" and partenaire.logo != None %}
-                    <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="200"
+                    <center><img src="{{ url_for('static', filename="upload/" + partenaire.logo.nom_fichier) }}" width="{% if partenaire.important %}300{% else %}150{% endif %}"
                          alt="{{ partenaire.nom }}"></center>
                     {% endif %}
                     </a>

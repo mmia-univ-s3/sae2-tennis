@@ -3,7 +3,7 @@ from datetime import date
 from flask import render_template
 
 from appli.app import app
-from appli.models import Article, Championnat
+from appli.models import Article, Championnat, Partenaire
 from appli.views.contacts import get_contacts_data  # pylint: disable=no-name-in-module
 
 
@@ -16,11 +16,14 @@ def index():
     article = liste_articles.first()
     adresse, tel, mail, reseaux = get_contacts_data()
     championnats = Championnat.query.filter(Championnat.date_championnat <= date.today()).all()
-    print(championnats)
     competitions = Championnat.query.filter(Championnat.date_championnat >= date.today()).all()
-    print(competitions)
+    parts_premium = []
+    for part in Partenaire.query.order_by(Partenaire.nom).all():
+        if part.important:
+            parts_premium.append(part)
 
     return render_template('index.html', title="", article=article,
                            articles=liste_articles, adresse=adresse.contenu, tel=tel.contenu,
                            mail=mail.contenu, reseaux=reseaux.contenu,
-                           championnats_passes=championnats, championnats_futur=competitions)
+                           championnats_passes=championnats, championnats_futur=competitions,
+                           partenaires=parts_premium)
