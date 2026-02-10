@@ -42,7 +42,7 @@ def test_article_maj(client, testapp):
             "editor":"blabla",
             "type_a":"club",
             "nom_fichier":"logo.png",
-            "largeur":123,
+            "largeur":113,
             "description":""
         }, follow_redirects=True)
 
