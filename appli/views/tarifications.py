@@ -28,7 +28,7 @@ def tarifications():
                            tarifs = dico_categories)
 
 @app.route('/formation/tarifications/<id_tarif>/monter/')
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_monter_tarif(id_tarif):
     """Monte un tarif"""
     tarif = Tarif.query.get(id_tarif)
@@ -54,7 +54,7 @@ def tarifications_monter_tarif(id_tarif):
     return redirect(url_for("tarifications"))
 
 @app.route('/formation/tarifications/<id_tarif>/descendre/')
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_descendre_tarif(id_tarif):
     """Descend un tarif"""
     tarif = Tarif.query.get(id_tarif)
@@ -80,7 +80,7 @@ def tarifications_descendre_tarif(id_tarif):
     return redirect(url_for("tarifications"))
 
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/monter/')
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_monter_souscategorie(id_cat):
     """Monte une sous-catégorie"""
     souscategorie = CategorieTarif.query.get(id_cat)
@@ -106,7 +106,7 @@ def tarifications_monter_souscategorie(id_cat):
     return redirect(url_for("tarifications"))
 
 @app.route('/formation/tarifications/categorie/<id_cat>/souscategorie/descendre/')
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_descendre_souscategorie(id_cat):
     """Descend une sous-catégorie"""
     souscategorie = CategorieTarif.query.get(id_cat)
@@ -132,7 +132,7 @@ def tarifications_descendre_souscategorie(id_cat):
     return redirect(url_for("tarifications"))
 
 @app.route('/formation/tarifications/categorie/<id_cat>/monter/')
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_monter_categorie(id_cat):
     """Monte une catégorie"""
     categorie = CategorieTarif.query.get(id_cat)
@@ -158,7 +158,7 @@ def tarifications_monter_categorie(id_cat):
     return redirect(url_for("tarifications"))
 
 @app.route('/formation/tarifications/categorie/<id_cat>/descendre/')
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_descendre_categorie(id_cat):
     """Descend une catégorie"""
     categorie = CategorieTarif.query.get(id_cat)
@@ -216,7 +216,7 @@ def tarifications_categorie_ajout():
                            form=form)
 
 @app.route('/formation/tarifications/ajout/sport', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_sport_ajout():
     """Page d'ajout d'un sport"""
     form = FormSportAdd()
@@ -230,7 +230,7 @@ def tarifications_sport_ajout():
     return  render_template('tarifications_sport_ajout.html', title="Ajout d'un sport", form=form)
 
 @app.route('/formation/tarifications/<id_sport>/delete/sport', methods=('GET', 'POST'))
-@login_required
+@required_permission_lvl("publicateur")
 def tarifications_sport_delete(id_sport):
     """Page de suppression d'un sport"""
     form = FormConfirm()
