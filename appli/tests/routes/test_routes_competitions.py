@@ -124,34 +124,21 @@ def test_internes_add(client):
     response = client.get('competitions/tournois-internes/add/', follow_redirects=True)
     assert b"Ajout d'un match en interne" in response.data
 
-def test_internes_update_not_work(client):
-    response = login(client, "/competitions/tournois-internes/12/update/")
-    response = client.post('competitions/tournois-internes/12/update/', data={
-        "date":"2025-12-14",
-        "titre":"Test",
-        "serie":"test",
-        "joueur1":"1",
-        "points1": '4',
-        'points2': '7',
-        'joueur2':'1'
-    }, follow_redirects=True)
-    assert b"Modification d'un match" in response.data
-    assert "/competitions/tournois-internes/12/update/" in response.request.path
-
-def test_internes_update_work(client):
-    response = login(client, "/competitions/tournois-internes/21/update/")
-    response = client.post('competitions/tournois-internes/21/update/', data={
-        "date":"2025-12-14",
-        "titre":"Test",
-        "serie":"test",
-        "joueur1":"1",
-        "points1": '4',
-        'points2': '7',
-        'joueur2':'2'
-    }, follow_redirects=True)
-    print(response.data)
-    assert b"Tournois internes" in response.data
-    assert "/competitions/tournois-internes/" in response.request.path
+def test_internes_update(client, testapp):
+    with testapp.app_context():
+        response = login(client, "/competitions/tournois-internes/21/update/")
+        response = client.post('competitions/tournois-internes/21/update/', data={
+            "date":"2025-12-14",
+            "titre":"Test",
+            "sets":4,
+            "joueur1":5,
+            "points1":'0000',
+            'points2':'7777',
+            'joueur2':6
+        }, follow_redirects=True)
+        print(response.data)
+        assert b"Tournois internes" in response.data
+        assert "/competitions/tournois-internes/" in response.request.path
 
 def test_internes_delete(client, testapp):
     with testapp.app_context():

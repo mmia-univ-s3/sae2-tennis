@@ -95,8 +95,7 @@ def tournoi_add(type_tournoi: str):
         championnat = ChampionnatIndividuel(titre=form.titre.data,
                                             date_championnat=form.date_championnat.data,
                                             categorie=form.categorie.data, serie=form.serie.data,
-                                            niveau=form.niveau.data, id_joueur_1=None,
-                                            id_joueur_2=None,  score_1=None, score_2=None)
+                                            niveau=form.niveau.data)
     else:
         form = FormChampionnatEquipe()
         championnat = ChampionnatEquipe(titre=form.titre.data,

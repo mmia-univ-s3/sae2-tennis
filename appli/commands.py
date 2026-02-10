@@ -256,12 +256,13 @@ def _exporter_users(filepath):
     """Permet d'exporter les utilisateurs"""
     liste_utilisateurs = Utilisateur.query.all()
     with open(f"{filepath}/utilisateur.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idU", "mdp"]
+        colonnes = ["idU", "mdp", "role"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for utilisateur in liste_utilisateurs:
             ecriture.writerow({"idU" : utilisateur.login,
-                               "mdp" : utilisateur.mdp})
+                               "mdp" : utilisateur.mdp,
+                               "role" : utilisateur.role})
 
 # pylint: disable=protected-access
 def _exporter_tarifs(filepath):
