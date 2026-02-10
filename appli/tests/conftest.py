@@ -6,7 +6,7 @@ from appli import app, db
 
 from appli.commands import _importer_articles, _importer_championnats_equipes,\
     _importer_championnats_individuels, _importer_partenaires, _importer_tarifs,\
-    _importer_trivias, _importer_users
+    _importer_trivias, _importer_users, _importer_championnats_internes
 
 with app.app_context():
     db.drop_all()
@@ -18,6 +18,7 @@ with app.app_context():
     _importer_tarifs(filepath="./appli/data/init")
     _importer_championnats_equipes(filepath="./appli/data/init")
     _importer_championnats_individuels(filepath="./appli/data/init")
+    _importer_championnats_internes(filepath="./appli/data/init")
 
 @pytest.fixture
 def testapp():

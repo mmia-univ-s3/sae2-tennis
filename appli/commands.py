@@ -6,8 +6,8 @@ import click
 
 from .app import app, db
 from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Reservation, \
-    Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, Equipe, Participer, \
-    Affronter, Joueur, Classer, Sport, Image
+    Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, ChampionnatInterne, Equipe, \
+    Participer, Affronter, Joueur, Classer, Sport, Jouer, Inscrire, Image
 
 
 def _importer_articles(filename):
@@ -166,11 +166,7 @@ def _importer_championnats_individuels(filepath):
             champ = ChampionnatIndividuel(date_championnat=date.fromisoformat(ligne["dateCha"]),
                                           titre=ligne["titreCha"],
                                           categorie=ligne["categorieSport"], serie=ligne["serie"],
-                                          niveau=ligne["niveau"],
-                                          id_joueur_1=ligne["idJ1"],
-                                          id_joueur_2=ligne["idJ2"],
-                                          score_1=ligne["score1"],
-                                          score_2=ligne["score2"])
+                                          niveau=ligne["niveau"])
             champ.id = int(ligne["idCha"])
             db.session.add(champ)
 
@@ -181,6 +177,33 @@ def _importer_championnats_individuels(filepath):
                               rang=ligne["rang"])
             db.session.add(classer)
     db.session.commit()
+
+
+def _importer_championnats_internes(filepath):
+    """Permet d'importer les données relatives aux championnats internes"""
+    with open(filepath + "/champ_inter.csv", newline="", encoding="utf-8") as csvfile:
+        lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
+        for ligne in lecture:
+            champ = ChampionnatInterne(date_championnat=date.fromisoformat(ligne["dateCha"]),
+                                       titre=ligne["titreCha"])
+            champ.id = int(ligne["idCha"])
+            db.session.add(champ)
+
+    with open(filepath + "/inscrire.csv", newline="", encoding="utf-8") as csvfile:
+        lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
+        for ligne in lecture:
+            inscrire = Inscrire(id_championnat=int(ligne["idCha"]), id_j=int(ligne["idJ"]))
+            db.session.add(inscrire)
+
+    with open(filepath + "/jouer.csv", newline="", encoding="utf-8") as csvfile:
+        lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
+        for ligne in lecture:
+            jouer = Jouer(id_championnat=int(ligne["idCha"]), id_j1=int(ligne["idJ1"]),
+                          id_j2=int(ligne["idJ2"]), sets=int(ligne["setsGagnants"]),
+                          score1=ligne["score1"], score2=ligne["score2"])
+            db.session.add(jouer)
+    db.session.commit()
+
 
 # pylint: disable=protected-access
 def _exporter_articles(filepath):
@@ -233,12 +256,13 @@ def _exporter_users(filepath):
     """Permet d'exporter les utilisateurs"""
     liste_utilisateurs = Utilisateur.query.all()
     with open(f"{filepath}/utilisateur.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idU", "mdp"]
+        colonnes = ["idU", "mdp", "role"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for utilisateur in liste_utilisateurs:
             ecriture.writerow({"idU" : utilisateur.login,
-                               "mdp" : utilisateur.mdp})
+                               "mdp" : utilisateur.mdp,
+                               "role" : utilisateur.role})
 
 # pylint: disable=protected-access
 def _exporter_tarifs(filepath):
@@ -372,8 +396,7 @@ def _exporter_championnats_individuels(filepath):
 
     liste_championnats = ChampionnatIndividuel.query.all()
     with open(f"{filepath}/champ_indiv.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCha", "dateCha", "titreCha", "categorieSport", "serie", "niveau",
-                    "idJ1", "idJ2", "score1", "score2"]
+        colonnes = ["idCha", "dateCha", "titreCha", "categorieSport", "serie", "niveau"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for championnat in liste_championnats:
@@ -382,27 +405,53 @@ def _exporter_championnats_individuels(filepath):
                                "titreCha" : championnat.titre,
                                "categorieSport" : championnat.categorie,
                                "serie" : championnat.serie,
-                               "niveau" : championnat.niveau,
-                               "idJ1" : "" if championnat._id_joueur_1 is None\
-                                else str(championnat._id_joueur_1),
-                               "idJ2" : "" if championnat._id_joueur_2 is None\
-                                else str(championnat._id_joueur_2),
-                               "score1" : "" if championnat.score_1 is None\
-                                else str(championnat.score_1),
-                               "score2" : "" if championnat.score_2 is None\
-                                else str(championnat.score_2)})
+                               "niveau" : championnat.niveau})
 
     liste_classements = Classer.query.all()
     with open(f"{filepath}/classer.csv", 'w', newline="", encoding="utf-8") as csvfile:
         colonnes = ["idCha", "idJ", "rang"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
-        liste_classements:list[Classer]
         for classement in liste_classements:
             ecriture.writerow({"idCha" : str(classement._id_championnat),
                                "idJ" : str(classement._id_j),
                                "rang" : classement.rang})
 
+
+# pylint: disable=protected-access
+def _exporter_championnats_internes(filepath):
+    """Permet d'exporter les données relatives aux championnats internes"""
+    liste_championnats = ChampionnatInterne.query.all()
+    with open(f"{filepath}/champ_inter.csv", 'w', newline="", encoding="utf-8") as csvfile:
+        colonnes = ["idCha", "dateCha", "titreCha"]
+        ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
+        ecriture.writeheader()
+        for championnat in liste_championnats:
+            ecriture.writerow({"idCha" : str(championnat.id),
+                               "dateCha" : championnat.date_championnat.strftime("%Y-%m-%d"),
+                               "titreCha" : championnat.titre})
+
+    liste_inscriptions = Inscrire.query.all()
+    with open(f"{filepath}/inscrire.csv", 'w', newline="", encoding="utf-8") as csvfile:
+        colonnes = ["idCha", "idJ"]
+        ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
+        ecriture.writeheader()
+        for inscription in liste_inscriptions:
+            ecriture.writerow({"idCha" : str(inscription._id_championnat),
+                               "idJ" : str(inscription._id_j)})
+
+    liste_jeux = Jouer.query.all()
+    with open(f"{filepath}/jouer.csv", 'w', newline="", encoding="utf-8") as csvfile:
+        colonnes = ["idCha", "idJ1", "idJ2", "setsGagnants", "score1", "score2"]
+        ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
+        ecriture.writeheader()
+        for jeu in liste_jeux:
+            ecriture.writerow({"idCha" : str(jeu._id_championnat),
+                               "idJ1" : str(jeu._id_j1),
+                               "idJ2" : str(jeu._id_j2),
+                               "setsGagnants" : str(jeu.sets),
+                               "score1" : jeu.score1,
+                               "score2" : jeu.score2})
 
 @app.cli.command()
 @click.argument('filepath')
@@ -441,6 +490,9 @@ def loaddb(filepath):
 
         _importer_championnats_individuels(filepath=filepath)
         lg.info('Championnats individuels importés')
+
+        _importer_championnats_internes(filepath=filepath)
+        lg.info('Championnats internes importés')
 
         lg.info('Base de données créée')
 

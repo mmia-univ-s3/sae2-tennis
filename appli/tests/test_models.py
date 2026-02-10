@@ -14,7 +14,7 @@ def test_models_article():
 
 def test_models_championnat_individuel(testapp):
     var = ChampionnatIndividuel(datetime.date(1969, 1, 20), "titre", "categorie", "serie",
-                                "niveau", None, None, None, None)
+                                "niveau")
     assert str(var) == repr(var) == "<ChampionnatIndividuel(None) titre>"
     with testapp.app_context():
         championnat = ChampionnatIndividuel.query.get(12)

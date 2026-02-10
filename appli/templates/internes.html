@@ -7,9 +7,9 @@
         <thead>
             <tr>
                 <th>Nom</th>
-                <th>Points</th>
+                <th>Sets</th>
                 <th>-</th>
-                <th>Points</th>
+                <th>Sets</th>
                 <th>Nom</th>
                 {% if current_user.is_authenticated %}
                     <th>Action</th>
@@ -33,8 +33,8 @@
                         <td>{{ match[3].prenom }} {{ match[3].nom }}</td>
                     {% endif %}
                     {% if current_user.is_authenticated %}
-                        <td><a href="{{ url_for('internes_update', id_match=match[0]) }}" class="btn btn-primary">Modifier</a>
-                            <a href="{{ url_for('internes_delete', id_match=match[0]) }}" class="btn btn-primary">Supprimer</a></td>
+                        <td><a href="{{ url_for('internes_update', id_match=match[0].id) }}" class="btn btn-primary">Modifier</a>
+                            <a href="{{ url_for('internes_delete', id_match=match[0].id) }}" class="btn btn-primary">Supprimer</a></td>
                     {% endif %}
                 </tr>
             {% endfor %}

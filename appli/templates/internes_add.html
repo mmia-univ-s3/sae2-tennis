@@ -5,7 +5,9 @@
 
     {% if error %}
         <div class="alert alert-danger">
-            Les joueurs sont les mêmes. Veuillez vérifier les informations.
+            Erreur:<br>
+            -Soit les joueurs sont les mêmes. Veuillez vérifier les informations.<br>
+            -Soit les données rentrées pour les 2 scores ne sont pas de même taille<br>
         </div>
     {% endif %}
 
@@ -24,9 +26,9 @@
             </div>
         </div>
         <div class="form-group mb-3">
-            <label for="Serie" class="col-sm-2 control-label">{{ form.serie.label }}</label>
+            <label for="sets" class="col-sm-2 control-label">{{ form.sets.label }}</label>
             <div class="col-sm-10">
-                {{ form.serie(class_="form-control") }}
+                {{ form.sets(class_="form-control") }}
             </div>
         </div>
         <div class="form-group mb-3">
