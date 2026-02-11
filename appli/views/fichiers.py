@@ -20,6 +20,7 @@ def fichiers_list():
         try:
             if os.path.exists(nom):
                 tailles_fichiers[fichier.nom_fichier] = os.path.getsize(nom)
+        # pylint: disable=broad-exception-caught
         except Exception:
             pass
 
@@ -71,9 +72,9 @@ def fichiers_delete(nom_fichier):
                            title="Supprimer un fichier", fichier=fichier)
 
 def get_pretty_size(size):
+    """Renvoie la taille formatée pour un fichier"""
     if size > 1024**2:
         return f"{round(size / 1024**2, 2)} Mio"
-    elif size > 1024:
+    if size > 1024:
         return f"{round(size / 1024, 1)} Kio"
-    else:
-        return f"{size} octets"
+    return f"{size} octets"
