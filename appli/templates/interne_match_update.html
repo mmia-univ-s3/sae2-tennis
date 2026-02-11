@@ -11,8 +11,8 @@
         </div>
     {% endif %}
 
-    <form action="{{ url_for('internes_match_update', id_interne=match._id_championnat, id_j1=match
-    ._id_j1, id_j2=_id_j2) }}" method="POST">
+    <form action="{{ url_for('match_update', id_interne=match._id_championnat,
+            id_j1=id_joueurs[0], id_j2=id_joueurs[1]) }}" method="POST">
         {{  form.hidden_tag() }}
         <div class="form-group mb-3">
             <label for="sets" class="col-sm-2 control-label">{{ form.sets.label }}</label>

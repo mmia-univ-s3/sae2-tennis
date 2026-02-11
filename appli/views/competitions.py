@@ -495,6 +495,7 @@ def match_update(id_interne, id_j1, id_j2):
     """Page permettant de modifier un match d'un tournoi interne"""
     tournoi = ChampionnatInterne.query.get(id_interne)
     match = Jouer.query.get((id_interne, id_j1, id_j2))
+    id_joueurs = (id_j1, id_j2)
     joueur1 = Joueur.query.get(id_j1)
     joueur2 = Joueur.query.get(id_j2)
     form = FormMatch(sets=match.sets, joueur1=joueur1, points1=match.score1, joueur2=joueur2,
@@ -510,7 +511,8 @@ def match_update(id_interne, id_j1, id_j2):
                                title="Modification d'un match", form=form, interne=tournoi,
                                error=True)
     return render_template('interne_match_update.html',
-                           title="Modification d'un match", form=form, interne=tournoi, error=False)
+                           title="Modification d'un match", form=form, interne=tournoi,
+                           error=False, match=match, id_joueurs=id_joueurs)
 
 
 @app.route('/competitions/tournois-internes/<int:id_interne>/add/', methods=['GET', 'POST'])
