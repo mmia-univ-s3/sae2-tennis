@@ -8,7 +8,8 @@ from .utilisateur import Utilisateur
 from .division import Division
 from .joueur import Joueur
 from .classer import Classer
-from .championnat import ChampionnatEquipe, ChampionnatIndividuel, Championnat, ChampionnatInterne
+from .championnat import (ChampionnatEquipe, ChampionnatIndividuel, Championnat,
+                          ChampionnatInterne)
 from .equipe import Equipe
 from .participer import Participer
 from .affronter import Affronter

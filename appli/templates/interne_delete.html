@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <h1>Suppression d'un match interne</h1>
-    <p>Vous allez supprimer un match interne. Ce match ne sera plus visible sur le site.
-        Voulez-vous continuer ?</p>
-    <form action="{{ url_for('internes_delete', id_match=id_match) }}" method="post"
+    <h1>Suppression d'un tournoi interne</h1>
+    <form action="{{ url_for('interne_delete', id_interne=interne.id) }}" method="post"
           class="form-horizontal mb-3">
         {{ form.hidden_tag() }}
+        <p>Vous allez supprimer l'article <b>{{ interne.titre }}</b>. Ce tournoi interne ne sera
+            plus visible sur le site. Voulez-vous continuer ?</p>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <input type="submit" value="Supprimer" class="btn btn-danger">

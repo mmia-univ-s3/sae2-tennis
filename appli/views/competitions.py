@@ -6,7 +6,7 @@ from appli.app import app, db, required_permission_lvl
 from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer,\
 Equipe, Participer, ChampionnatInterne, Jouer, Championnat
 from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser,\
-FormParticiper, FormAffronter, FormInternes, FormConfirm
+FormParticiper, FormAffronter, FormInternes, FormConfirm, FormMatch
 
 @app.route('/competitions/calendrier/')
 def calendrier():
@@ -481,30 +481,104 @@ def palmares_annee(annee: int):
             participation:Participer
             dict_equipe[championnat.categorie][championnat].add(participation)
 
-    return render_template('palmares.html', title=f"Palmarès {annee} - Competitions",
-                           annee=annee, indiv=dict_indiv, equipe=dict_equipe)
+    return render_template('palmares.html',
+                           title=f"Palmarès {annee} - Competitions", annee=annee, indiv=dict_indiv,
+                           equipe=dict_equipe)
 
 
 @app.route('/competitions/tournois-internes/')
 def internes():
-    """ Page de la liste des matchs en interne """
-    championnats = ChampionnatInterne.query.all()
-    resultat = []
-    for championnat in championnats:
-        for match in championnat.jouer:
-            joueur1 = match.joueur1
-            joueur2 = match.joueur2
-            score1 = match.sets_gagnees_j1()
-            score2 = match.sets_gagnees_j2()
-            resultat.append((championnat, joueur1, score1, joueur2, score2))
+    """ Page de la liste des tournois en interne """
+    tournois = ChampionnatInterne.query.order_by(ChampionnatInterne.date_championnat)
     return render_template('internes.html',
-                           title="Tournois internes - Competitions", matchs=resultat)
+                           title="Tournois internes - Competitions", tournois=tournois)
 
-@app.route('/competitions/tournois-internes/add/', methods=("GET", "POST"))
+@app.route('/competitions/tournois-internes/add/', methods=['GET', 'POST'])
 @required_permission_lvl("publicateur")
-def internes_add():
-    """ Page d'ajout d'un match en interne """
+def interne_add():
+    """Page permettant d'ajouter un tournoi interne"""
     form = FormInternes()
+    if form.validate_on_submit():
+        interne = ChampionnatInterne(form.date.data, form.titre.data)
+        db.session.add(interne)
+        db.session.commit()
+        return redirect(url_for("internes"))
+    return render_template('interne_add.html', title="Ajout d'un tournoi interne",
+                           form=form)
+
+@app.route('/competitions/tournois-internes/delete/<int:id_interne>/', methods=['GET', 'POST'])
+@required_permission_lvl("publicateur")
+def interne_delete(id_interne):
+    """Page permettant de supprimer un tournoi interne"""
+    tournoi_interne = ChampionnatInterne.query.get(id_interne)
+    form = FormConfirm()
+    if form.validate_on_submit() and tournoi_interne is not None:
+        db.session.delete(tournoi_interne)
+        db.session.commit()
+        return redirect(url_for("internes"))
+    return render_template('interne_delete.html',
+                           title="Suppression d'un tournoi interne", form=form,
+                           interne=tournoi_interne)
+
+
+@app.route('/competitions/tournois-internes/<int:id_interne>/', methods=['GET', 'POST'])
+@required_permission_lvl("publicateur")
+def interne_view(id_interne):
+    """Page permettant de visualiser/modifier un tournoi interne"""
+    tournoi_interne = ChampionnatInterne.query.get(id_interne)
+    # pylint: disable=protected-access
+    liste_matchs = Jouer.query.filter(Jouer._id_championnat == tournoi_interne.id).all()
+    matchs = []
+    for match in liste_matchs:
+        joueur1 = match.joueur1
+        joueur2 = match.joueur2
+        score1 = match.sets_gagnees_j1()
+        score2 = match.sets_gagnees_j2()
+        matchs.append((tournoi_interne, joueur1, score1, joueur2, score2))
+    form = FormInternes(date=tournoi_interne.date_championnat, titre=tournoi_interne.titre)
+    if form.validate_on_submit():
+        tournoi_interne.data = form.date.data
+        tournoi_interne.titre = form.titre.data
+        db.session.commit()
+        return redirect(url_for("internes", id_interne=id_interne))
+    return render_template("interne_view.html", title="Tournoi interne",
+                           interne=tournoi_interne, form=form, matchs=matchs, id_interne=id_interne)
+
+@app.route('/competitions/tournois-internes/<int:id_interne>/<int:id_j1>/<int:id_j2>/',
+           methods=['GET', 'POST'])
+@required_permission_lvl("publicateur")
+def match_update(id_interne, id_j1, id_j2):
+    """Page permettant de modifier un match d'un tournoi interne"""
+    tournoi_interne = ChampionnatInterne.query.get(id_interne)
+    match = Jouer.query.get((id_interne, id_j1, id_j2))
+    id_joueurs = (id_j1, id_j2)
+    joueur1 = Joueur.query.get(id_j1)
+    joueur2 = Joueur.query.get(id_j2)
+    form = FormMatch(sets=match.sets, joueur1=joueur1, points1=match.score1, joueur2=joueur2,
+                     points2=match.score2)
+
+    if form.validate_on_submit():
+        if len(form.points1.data) == len(form.points2.data) and form.joueur1 != form.joueur2:
+            match.score1 = form.points1
+            match.score2 = form.points2
+            db.session.commit()
+            return redirect(url_for("interne_view", id_interne=id_interne))
+        return render_template("interne_match_update.html",
+                               title="Modification d'un match", form=form, interne=tournoi_interne,
+                               error=True)
+    return render_template('interne_match_update.html',
+                           title="Modification d'un match", form=form, interne=tournoi_interne,
+                           error=False, match=match, id_joueurs=id_joueurs)
+
+
+@app.route('/competitions/tournois-internes/<int:id_interne>/add/', methods=['GET', 'POST'])
+@required_permission_lvl("publicateur")
+def match_add(id_interne):
+    """Page permettant d'ajouter un match dans un tournoi interne"""
+    tournoi_interne = ChampionnatInterne.query.get(id_interne)
+    form = FormMatch()
+
+    # Liste déroulante des joueurs
     joueurs = Joueur.query.all()
     choix = []
     for joueur in joueurs:
@@ -515,70 +589,28 @@ def internes_add():
 
     if form.validate_on_submit():
         if len(form.points1.data) == len(form.points2.data) and form.joueur1 != form.joueur2:
-            champ = ChampionnatInterne(form.date.data, form.titre.data)
-            db.session.add(champ)
-            db.session.commit()
-            match = Jouer(champ.id, form.joueur1.data, form.joueur2.data, form.sets.data,
-                        form.points1.data, form.points2.data)
+            match = Jouer(id_interne, form.joueur1.data, form.joueur2.data, form.sets.data,
+                          form.points1.data, form.points2.data)
             db.session.add(match)
             db.session.commit()
-            return redirect(url_for("internes"))
-        return render_template("internes_add.html", title="Ajout d'un match",
-                               form=form, error=True)
-    return render_template("internes_add.html", title="Ajout d'un match",
-                           form=form, error=False)
+            return redirect(url_for("interne_view", id_interne=id_interne))
+        return render_template("interne_match_add.html", title="Ajout d'un match",
+                               form=form, interne=tournoi_interne, error=True)
+    return render_template('interne_match_add.html', title="Ajout d'un match",
+                           form=form, interne=tournoi_interne, error=False)
 
-# pylint: disable=protected-access
-@app.route('/competitions/tournois-internes/<id_match>/update/', methods=("GET", "POST"))
+@app.route('/competitions/tournois-internes/delete/<int:id_interne>/<int:id_j1>/<int:id_j2>',
+           methods=['GET', 'POST'])
 @required_permission_lvl("publicateur")
-def internes_update(id_match):
-    """Met à jour un tournoi interne.
-
-    Args:
-        id_match (int): L'identifiant du match."""
-    championnat = ChampionnatInterne.query.get(id_match)
-    match = championnat.jouer.first()
-    form = FormInternes(date=championnat.date_championnat, titre=championnat.titre,
-                        sets=match.sets, joueur1=match.joueur1.id, joueur2=match.joueur2.id,
-                        points1=match.score1, points2=match.score2)
-
-    joueurs = Joueur.query.all()
-    choix = []
-    for joueur in joueurs:
-        choix.append((joueur.id, joueur.prenom + " " + joueur.nom))
-
-    form.joueur1.choices = choix
-    form.joueur2.choices = choix
-
-    if form.validate_on_submit():
-        if len(form.points1.data) == len(form.points2.data) and form.joueur1 != form.joueur2:
-            championnat.date_championnat = form.date.data
-            championnat.titre = form.titre.data
-            match.sets = form.sets.data
-            match._id_j1 = form.joueur1.data
-            match._id_j2 = form.joueur2.data
-            match.score1 = form.points1.data
-            match.score2 = form.points2.data
-            db.session.commit()
-            return redirect(url_for("internes"))
-        return render_template("internes_update.html",
-                               title="Modification du match", form=form, error=True,
-                               id_match=id_match)
-    return render_template("internes_update.html", title="Modification du match",
-                           form=form, error=False,id_match=id_match)
-
-@app.route('/competitions/tournois-internes/<id_match>/delete/', methods=("GET", "POST"))
-@required_permission_lvl("publicateur")
-def internes_delete(id_match):
-    """Supprime un tournoi interne.
-
-    Args:
-        id_match (int): L'identifiant du match."""
-    match = ChampionnatInterne.query.get(id_match)
+def match_delete(id_interne, id_j1, id_j2):
+    """Page permettant de supprimer un match dans un tournoi interne"""
+    match = Jouer.query.get((id_interne, id_j1, id_j2))
+    id_joueurs = (id_j1, id_j2)
     form = FormConfirm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and match is not None:
         db.session.delete(match)
         db.session.commit()
-        return redirect(url_for('internes'))
-    return render_template("internes_delete.html", title="Suppression du match",
-                           form=form, id_match=id_match)
+        return redirect(url_for("interne_view", id_interne=id_interne))
+    return render_template('interne_match_delete.html',
+                           title="Suppression d'un match d'un tournoi interne", form=form,
+                           match=match, id_joueurs=id_joueurs)
