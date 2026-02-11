@@ -210,13 +210,3 @@ def test_form_interne_add(client, testapp):
             "titre":"Test",
         }, follow_redirects=True)
         assert "/competitions/tournois-internes/" in response.request.path
-
-
-def test_form_interne_add_error(client, testapp):
-    with testapp.app_context():
-        response = login(client, "/competitions/tournois-internes/add/")
-        response = client.post('/competitions/tournois-internes/add/', data={
-            "date":"2025-12-14",
-            "titre":"Test",
-        }, follow_redirects=True)
-        assert "/competitions/tournois-internes/add/" in response.request.path

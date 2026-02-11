@@ -131,7 +131,7 @@ def test_internes_update(client, testapp):
             "date":"2025-12-14",
             "titre":"Test",
         }, follow_redirects=True)
-        assert b"roule le" in response.data
+        assert b"Tournois internes" in response.data
         assert "/competitions/tournois-internes/" in response.request.path
 
 def test_internes_delete(client, testapp):

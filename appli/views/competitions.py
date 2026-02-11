@@ -459,8 +459,8 @@ def interne_delete(id_interne):
     """Page permettant de supprimer un tournoi interne"""
     tournoi_interne = ChampionnatInterne.query.get(id_interne)
     form = FormConfirm()
-    if form.validate_on_submit() and tournoi is not None:
-        db.session.delete(tournoi)
+    if form.validate_on_submit() and tournoi_interne is not None:
+        db.session.delete(tournoi_interne)
         db.session.commit()
         return redirect(url_for("internes"))
     return render_template('interne_delete.html',
@@ -473,19 +473,18 @@ def interne_view(id_interne):
     """Page permettant de visualiser/modifier un tournoi interne"""
     tournoi_interne = ChampionnatInterne.query.get(id_interne)
     # pylint: disable=protected-access
-    liste_matchs = Jouer.query.filter(Jouer._id_championnat == tournoi.id).all()
+    liste_matchs = Jouer.query.filter(Jouer._id_championnat == tournoi_interne.id).all()
     matchs = []
     for match in liste_matchs:
         joueur1 = match.joueur1
         joueur2 = match.joueur2
         score1 = match.sets_gagnees_j1()
         score2 = match.sets_gagnees_j2()
-        matchs.append((tournoi, joueur1, score1, joueur2, score2))
-    print(matchs)
-    form = FormInternes(date=tournoi.date_championnat, titre=tournoi.titre)
+        matchs.append((tournoi_interne, joueur1, score1, joueur2, score2))
+    form = FormInternes(date=tournoi_interne.date_championnat, titre=tournoi_interne.titre)
     if form.validate_on_submit():
-        tournoi.data = form.date.data
-        tournoi.titre = form.titre.data
+        tournoi_interne.data = form.date.data
+        tournoi_interne.titre = form.titre.data
         db.session.commit()
         return redirect(url_for("internes", id_interne=id_interne))
     return render_template("interne_view.html", title="Tournoi interne",
