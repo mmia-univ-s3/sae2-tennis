@@ -469,6 +469,7 @@ def interne_delete(id_interne):
 
 
 @app.route('/competitions/tournois-internes/<int:id_interne>/', methods=['GET', 'POST'])
+@required_permission_lvl("publicateur")
 def interne_view(id_interne):
     """Page permettant de visualiser/modifier un tournoi interne"""
     tournoi_interne = ChampionnatInterne.query.get(id_interne)
@@ -492,6 +493,7 @@ def interne_view(id_interne):
 
 @app.route('/competitions/tournois-internes/<int:id_interne>/<int:id_j1>/<int:id_j2>/',
            methods=['GET', 'POST'])
+@required_permission_lvl("publicateur")
 def match_update(id_interne, id_j1, id_j2):
     """Page permettant de modifier un match d'un tournoi interne"""
     tournoi_interne = ChampionnatInterne.query.get(id_interne)
@@ -517,6 +519,7 @@ def match_update(id_interne, id_j1, id_j2):
 
 
 @app.route('/competitions/tournois-internes/<int:id_interne>/add/', methods=['GET', 'POST'])
+@required_permission_lvl("publicateur")
 def match_add(id_interne):
     """Page permettant d'ajouter un match dans un tournoi interne"""
     tournoi_interne = ChampionnatInterne.query.get(id_interne)
