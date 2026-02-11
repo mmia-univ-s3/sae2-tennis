@@ -47,15 +47,14 @@ def article_view(id_article):
 def article_create():
     """Page de création d'un article"""
     form = FormArticleAdd()
-    if current_user.is_authenticated:
-        if form.validate_on_submit():
-            filename = None
-            if form.image.data is not None:
-                filename = form.filename()
-                image = form.image.data
-                image.save(os.path.join("appli", "static", "upload", filename))
-            article = form.creation_article(filename, form.largeur.data, form.description.data)
-            return redirect(form.next.data or url_for("article_view", id_article=article.id))
+    if form.validate_on_submit():
+        filename = None
+        if form.image.data is not None:
+            filename = form.filename()
+            image = form.image.data
+            image.save(os.path.join("appli", "static", "upload", filename))
+        article = form.creation_article(filename, form.largeur.data, form.description.data)
+        return redirect(form.next.data or url_for("article_view", id_article=article.id))
     return render_template("article_add.html", title="Ajout d'un article", form=form)
 
 

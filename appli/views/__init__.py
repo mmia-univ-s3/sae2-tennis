@@ -5,6 +5,7 @@ from .contacts import contacts
 from .documents import documents
 from .ecole import ecole
 from .error import e404, e405, e500
+from .fichiers import fichiers_create, fichiers_update, fichiers_list, fichiers_delete
 from .histoire import histoire_delete, histoire_ajout, histoire
 from .index import index
 from .logout import deconnexion

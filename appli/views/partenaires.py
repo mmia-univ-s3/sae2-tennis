@@ -4,7 +4,7 @@ from flask import render_template, redirect, url_for
 
 from appli.app import app, db, required_permission_lvl
 from appli.forms import FormConfirm, FormPartenaireAdd
-from appli.models import Partenaire
+from appli.models import Partenaire, Image
 
 
 @app.route('/partenaires/')
@@ -45,6 +45,9 @@ def partenaire_create():
     if form.validate_on_submit():
         filename = form.filename()
         form.confirm(filename)
+        image = Image(filename, 100, f"Image pour le partenaire \"{form.nom.data}\"")
+        db.session.add(image)
+        db.session.commit()
         fichier_logo = form.logo.data
         fichier_logo.save(os.path.join("appli", "static", "upload", filename))
         return redirect(form.next.data or url_for("partenaires"))
