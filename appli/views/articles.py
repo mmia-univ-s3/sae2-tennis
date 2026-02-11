@@ -11,9 +11,35 @@ from appli.models import Article
 @app.route('/club/articles/')
 def articles():
     """Page des articles"""
-    liste_articles = Article.query.filter(Article.type_article != "pages").all()
+    liste_articles = Article.query.filter(Article.type_article != "pages")\
+        .order_by(Article.date_publi.desc()).all()
+    liste_annees = []
+    for article in liste_articles:
+        if article.date_publi.year not in liste_annees:
+            liste_annees.append(article.date_publi.year)
     return render_template('articles.html', title="Articles du club - Club",
-                           articles=liste_articles)
+                           articles=liste_articles, annees=liste_annees,
+                           annee=None)
+
+@app.route('/club/articles/<int:annee>')
+def articles_annee(annee):
+    """Page des articles selon une année donnée
+
+    Args:
+        annee (int): Une année
+    """
+    les_articles = Article.query.filter(Article.type_article != "pages")\
+        .order_by(Article.date_publi.desc()).all()
+    liste_annees = []
+    liste_articles = []
+    for article in les_articles:
+        if article.date_publi.year not in liste_annees:
+            liste_annees.append(article.date_publi.year)
+        if article.date_publi.year == annee:
+            liste_articles.append(article)
+    return render_template('articles.html', title="Articles du club - Club",
+                           articles=liste_articles, annees=liste_annees,
+                           annee=annee)
 
 
 @app.route('/club/articles/<int:id_article>/', methods=('GET', 'POST'))

@@ -25,7 +25,33 @@ def tarifications():
                                                                   key=lambda tarif: tarif.ordre)}
         dico_categories[sport] = dico_categories_sport
     return render_template('tarifications.html', title="Tarifications - Formation",
-                           tarifs = dico_categories)
+                           tarifs=dico_categories, liste_sports=dico_categories,
+                           id_sport=0)
+
+# noinspection PyProtectedMember,PyComparisonWithNone
+@app.route('/formation/tarifications/<int:id_sport>')
+def tarifications_sport(id_sport):
+    """Page des tarifs d'un sport donné"""
+    dico_categories = {}
+    liste_sports = []
+    for sport in Sport.query.all():
+        liste_sports.append(sport)
+        if sport.id == id_sport:
+            dico_categories_sport = {}
+            for categorie in sorted(filter(lambda cat: not cat.est_sous_categorie(),
+                                        sport.categoriesTarifs),
+                                    key=lambda cat: cat.ordre):
+                dico_sous_categories = {}
+                for sous_cat in sorted(categorie.enfants, key=lambda cat: cat.ordre):
+                    dico_sous_categories[sous_cat] = sorted(sous_cat.tarifs,
+                                                            key=lambda tarif: tarif.ordre)
+                dico_categories_sport[categorie] = {"sous_cat" : dico_sous_categories,
+                                                    "tarifs" : sorted(categorie.tarifs,
+                                                                    key=lambda tarif: tarif.ordre)}
+            dico_categories[sport] = dico_categories_sport
+    return render_template('tarifications.html', title="Tarifications - Formation",
+                           tarifs = dico_categories, liste_sports=liste_sports,
+                           id_sport=id_sport)
 
 @app.route('/formation/tarifications/<id_tarif>/monter/')
 @required_permission_lvl("publicateur")

@@ -1,14 +1,21 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <center><h1>Articles du club</h1></center>
+    <center><h1>Articles du club{% if annee != None %} de l'année {{ annee }}{% endif %}</h1></center>
+    <center><select class="form-select" style="width: max-content; text-align: center;" onchange='location.href = `{{ url_for("articles_annee", annee=9999) }}`.replace("9999", this.value);'>
+    <option value="">Tous les articles</option>
+    {% for an in annees %}
+        <option value="{{ an }}" {% if an == annee %}selected{% endif %}>{{ an }}</option>
+    {% endfor %}
+    </select>
+    </center>
     <div class="list-group" style="max-width: 400px; margin-left: auto; margin-right: auto;">
         {% for article in articles %}
             <a class="list-group-item list-group-item-action"
                href="{{ url_for('article_view', id_article=article.id) }}">
                 <center>
                     {{ article.titre }} -
-                    {{ article.date_publi }}{% if article.type_article == "club" %} -
+                    {{ article.date_publi.strftime("%d/%m/%Y") }}{% if article.type_article == "club" %} -
                         <span class="text-warning">Mis en avant</span>
                     {% endif %}
                 </center>

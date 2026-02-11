@@ -38,7 +38,7 @@ Nouveau Modèle:
 
 
 [x] - Création classe Sport
-[~] -> Tri des tarifs selon le sport
+[x] -> Tri des tarifs selon le sport
 [x] -> Création, Modification et Supression de sports
 
 
@@ -53,7 +53,7 @@ Nouveau Modèle:
 [x] Liste déroulante
 
 - Article
-[•] Filtrer par année 
+[x] Filtrer par année 
 [x] Image -> Envoyé fichier
 [x] Option : importer une image
 [x] Modification taille image
