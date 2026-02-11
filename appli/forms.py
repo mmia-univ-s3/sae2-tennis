@@ -251,6 +251,13 @@ class FormMatch(FlaskForm):
     joueur2 = SelectField("Joueur 2",  validators=[DataRequired()], coerce=int, choices=[])
     next = HiddenField()
 
+class FormMatchUpdate(FlaskForm):
+    """Formulaire pour ajouter et mettre à jour un match d'un tournoi interne"""
+    sets = IntegerField("Sets gagnants",  validators=[DataRequired()])
+    points1 = StringField("Points du joueur 1", validators=[DataRequired()])
+    points2 = StringField("Points du joueur 2", validators=[DataRequired()])
+    next = HiddenField()
+
 class FormChampionnatIndividuel(FlaskForm):
     """Formulaire de création et de mise à jour d'un championnat individuel."""
     titre = StringField('Titre', validators=[DataRequired()])

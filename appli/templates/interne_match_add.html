@@ -12,8 +12,8 @@
     {% endif %}
 
     <form action="{{ url_for('match_add', id_interne=interne.id) }}" method="POST">
-        <p> Pour les scores, veuillez mettre les points de chaque set les uns à la suite des
-            autres, sans espaces ni tirets. </p>
+        <p> Pour les scores, veuillez mettre les points de chaque set séparés par un tiret. Ex :
+            4-7-5 </p>
         {{  form.hidden_tag() }}
         <div class="form-group mb-3">
             <label for="sets" class="col-sm-2 control-label">{{ form.sets.label }}</label>
