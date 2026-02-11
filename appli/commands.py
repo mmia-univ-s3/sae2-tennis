@@ -441,7 +441,7 @@ def _exporter_championnats_internes(filepath):
                                "idJ" : str(inscription._id_j)})
 
     liste_jeux = Jouer.query.all()
-    with open(f"{filepath}/jouer.csv", 'w', newline="", encoding="utf-8") as csvfile:
+    with open(f"{filepath}/joueur.csv", 'w', newline="", encoding="utf-8") as csvfile:
         colonnes = ["idCha", "idJ1", "idJ2", "setsGagnants", "score1", "score2"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()

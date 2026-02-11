@@ -4,6 +4,7 @@
     <form action="{{ url_for('interne_view', id_interne=interne.id) }}" method="post"
           class="form-horizontal mb-3" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
+        <h1>Championnat</h1>
         {% if current_user.is_authenticated %}
             <div class="form-group mb-3">
                 <label for="titre" class="col-sm-10 control-label">{{ form.titre.label }}</label>
@@ -17,16 +18,69 @@
                     {{ form.date(size=50, class_="form-control") }}
                 </div>
             </div>
+
+        {% else %}
+            <h2>Tournoi interne {{ interne.titre }}</h2>
+            <h4>Se déroule le {{ interne.date_championnat }}. </h4>
+        {% endif %}
+        <hr>
+        <h2 class="mt-5">Matchs
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('match_add', id_interne=interne.id) }}"
+               class="btn btn-primary">Ajouter un match</a>
+        {% endif %}
+        </h2>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Sets</th>
+                <th>-</th>
+                <th>Sets</th>
+                <th>Nom</th>
+                {% if current_user.is_authenticated %}
+                    <th>Action</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for match in matchs %}
+                <tr>
+                    {% if match[2] > match[4] %}
+                        <td class="text-success"><strong>{{ match[1].prenom }} {{ match[1].nom }}</strong></td>
+                    {% else %}
+                        <td>{{ match[1].prenom }} {{ match[1].nom }}</td>
+                    {% endif %}
+                    <td>{{ match[2] }}</td>
+                    <td>-</td>
+                    <td>{{ match[4] }}</td>
+                    {% if match[2] < match[4] %}
+                        <td class="text-success"><strong>{{ match[3].prenom }} {{ match[3].nom }}</strong></td>
+                    {% else %}
+                        <td>{{ match[3].prenom }} {{ match[3].nom }}</td>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                        <td><a href="{{ url_for('match_update', id_interne=id_interne,
+                                id_j1=match[1].id, id_j2=match[3].id) }}"
+                               class="btn btn-primary">Modifier</a>
+                            <a href="{{ url_for('match_delete', id_interne=id_interne,
+                                id_j1=match[1].id, id_j2=match[3].id) }}" class="btn
+                            btn-primary">Supprimer</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if current_user.is_authenticated %}
+
             <div class="col-sm-offset-2 col-sm-10">
                 <input type="submit" value="Sauvegarder" class="btn btn-success">
                 <a href="{{ url_for('interne_delete', id_interne=interne.id) }}"
                    class="btn btn-danger">Supprimer</a>
-                <a href="{{ url_for('internes') }}" class="btn btn-secondary">Annuler</a>
+                <a href="{{ url_for('internes') }}" class="btn btn-secondary">Retour en arrière</a>
             </div>
-        {% else %}
-            <h1>Tournoi interne {{ interne.titre }}</h1>
-            <h3>Se déroule le {{ interne.date_championnat }}. </h3>
-
         {% endif %}
     </form>
 

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <h1> Modification d'un match en interne</h1>
+    <h1> Ajout d'un match en interne</h1>
 
     {% if error %}
         <div class="alert alert-danger">
@@ -11,20 +11,10 @@
         </div>
     {% endif %}
 
-    <form action="{{ url_for('internes_update', id_match=id_match) }}" method="POST">
+    <form action="{{ url_for('match_add', id_interne=interne.id) }}" method="POST">
+        <p> Pour les scores, veuillez mettre les points de chaque set les uns à la suite des
+            autres, sans espaces ni tirets. </p>
         {{  form.hidden_tag() }}
-        <div class="form-group mb-3">
-            <label for="Date" class="col-sm-2 control-label">{{ form.date.label }}</label>
-            <div class="col-sm-10">
-                {{ form.date(class_="form-control") }}
-            </div>
-        </div>
-        <div class="form-group mb-3">
-            <label for="Titre" class="col-sm-2 control-label">{{ form.titre.label }}</label>
-            <div class="col-sm-10">
-                {{ form.titre(class_="form-control") }}
-            </div>
-        </div>
         <div class="form-group mb-3">
             <label for="sets" class="col-sm-2 control-label">{{ form.sets.label }}</label>
             <div class="col-sm-10">
@@ -57,7 +47,8 @@
         </div>
         <div class="col-sm-offset-2 col-sm-10">
             <input type="submit" value="Valider" class="btn btn-success">
-            <a href="{{ url_for('internes') }}" class="btn btn-secondary">Annuler</a>
+            <a href="{{ url_for('interne_view', id_interne=interne.id) }}" class="btn
+            btn-secondary">Annuler</a>
         </div>
     </form>
 {% endblock %}

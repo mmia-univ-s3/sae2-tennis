@@ -125,28 +125,3 @@ class ChampionnatInterne(Championnat):
 
     def __repr__(self):
         return self.__str__()
-
-# pylint: disable=too-many-arguments,too-many-instance-attributes
-class Match(db.Model):
-    """Matchs dans un championnat interne"""
-    __tablename__ = "MATCH_INTERNE"
-
-    id = db.Column("id_match", db.Integer, primary_key=True)
-    id_int = db.Column("id_interne", db.ForeignKey('CHAMP_INTER.idCha'), primary_key=True)
-    joueur1 = db.Column("joueur1", db.Text)
-    joueur2 = db.Column("joueur2", db.Text)
-    score1 = db.Column("score1", db.Integer)
-    score2 = db.Column("score2", db.Integer)
-
-    def __init__(self, id_int, joueur1, score1, joueur2, score2):
-        self.id_int = id_int
-        self.joueur1 = joueur1
-        self.score1 = score1
-        self.joueur2 = joueur2
-        self.score2 = score2
-
-    def __str__(self):
-        return f"<Match({self.id_int}) {self.joueur1} vs {self.joueur2}"
-
-    def __repr__(self):
-        return self.__str__()

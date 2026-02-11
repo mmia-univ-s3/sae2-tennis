@@ -45,9 +45,9 @@ def internes_add():
             db.session.add(match)
             db.session.commit()
             return redirect(url_for("internes"))
-        return render_template("internes_match_add.html", title="Ajout d'un match",
+        return render_template("interne_match_add.html", title="Ajout d'un match",
                                form=form, error=True)
-    return render_template("internes_match_add.html", title="Ajout d'un match",
+    return render_template("interne_match_add.html", title="Ajout d'un match",
                            form=form, error=False)
 
 # pylint: disable=protected-access
@@ -83,10 +83,10 @@ def internes_update(id_match):
             match.score2 = form.points2.data
             db.session.commit()
             return redirect(url_for("internes"))
-        return render_template("internes_match_update.html",
+        return render_template("interne_match_update.html",
                                title="Modification du match", form=form, error=True,
                                id_match=id_match)
-    return render_template("internes_match_update.html", title="Modification du match",
+    return render_template("interne_match_update.html", title="Modification du match",
                            form=form, error=False,id_match=id_match)
 
 @app.route('/competitions/tournois-internes/<id_match>/delete/', methods=("GET", "POST"))
@@ -102,5 +102,5 @@ def internes_delete(id_match):
         db.session.delete(match)
         db.session.commit()
         return redirect(url_for('internes'))
-    return render_template("internes_delete.html", title="Suppression du match",
+    return render_template("interne_match_delete.html", title="Suppression du match",
                            form=form, id_match=id_match)
