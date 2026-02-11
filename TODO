@@ -30,44 +30,38 @@ Nouveau Modèle:
 [•] image supp/save si update, redimensionner
 
 - User 
-[•] (differents rôles)
-
-- Site
-[•] Possibilité ajout page
+[x] (differents rôles)
 
 - Tarification
 [x] Ordre
-[•] deplacer position
-[•] Ajout encadré
+[x] deplacer position
 
 
 [x] - Création classe Sport
-[•] -> Tri des tarifs selon le sport
-[•] -> Création, Modification et Supression de sports
+[~] -> Tri des tarifs selon le sport
+[x] -> Création, Modification et Supression de sports
 
 
 - Partenaire
-[•] Centrer logo
-[•] Catégorie
-[•] Ordre alphabétique 
+[x] Centrer logo
+[x] Catégorie
+[x] Ordre alphabétique 
 
 - Calendrier
-[•] Filtre 
-[•] Par date (année)
-[•] Liste déroulante
+[x] Filtre 
+[x] Par date (année)
+[x] Liste déroulante
 
 - Article
-[•] Trier par année 
-[•] Image -> Envoyé fichier
-[•] Option : importer une image
-[•] Modification taille image
+[•] Filtrer par année 
+[x] Image -> Envoyé fichier
+[x] Option : importer une image
+[x] Modification taille image
 
 - Accueil
-[•] Image en guise de baniere "bienvenue .."
-[•] Bloque 
-[•] Trois articles plus recents 
-[•] Boutons redirections articles
-[•] Competitions -> 3 championnats les plus recents en equipe/indiv
-[•] Pied de page
-[•] Partenaires
-[•] Contact
+[x] Image en guise de baniere "bienvenue .."
+[x] Boutons redirections articles
+[x] Competitions -> 3 championnats les plus recents en equipe/indiv
+[x] Pied de page
+[x] Partenaires
+[x] Contact

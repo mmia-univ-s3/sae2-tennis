@@ -11,6 +11,7 @@ from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, Optional
 
 from appli.models.article import Article
+from appli.models.image import Image
 from appli.models.partenaire import Partenaire
 from appli.models.utilisateur import Utilisateur
 from .app import db
@@ -159,6 +160,8 @@ class FormArticleAdd(FlaskForm):
                                FileAllowed(
                                    ['jpg', 'png'],
                                    "Merci de n'envoyer que des fichiers JPG ou PNG.")])
+    largeur = IntegerField("Largeur de l'image", default=200, validators=[DataRequired()])
+    description = StringField("Description/texte de remplacement")
     editor = StringField('Contenu')
     type_a = RadioField('Type', choices=[('club', 'Mettre en avant'),
                                          ('stade', 'Ne pas mettre en avant')],
@@ -176,7 +179,7 @@ class FormArticleAdd(FlaskForm):
         filename = f'{hex(random.randrange(16 ** 48))[2:]}'
         return filename + ext
 
-    def creation_article(self, filename):
+    def creation_article(self, filename, largeur, description):
         """
         Créé un article et le renvoie
 
@@ -185,6 +188,9 @@ class FormArticleAdd(FlaskForm):
         """
         article = Article(self.titre.data, self.editor.data, datetime.date.today(),
                           self.type_a.data, filename)
+        if filename != "" and filename is not None:
+            image = Image(filename, largeur or 200, description)
+            db.session.add(image)
         db.session.add(article)
         db.session.commit()
         return article
@@ -195,7 +201,9 @@ class FormArticleUpdate(FlaskForm):
         FileAllowed(
             ['jpg', 'png'],
             "Merci de n'envoyer que des fichiers JPG ou PNG.")])
-    editor = StringField('Contenu')
+    largeur = IntegerField("Largeur de l'image", default=200, validators=[DataRequired()])
+    description = StringField("Description/texte de remplacement")
+    editor = StringField("Contenu de l'article")
     next = HiddenField()
 
     def filename(self):
@@ -209,7 +217,7 @@ class FormArticleUpdate(FlaskForm):
         filename = f'{hex(random.randrange(16 ** 48))[2:]}'
         return filename + ext
 
-    def update_article(self, article, filename):
+    def update_article(self, article, filename, largeur, description):
         """
         Met à jour un article et le renvoie
 
@@ -217,7 +225,14 @@ class FormArticleUpdate(FlaskForm):
             Article: article créé
         """
         article.contenu = self.editor.data
-        article.image = filename
+        if filename is not None and filename != "":
+            if article.image is not None:
+                db.session.delete(article.image)
+            article.image = Image(filename, largeur, description)
+            db.session.add(article.image)
+        elif article.image is not None:
+            article.image.description = description
+            article.image.largeur = largeur
         db.session.commit()
         return article
 
@@ -275,3 +290,49 @@ class FormAffronter(FlaskForm):
     domicile = RadioField("Lieu du match",
                           choices=[('True', "Réception"), ('False', "Déplacement")],
                           coerce=str, validators=[DataRequired()])
+
+class FormFichierAdd(FlaskForm):
+    """Formulaire de l'ajout d'un fichier"""
+    image = FileField('Fichier', validators=[DataRequired()])
+    largeur = IntegerField("Largeur de l'image", default=200, validators=[DataRequired()])
+    description = StringField("Description/texte de remplacement")
+
+    def filename(self):
+        """
+        Donne un nom au fichier
+
+        Returns:
+            str: nom du fichier
+        """
+        _, ext = os.path.splitext(self.image.data.filename)
+        filename = f'{hex(random.randrange(16 ** 48))[2:]}'
+        return filename + ext
+
+    def creation_fichier(self, filename):
+        """
+        Créé un fichier et le renvoie
+
+        Returns:
+            Image: fichier créé
+        """
+        image = Image(filename, self.largeur.data or 200, self.description.data)
+        db.session.add(image)
+        db.session.commit()
+        return image
+
+class FormFichierUpdate(FlaskForm):
+    """Formulaire de mise à jour d'un fichier"""
+    largeur = IntegerField("Largeur de l'image", default=200, validators=[DataRequired()])
+    description = StringField("Description/texte de remplacement")
+
+    def update_fichier(self, fichier, largeur, description):
+        """
+        Met à jour un fichier et le renvoie
+
+        Returns:
+            Image: fichier modifié
+        """
+        fichier.description = description
+        fichier.largeur = largeur
+        db.session.commit()
+        return fichier
