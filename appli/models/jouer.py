@@ -70,8 +70,8 @@ class Jouer(db.Model):
         cpt = 0
         scores1, scores2 = self.score1.split("-"), self.score2.split("-")
         for i, set2 in enumerate(scores2):
-                if int(set2) > int(scores1[i]):
-                    cpt += 1
+            if int(set2) > int(scores1[i]):
+                cpt += 1
         return cpt
 
     def __str__(self):
