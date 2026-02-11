@@ -49,6 +49,11 @@ def calendrier():
 
 @app.route('/competitions/calendrier/<int:annee>')
 def calendrier_annee(annee):
+    """Permet d'afficher la page concernant le calendrier des tournois démarrant durant une certaine année
+
+    Args:
+        annee (int): L'année où les tournois ont commencés
+    """
     list_comp_indiv = ChampionnatIndividuel.query.filter(
         ChampionnatIndividuel.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')
     ).order_by(\
