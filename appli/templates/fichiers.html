@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Gestion des fichiers</h1>
+
+    <ul class="list-group">
+        {% for fichier in fichiers %}
+            <li class="list-group-item"
+                style="display: grid; grid-template-columns: 1fr max-content">
+                <div style="display: flex; align-items: center">
+                    {% if tailles[fichier.nom_fichier] == None %}
+                        <div class="text-danger">
+                            <b>{{ fichier.nom_fichier }}</b>
+                            (introuvable)
+                        </div>
+                    {% else %}
+                        <div>
+                            <b>{{ fichier.nom_fichier }}</b>
+                            ({{ get_pretty_size(tailles[fichier.nom_fichier]) }})
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="btn-group">
+                    <a title="Modifier"
+                       href="{{ url_for('fichiers_update', nom_fichier=fichier.nom_fichier) }}"
+                       class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+                    </a>
+                    <a title="Supprimer" href="{{ url_for('fichiers_delete', nom_fichier=fichier.nom_fichier) }}"
+                       class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                             viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash">
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                            <path d="M3 6h18"/>
+                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="mt-2">
+        <a href="{{ url_for('fichiers_create') }}" class="btn btn-primary">Téléverser un fichier</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Supprimer un fichier</h1>
+
+    <form action="{{ url_for('fichiers_delete', nom_fichier=fichier.nom_fichier) }}" method="post"
+          class="form-horizontal mb-3">
+        {{ form.hidden_tag() }}
+        <p>Vous allez supprimer le fichier <b>{{ fichier.nom_fichier }}</b>. Ce fichier ne sera plus utilisable sur le site et toutes les pages l'utilisant ne pourront plus l'afficher. Voulez-vous continuer ?</p>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="Supprimer" class="btn btn-danger">
+                <a href="{{ url_for('fichiers_list') }}" class="btn btn-secondary">Annuler</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
