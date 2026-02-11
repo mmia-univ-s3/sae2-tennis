@@ -3,15 +3,17 @@
 {% block main %}
     <h1> Modification d'un match en interne</h1>
 
+    <p> Pour les scores, veuillez mettre les points de chaque set séparés par un tiret. Ex :
+        4-7-5 </p>
+
     {% if error %}
         <div class="alert alert-danger">
             Erreur:<br>
-            -Soit les joueurs sont les mêmes. Veuillez vérifier les informations.<br>
-            -Soit les données rentrées pour les 2 scores ne sont pas de même taille<br>
+            Les données rentrées pour les 2 scores ne sont pas de même taille<br>
         </div>
     {% endif %}
 
-    <form action="{{ url_for('match_update', id_interne=match._id_championnat,
+    <form action="{{ url_for('match_update', id_interne=id_interne,
             id_j1=id_joueurs[0], id_j2=id_joueurs[1]) }}" method="POST">
         {{  form.hidden_tag() }}
         <div class="form-group mb-3">
@@ -21,21 +23,9 @@
             </div>
         </div>
         <div class="form-group mb-3">
-            <label for="Joueur1" class="col-sm-2 control-label">{{ form.joueur1.label }}</label>
-            <div class="col-sm-10">
-                {{ form.joueur1(class_="form-select") }}
-            </div>
-        </div>
-        <div class="form-group mb-3">
             <label for="score1" class="col-sm-2 control-label">{{ form.points1.label }}</label>
             <div class="col-sm-10">
                 {{ form.points1(size=50, class_="form-control") }}
-            </div>
-        </div>
-        <div class="form-group mb-3">
-            <label for="Joueur2" class="col-sm-2 control-label">{{ form.joueur2.label }}</label>
-            <div class="col-sm-10">
-                {{ form.joueur2(class_="form-select") }}
             </div>
         </div>
         <div class="form-group mb-3">
@@ -46,7 +36,7 @@
         </div>
         <div class="col-sm-offset-2 col-sm-10">
             <input type="submit" value="Valider" class="btn btn-success">
-            <a href="{{ url_for('interne_view', id_interne=match._id_championnat) }}" class="btn btn-secondary">Annuler</a>
+            <a href="{{ url_for('interne_view', id_interne=id_interne) }}" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
 {% endblock %}

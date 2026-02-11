@@ -55,8 +55,9 @@ class Jouer(db.Model):
             int: Le nombre de sets gagnés par le joueur 1
         """
         cpt = 0
-        for i, set1 in enumerate(self.score1):
-            if int(set1) > int(self.score2[i]):
+        scores1, scores2 = self.score1.split("-"), self.score2.split("-")
+        for i, set1 in enumerate(scores1):
+            if int(set1) > int(scores2[i]):
                 cpt += 1
         return cpt
 
@@ -67,9 +68,10 @@ class Jouer(db.Model):
             int: Le nombre de sets gagnés par le joueur 2
         """
         cpt = 0
-        for i, set2 in enumerate(self.score2):
-            if int(set2) > int(self.score1[i]):
-                cpt += 1
+        scores1, scores2 = self.score1.split("-"), self.score2.split("-")
+        for i, set2 in enumerate(scores2):
+                if int(set2) > int(scores1[i]):
+                    cpt += 1
         return cpt
 
     def __str__(self):

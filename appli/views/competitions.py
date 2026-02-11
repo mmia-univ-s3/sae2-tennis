@@ -5,8 +5,9 @@ from sqlalchemy.exc import IntegrityError
 from appli.app import app, db, required_permission_lvl
 from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer,\
 Equipe, Participer, ChampionnatInterne, Jouer, Championnat
-from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser,\
-FormParticiper, FormAffronter, FormInternes, FormConfirm, FormMatch
+from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser, \
+    FormParticiper, FormAffronter, FormInternes, FormConfirm, FormMatch, FormMatchUpdate
+
 
 @app.route('/competitions/calendrier/')
 def calendrier():
@@ -537,12 +538,13 @@ def interne_view(id_interne):
         matchs.append((tournoi_interne, joueur1, score1, joueur2, score2))
     form = FormInternes(date=tournoi_interne.date_championnat, titre=tournoi_interne.titre)
     if form.validate_on_submit():
-        tournoi_interne.data = form.date.data
+        tournoi_interne.date = form.date.data
         tournoi_interne.titre = form.titre.data
         db.session.commit()
         return redirect(url_for("internes", id_interne=id_interne))
     return render_template("interne_view.html", title="Tournoi interne",
-                           interne=tournoi_interne, form=form, matchs=matchs, id_interne=id_interne)
+                           interne=tournoi_interne, form=form, matchs=matchs,
+                           id_interne=id_interne)
 
 @app.route('/competitions/tournois-internes/<int:id_interne>/<int:id_j1>/<int:id_j2>/',
            methods=['GET', 'POST'])
@@ -552,23 +554,20 @@ def match_update(id_interne, id_j1, id_j2):
     tournoi_interne = ChampionnatInterne.query.get(id_interne)
     match = Jouer.query.get((id_interne, id_j1, id_j2))
     id_joueurs = (id_j1, id_j2)
-    joueur1 = Joueur.query.get(id_j1)
-    joueur2 = Joueur.query.get(id_j2)
-    form = FormMatch(sets=match.sets, joueur1=joueur1, points1=match.score1, joueur2=joueur2,
-                     points2=match.score2)
+    form = FormMatchUpdate(sets=match.sets, points1=match.score1, points2=match.score2)
 
     if form.validate_on_submit():
-        if len(form.points1.data) == len(form.points2.data) and form.joueur1 != form.joueur2:
-            match.score1 = form.points1
-            match.score2 = form.points2
+        if len(form.points1.data) == len(form.points2.data):
+            match.score1 = form.points1.data
+            match.score2 = form.points2.data
             db.session.commit()
             return redirect(url_for("interne_view", id_interne=id_interne))
         return render_template("interne_match_update.html",
                                title="Modification d'un match", form=form, interne=tournoi_interne,
-                               error=True)
+                               id_joueurs=id_joueurs, error=True, id_interne=id_interne)
     return render_template('interne_match_update.html',
                            title="Modification d'un match", form=form, interne=tournoi_interne,
-                           error=False, match=match, id_joueurs=id_joueurs)
+                           error=False, match=match, id_joueurs=id_joueurs, id_interne=id_interne)
 
 
 @app.route('/competitions/tournois-internes/<int:id_interne>/add/', methods=['GET', 'POST'])
