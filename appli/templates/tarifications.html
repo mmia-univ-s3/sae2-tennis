@@ -2,6 +2,13 @@
 
 {% block main %}
     <h1>Tarifications</h1>
+    <center><select class="form-select" style="width: max-content; text-align: center;" onchange='location.href = `{{ url_for("tarifications_sport", id_sport=9999) }}`.replace("9999", this.value);'>
+        <option value="">Toutes les sports</option>
+        {% for sport in liste_sports %}
+            <option value="{{ sport.id }}" {% if sport.id == id_sport %}selected{% endif %}>{{ sport.nom }}</option>
+        {% endfor %}
+        </select>
+    </center>
     {% for sport in tarifs %}
         <h2>Détail des tarifs {{ sport.nom }}</h2>
             <a href="{{ url_for('tarifications_sport_delete', id_sport=sport.id) }}"

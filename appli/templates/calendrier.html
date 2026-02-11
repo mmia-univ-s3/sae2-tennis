@@ -45,7 +45,7 @@
             </table>
         {% endif %}
 
-        <h1>Liste des compétitions</h1>
+        <h1>Liste des compétitions {% if annee != None %} de l'année {{ annee }}{% endif %}</h1>
         <center><select class="form-select" style="width: max-content; text-align: center;" onchange='location.href = `{{ url_for("calendrier_annee", annee=9999) }}`.replace("9999", this.value);'>
             <option value="">Toutes les années</option>
             {% for an in annees %}
