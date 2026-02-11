@@ -21,7 +21,7 @@
 
         {% else %}
             <h2>Tournoi interne {{ interne.titre }}</h2>
-            <h4>Se déroule le {{ interne.date_championnat }}. </h4>
+            <h4>Se déroule le {{ interne.date_championnat.strftime("%d/%m/%Y") }}. </h4>
         {% endif %}
         <hr>
         <h2 class="mt-5">Matchs

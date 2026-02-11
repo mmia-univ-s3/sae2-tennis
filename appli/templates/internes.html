@@ -8,7 +8,7 @@
         <a class="list-group-item list-group-item-action"
            href="{{ url_for('interne_view', id_interne=tournoi.id) }}">
             <center>
-                {{ tournoi.date_championnat }} -
+                {{ tournoi.date_championnat.strftime("%d/%m/%Y") }} -
                 {{ tournoi.titre }}
             </center>
         </a>

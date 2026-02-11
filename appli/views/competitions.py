@@ -523,7 +523,6 @@ def interne_delete(id_interne):
 
 
 @app.route('/competitions/tournois-internes/<int:id_interne>/', methods=['GET', 'POST'])
-@required_permission_lvl("publicateur")
 def interne_view(id_interne):
     """Page permettant de visualiser/modifier un tournoi interne"""
     tournoi_interne = ChampionnatInterne.query.get(id_interne)

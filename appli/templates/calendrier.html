@@ -18,7 +18,7 @@
                     {% for semaine in dates %}
                         <tr>
                             {% for date in semaine %}
-                                <td class="bg-success-subtle"><center>{{ date.strftime('%d/%m/%y') }}<br>
+                                <td class="bg-success-subtle"><center>{{ date.strftime('%d/%m/%Y') }}<br>
                                     {% for championnat in calendrier[date] %}
                                         {% if championnat.type_championnat == "individuel" %}
                                             <a href="{{ url_for('tournoi', type_tournoi='individuel', id_championnat=championnat.id) }}" class="text-danger">{{ championnat.titre }}</a>
