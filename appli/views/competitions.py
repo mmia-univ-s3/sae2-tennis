@@ -13,9 +13,9 @@ def calendrier():
     """Permet d'afficher la page concernant le calendrier des tournois"""
     premiere_date = date.today() - timedelta(days=(int(datetime.today().strftime("%w")) - 1) % 7)
     derniere_date = date.today() + timedelta(days=(-int(datetime.today().strftime("%w"))) % 7 + 21)
-    list_comp_calendrier = Championnat.query.filter(Championnat.date_championnat <= derniere_date,
-                                                    Championnat.date_championnat >= premiere_date)\
-                                                        .all()
+    list_comp_calendrier = Championnat.query.filter(Championnat.date_championnat.between(
+        premiere_date.strftime("%Y-%m-%d"), derniere_date.strftime("%Y-%m-%d")
+    )).all()
     date_jour = premiere_date
     list_dates = []
     dico_calendrier = {}
@@ -35,9 +35,37 @@ def calendrier():
         ChampionnatIndividuel.date_championnat.desc()).all()
     list_comp_equipe = ChampionnatEquipe.query.order_by(\
         ChampionnatEquipe.date_championnat.desc()).all()
+    list_comp = Championnat.query.order_by(Championnat.date_championnat)\
+        .filter(Championnat.type_championnat != "interne").all()
+    list_annees = []
+    for comp in list_comp:
+        if comp.type_championnat != "interne" and comp.date_championnat.year not in list_annees:
+            list_annees.append(comp.date_championnat.year)
     return render_template('calendrier.html', title="Calendrier - Compétitions",
                            comp_indiv=list_comp_indiv, comp_equipe=list_comp_equipe,
-                           calendrier=dico_calendrier, dates=list_dates)
+                           calendrier=dico_calendrier, dates=list_dates, annees=list_annees,
+                           annee=None)
+
+
+@app.route('/competitions/calendrier/<int:annee>')
+def calendrier_annee(annee):
+    list_comp_indiv = ChampionnatIndividuel.query.filter(
+        ChampionnatIndividuel.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')
+    ).order_by(\
+        ChampionnatIndividuel.date_championnat.desc()).all()
+    list_comp_equipe = ChampionnatEquipe.query.filter(
+        ChampionnatIndividuel.date_championnat.between(f'{annee}-01-01', f'{annee}-12-31')
+    ).order_by(\
+        ChampionnatEquipe.date_championnat.desc()).all()
+    list_comp = Championnat.query.order_by(Championnat.date_championnat).\
+        filter(Championnat.type_championnat != "interne").all()
+    list_annees = []
+    for comp in list_comp:
+        if comp.type_championnat != "interne" and comp.date_championnat.year not in list_annees:
+            list_annees.append(comp.date_championnat.year)
+    return render_template('calendrier.html', title="Calendrier - Compétitions",
+                           comp_indiv=list_comp_indiv, comp_equipe=list_comp_equipe,
+                           calendrier={}, dates=[], annees=list_annees, annee=annee)
 
 
 @app.route('/competitions/tournoi/<type_tournoi>/<int:id_championnat>/delete/',
@@ -413,12 +441,12 @@ def affronter_add(id_championnat: int, id_equipe: int):
 @app.route('/competitions/palmares/list/')
 def palmares_list():
     """Affiche la liste des palmarès."""
-    liste_championnat = ChampionnatIndividuel.query.all() + ChampionnatEquipe.query.all()
+    liste_championnat = Championnat.query.filter(Championnat.type_championnat != "interne")\
+        .order_by(Championnat.date_championnat.desc()).all()
     liste_annee = []
     for championnat in liste_championnat:
         if championnat.date_championnat.year not in liste_annee:
             liste_annee.append(championnat.date_championnat.year)
-    liste_annee.sort(reverse=True)
     return render_template('palmares_liste.html', title="Palmarès - Competitions",
                            liste_annee=liste_annee)
 
