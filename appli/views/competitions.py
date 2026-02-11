@@ -49,7 +49,7 @@ def calendrier():
 
 @app.route('/competitions/calendrier/<int:annee>')
 def calendrier_annee(annee):
-    """Permet d'afficher la page concernant le calendrier des tournois démarrant durant une certaine année
+    """Permet d'afficher la page concernant les tournois démarrant durant une certaine année
 
     Args:
         annee (int): L'année où les tournois ont commencés
