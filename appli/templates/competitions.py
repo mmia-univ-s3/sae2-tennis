@@ -85,7 +85,7 @@ def tournoi_delete(id_championnat: int):
         id_championnat (int): L'identifiant du tournoi dans la base de données
     """
     championnat = Championnat.query.get(id_championnat)
-    if championnat.type_championnat == "individuel":
+    if championnat.type_tournoi == "individuel":
         form = FormChampionnatIndividuel(titre=championnat.titre,
                                          date_championnat=championnat.date_championnat,
                                          categorie=championnat.categorie, serie=championnat.serie,
@@ -99,7 +99,7 @@ def tournoi_delete(id_championnat: int):
         db.session.commit()
         return redirect(url_for("calendrier"))
     return render_template('tournoi_delete.html', title="Supprimer un tournoi", form=form,
-                           type_tournoi=championnat.type_championnat, championnat=championnat)
+                           type_tournoi=championnat.type_tournoi, championnat=championnat)
 
 
 @app.route('/competitions/tournoi/<int:id_championnat>/update/',
@@ -112,7 +112,7 @@ def tournoi_update(id_championnat: int):
         id_championnat (int): L'identifiant du tournoi dans la base de données
     """
     championnat = championnat.query.get(id_championnat)
-    if championnat.type_championnat == "individuel":
+    if championnat.type_tournoi == "individuel":
         form = FormChampionnatIndividuel(titre=championnat.titre,
                                          date_championnat=championnat.date_championnat,
                                          categorie=championnat.categorie, serie=championnat.serie,
@@ -126,12 +126,12 @@ def tournoi_update(id_championnat: int):
         championnat.date_championnat = form.date_championnat.data
         championnat.categorie = form.categorie.data
         championnat.serie = form.serie.data
-        if championnat.type_championnat == "individuel":
+        if championnat.type_tournoi == "individuel":
             championnat.niveau = form.niveau.data
         db.session.commit()
         return redirect(url_for("calendrier"))
     return render_template('tournoi_update.html', title="Modifier un tournoi", form=form,
-                           type_tournoi=championnat.type_championnat, championnat=championnat)
+                           type_tournoi=championnat.type_tournoi, championnat=championnat)
 
 
 @app.route('/competitions/tournoi/<type_tournoi>/add/', methods=('GET', 'POST'))
@@ -171,7 +171,7 @@ def tournoi(id_championnat: int):
     liste_dates = {}
     donnees = {}
     champ = Championnat.query.get(id_championnat)
-    if champ.type_championnat == "individuel":
+    if champ.type_tournoi == "individuel":
         for classement in champ.classer:
             id_joueur = classement.joueur.id
             donnees[id_joueur] = {}
@@ -196,7 +196,7 @@ def tournoi(id_championnat: int):
                         liste_dates[id_equipe].append(match.date_match)
             liste_dates[id_equipe].sort()
     return render_template('tournoi.html', title="Tournoi - Competitions", championnat=champ,
-                           type_champ=champ.type_championnat, matchs=donnees, dates=liste_dates)
+                           type_champ=champ.type_tournoi, matchs=donnees, dates=liste_dates)
 
 
 @app.route('/competitions/tournoi/<int:id_championnat>/<int:id_joueur>/delete/',
@@ -359,7 +359,7 @@ def opposer_delete(id_championnat: int, id_joueur: int, date_match: str):
         date_match (str): La date du match.
     """
     date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
-    opposer = Opposer.query.get((id_championnat, id_joueur, date_str))
+    opposer = Joueur.query.get((id_championnat, id_joueur, date_str))
     form = FormOpposer()
     form.adversaire.data = opposer.adversaire
     form.date.data = date_str
@@ -375,7 +375,7 @@ def opposer_delete(id_championnat: int, id_joueur: int, date_match: str):
                            adversaire=opposer.adversaire, date_match=date_match)
 
 
-@app.route('/competitions/tournoi/<int:id_championnat>/<int:id_joueur>/<date_match>/'\
+@app.route('/competitions/tournoi/<int:id_championnat>/<int:id_equipe>/<date_match>/'\
            + 'update/', methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
 def opposer_update(id_championnat: int, id_joueur: int, date_match: str):

@@ -298,6 +298,18 @@ class FormAffronter(FlaskForm):
                           choices=[('True', "Réception"), ('False', "Déplacement")],
                           coerce=str, validators=[DataRequired()])
 
+class FormOpposer(FlaskForm):
+    """Formulaire de création et de mise à jour d'affrontement entre 2 joueurs."""
+    adversaire = StringField("Nom de l'adversaire", validators=[DataRequired()])
+    date = DateField("Date du match", validators=[DataRequired()])
+    resultat = RadioField("Victoire de l'équipe du club ?",
+                          choices=[('V', 'Victoire'), ('D', 'Défaite'), ('N', "Nul")],
+                          coerce=str, validators=[Optional()])
+    score = StringField("Score")
+    domicile = RadioField("Lieu du match",
+                          choices=[('True', "Réception"), ('False', "Déplacement")],
+                          coerce=str, validators=[DataRequired()])
+
 class FormFichierAdd(FlaskForm):
     """Formulaire de l'ajout d'un fichier"""
     image = FileField('Fichier', validators=[DataRequired()])

@@ -21,7 +21,6 @@
                     {% if championnats_futur[i] != None %}
                         <a class="list-group-item list-group-item-action"
                            href="{{ url_for('tournoi',
-                           type_tournoi=championnats_futur[i].type_championnat,
                            id_championnat=championnats_futur[i].id) }}">
                             {{ championnats_futur[i].titre }}
                         </a>
@@ -35,7 +34,6 @@
                 championnats_passes|length) %}
                     <a class="list-group-item list-group-item-action"
                        href="{{ url_for('tournoi',
-                       type_tournoi=championnats_passes[i].type_championnat,
                        id_championnat=championnats_passes[i].id) }}">
                         {{ championnats_passes[i].titre }}
                     </a>

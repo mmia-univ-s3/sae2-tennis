@@ -21,9 +21,9 @@
                                 <td class="bg-success-subtle"><center>{{ date.strftime('%d/%m/%Y') }}<br>
                                     {% for championnat in calendrier[date] %}
                                         {% if championnat.type_championnat == "individuel" %}
-                                            <a href="{{ url_for('tournoi', type_tournoi='individuel', id_championnat=championnat.id) }}" class="text-danger">{{ championnat.titre }}</a>
+                                            <a href="{{ url_for('tournoi', id_championnat=championnat.id) }}" class="text-danger">{{ championnat.titre }}</a>
                                         {% elif championnat.type_championnat == "equipe" %}
-                                            <a href="{{ url_for('tournoi', type_tournoi='equipe', id_championnat=championnat.id) }}" class="text-primary">{{ championnat.titre }}</a>
+                                            <a href="{{ url_for('tournoi', id_championnat=championnat.id) }}" class="text-primary">{{ championnat.titre }}</a>
                                         {% else %}
                                             <a href="{{ url_for('internes') }}" class="text-success">{{ championnat.titre }}</a>
                                         {% endif %}
@@ -58,7 +58,7 @@
                 {% for championnat in comp_indiv %}
                     <li>
                         {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('tournoi_delete', type_tournoi='individuel', id_championnat=championnat.id) }}"
+                            <a href="{{ url_for('tournoi_delete', id_championnat=championnat.id) }}"
                                 class="btn btn-outline-danger">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24"
@@ -71,7 +71,7 @@
                                     <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                 </svg>
                             </a>
-                            <a href="{{ url_for('tournoi_update', type_tournoi='individuel', id_championnat=championnat.id) }}"
+                            <a href="{{ url_for('tournoi_update', id_championnat=championnat.id) }}"
                                 class="btn btn-outline-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                         height="24"
@@ -84,7 +84,7 @@
                                 </svg>
                             </a>
                         {% endif %}
-                        {{ championnat.date_championnat.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', type_tournoi='individuel', id_championnat=championnat.id) }}">{{ championnat.titre }}</a>
+                        {{ championnat.date_championnat.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', id_championnat=championnat.id) }}">{{ championnat.titre }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -97,7 +97,7 @@
                 {% for championnat in comp_equipe %}
                     <li>
                         {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('tournoi_delete', type_tournoi='equipe', id_championnat=championnat.id) }}"
+                            <a href="{{ url_for('tournoi_delete', id_championnat=championnat.id) }}"
                                 class="btn btn-outline-danger">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24"
@@ -110,7 +110,7 @@
                                     <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                 </svg>
                             </a>
-                            <a href="{{ url_for('tournoi_update', type_tournoi='equipe', id_championnat=championnat.id) }}"
+                            <a href="{{ url_for('tournoi_update', id_championnat=championnat.id) }}"
                                 class="btn btn-outline-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                         height="24"
@@ -123,7 +123,7 @@
                                 </svg>
                             </a>
                         {% endif %}
-                        {{ championnat.date_championnat.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', type_tournoi='equipe', id_championnat=championnat.id) }}">{{ championnat.titre }}</a>
+                        {{ championnat.date_championnat.strftime("%d/%m/%Y") }} - <a href="{{ url_for('tournoi', id_championnat=championnat.id) }}">{{ championnat.titre }}</a>
                     </li>
                 {% endfor %}
             </ul>

@@ -38,7 +38,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <input type="submit" value="Modifier" class="btn btn-warning">
-                <a href="{{ url_for('tournoi', type_tournoi='equipe', id_championnat=championnat.id) }}" class="btn btn-secondary">Annuler</a>
+                <a href="{{ url_for('tournoi', id_championnat=championnat.id) }}" class="btn btn-secondary">Annuler</a>
             </div>
         </div>
     </form>

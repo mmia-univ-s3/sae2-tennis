@@ -19,6 +19,7 @@ from .sport import Sport
 from .jouer import Jouer
 from .inscrire import Inscrire
 from .image import Image
+from .opposer import Opposer
 
 @login_manager.user_loader
 def load_user(login: str):

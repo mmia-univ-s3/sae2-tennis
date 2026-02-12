@@ -16,17 +16,20 @@
         </ul>
         {% if type_champ == "individuel" %}
             {% if championnat.classer.all()|length > 0 %}
-                <table class="table table-bordered border-success-subtle">
-                    <thead class="table-bordered border-success-subtle">
-                        <th class="bg-warning-subtle" scope="col"><center>Participant</center></th>
-                        <th class="bg-warning-subtle" scope="col"><center>Classement</center></th>
-                        {% if current_user.is_authenticated %}<th class="bg-warning-subtle" scope="col"><center>Options</center></th>{% endif %}
-                    </thead>
-                    <tbody>
-                        {% for classement in championnat.classer %}
-                            <tr>
-                                <td class="bg-success-subtle table-bordered border-success-subtle"><center>{{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
-                                <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{% if classement.rang | length > 0 %}{{ classement.rang }}{% else %}-{% endif %}</center></td>
+                {% for classement in championnat.classer %}
+                    <table class="table-responsive table-bordered border-success-subtle table align-middle">
+                        <tbody>
+                            <tr class="table-bordered border-success-subtle">
+                                <th scope="col" class="bg-success-subtle" style="width: 400px;"><center>Joueur : {{ classement.joueur.nom }}</center></th>
+                                <th scope="col" class="bg-success-info" style="width: 250px;" colspan="2"><center>Classement : {% if classement.rang | length > 0 %}{{ classement.rang }}{% else %}-{% endif %}</center></th>
+                                {% if current_user.is_authenticated %}
+                                    <th scope="col" class="bg-success-warning" style="width: 200px;"><center>Options</center></th>
+                                {% endif %}
+                            </tr>
+                            <tr class="table-bordered border-success-subtle">
+                                <th class="bg-warning-subtle" scope="col"><center>Date</center></th>
+                                <th class="bg-warning-subtle" scope="col"><center>Adversaire</center></th>
+                                <th class="bg-warning-subtle" scope="col"><center>Resultat</center></th>
                                 {% if current_user.is_authenticated %}
                                     <td class="table-bordered border-success-subtle">
                                         <center><a href="{{ url_for('participant_indiv_delete', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
@@ -53,11 +56,74 @@
                                                 <path
                                                         d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
                                             </svg>
+                                        </a>
+                                        <a href="{{ url_for('opposer_add', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
+                                            class="btn btn-outline-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="lucide lucide-circle-plus-icon lucide-circle-plus">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <path d="M8 12h8"/>
+                                                <path d="M12 8v8"/>
+                                            </svg>
                                         </a></center>
                                     </td>
                                 {% endif %}
                             </tr>
-                        {% endfor %}
+                            {% for date_match in dates[classement.joueur.id] %}
+                                <tr>
+                                    <th class="bg-warning-subtle table-bordered border-success-subtle" scope="row"><center>{{ date_match.strftime("%d/%m/%Y") }}</center></th>
+                                    {% if matchs[classement.joueur.id][date_match].domicile %}
+                                        <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{{ matchs[classement.joueur.id][date_match].adversaire }}</center></td>
+                                        <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{% if matchs[classement.joueur.id][date_match].resultat != None %}{{ matchs[classement.joueur.id][date_match].resultat }} {{ matchs[classement.joueur.id][date_match].score }}{% else %} - {% endif %}</center></td>
+                                    {% else %}
+                                        <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ matchs[classement.joueur.id][date_match].adversaire }}</center></td>
+                                        <td class="bg-secondary-subtle table-bordered border-success-subtle"><center>{{ matchs[classement.joueur.id][date_match].resultat }} {{ matchs[classement.joueur.id][date_match].score }}</center></td>
+                                    {% endif %}
+                                    {% if current_user.is_authenticated %}
+                                        <td class="table-bordered border-success-subtle">
+                                            <center><a href="{{ url_for('opposer_delete', id_championnat=championnat.id, id_joueur=classement.joueur.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
+                                                class="btn btn-outline-danger">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none" stroke="currentColor" stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        class="lucide lucide-trash-icon lucide-trash">
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                                    <path d="M3 6h18"/>
+                                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </a>
+                                            <a href="{{ url_for('opposer_update', id_championnat=championnat.id, id_joueur=classement.joueur.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
+                                                class="btn btn-outline-primary">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24"
+                                                        viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                        class="lucide lucide-pen-icon lucide-pen">
+                                                    <path
+                                                            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                                                </svg>
+                                            </a></center>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+                <table class="table table-bordered border-danger-subtle">
+                    <tbody>
+                        <tr><th class="bg-warning-subtle" colspan="2">Légende</th></tr>
+                        <tr>
+                            <td class="bg-primary-subtle">Réception</td>
+                            <td class="bg-secondary-subtle">Déplacement</td>
+                        </tr>
                     </tbody>
                 </table>
             {% else %}
