@@ -20,7 +20,7 @@
                             </th>
                             {% for championnat in indiv[niveau][categorie] %}
                                 <tr>
-                                    <th class="bg-primary-subtle"><center><a href="{{ url_for('tournoi', tid_championnat=championnat.id) }}">{{ championnat.titre }}</a></center></th>
+                                    <th class="bg-primary-subtle"><center><a href="{{ url_for('tournoi', id_championnat=championnat.id) }}">{{ championnat.titre }}</a></center></th>
                                     <td><center>{{ championnat.vainqueur() }}</center></td>
                                     <td><center>{{ championnat.finaliste() }}</center></td>
                                 </tr>

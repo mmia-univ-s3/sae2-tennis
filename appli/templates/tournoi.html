@@ -20,7 +20,7 @@
                     <table class="table-responsive table-bordered border-success-subtle table align-middle">
                         <tbody>
                             <tr class="table-bordered border-success-subtle">
-                                <th scope="col" class="bg-success-subtle" style="width: 400px;"><center>Joueur : {{ classement.joueur.nom }}</center></th>
+                                <th scope="col" class="bg-success-subtle" style="width: 400px;"><center>Joueur : {{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
                                 <th scope="col" class="bg-success-info" style="width: 250px;" colspan="2"><center>Classement : {% if classement.rang | length > 0 %}{{ classement.rang }}{% else %}-{% endif %}</center></th>
                                 {% if current_user.is_authenticated %}
                                     <th scope="col" class="bg-success-warning" style="width: 200px;"><center>Options</center></th>
@@ -32,7 +32,7 @@
                                 <th class="bg-warning-subtle" scope="col"><center>Resultat</center></th>
                                 {% if current_user.is_authenticated %}
                                     <td class="table-bordered border-success-subtle">
-                                        <center><a href="{{ url_for('participant_indiv_delete', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
+                                        <center><a href="{{ url_for('participant_delete', id_championnat=championnat.id, id_participant=classement.joueur.id) }}"
                                             class="btn btn-outline-danger">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24"
@@ -45,7 +45,7 @@
                                                 <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                             </svg>
                                         </a>
-                                        <a href="{{ url_for('participant_indiv_update', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
+                                        <a href="{{ url_for('participant_update', id_championnat=championnat.id, id_participant=classement.joueur.id) }}"
                                             class="btn btn-outline-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24"
@@ -57,7 +57,7 @@
                                                         d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
                                             </svg>
                                         </a>
-                                        <a href="{{ url_for('opposer_add', id_championnat=championnat.id, id_joueur=classement.joueur.id) }}"
+                                        <a href="{{ url_for('affronter_add', id_championnat=championnat.id, id_participant=classement.joueur.id) }}"
                                             class="btn btn-outline-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24"
@@ -85,7 +85,7 @@
                                     {% endif %}
                                     {% if current_user.is_authenticated %}
                                         <td class="table-bordered border-success-subtle">
-                                            <center><a href="{{ url_for('opposer_delete', id_championnat=championnat.id, id_joueur=classement.joueur.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
+                                            <center><a href="{{ url_for('affronter_delete', id_championnat=championnat.id, id_participant=classement.joueur.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
                                                 class="btn btn-outline-danger">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                         viewBox="0 0 24 24"
@@ -98,7 +98,7 @@
                                                     <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                                 </svg>
                                             </a>
-                                            <a href="{{ url_for('opposer_update', id_championnat=championnat.id, id_joueur=classement.joueur.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
+                                            <a href="{{ url_for('affronter_update', id_championnat=championnat.id, id_participant=classement.joueur.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
                                                 class="btn btn-outline-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                         height="24"
@@ -130,7 +130,7 @@
                 <p>Aucun joueur du club ne participe à ce tournoi</p>
             {% endif %}
             {% if current_user.is_authenticated %}
-                <center><a href="{{ url_for('participant_indiv_add', id_championnat=championnat.id) }}"
+                <center><a href="{{ url_for('participant_add', id_championnat=championnat.id) }}"
                     class="btn btn-primary">Ajouter un participant</a></center>
             {% endif %}
         {% else %}
@@ -154,7 +154,7 @@
                                 <th class="bg-warning-subtle" scope="col"><center>Resultat</center></th>
                                 {% if current_user.is_authenticated %}
                                     <td class="table-bordered border-success-subtle">
-                                        <center><a href="{{ url_for('participant_equipe_delete', id_championnat=championnat.id, id_equipe=participant.equipe.id) }}"
+                                        <center><a href="{{ url_for('participant_delete', id_championnat=championnat.id, id_participant=participant.equipe.id) }}"
                                             class="btn btn-outline-danger">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24"
@@ -167,7 +167,7 @@
                                                 <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                             </svg>
                                         </a>
-                                        <a href="{{ url_for('participant_equipe_update', id_championnat=championnat.id, id_equipe=participant.equipe.id) }}"
+                                        <a href="{{ url_for('participant_update', id_championnat=championnat.id, id_participant=participant.equipe.id) }}"
                                             class="btn btn-outline-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24"
@@ -179,7 +179,7 @@
                                                         d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
                                             </svg>
                                         </a>
-                                        <a href="{{ url_for('affronter_add', id_championnat=championnat.id, id_equipe=participant.equipe.id) }}"
+                                        <a href="{{ url_for('affronter_add', id_championnat=championnat.id, id_participant=participant.equipe.id) }}"
                                             class="btn btn-outline-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24"
@@ -207,7 +207,7 @@
                                     {% endif %}
                                     {% if current_user.is_authenticated %}
                                         <td class="table-bordered border-success-subtle">
-                                            <center><a href="{{ url_for('affronter_delete', id_championnat=championnat.id, id_equipe=participant.equipe.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
+                                            <center><a href="{{ url_for('affronter_delete', id_championnat=championnat.id, id_participant=participant.equipe.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
                                                 class="btn btn-outline-danger">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                         viewBox="0 0 24 24"
@@ -220,7 +220,7 @@
                                                     <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                                 </svg>
                                             </a>
-                                            <a href="{{ url_for('affronter_update', id_championnat=championnat.id, id_equipe=participant.equipe.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
+                                            <a href="{{ url_for('affronter_update', id_championnat=championnat.id, id_participant=participant.equipe.id, date_match=date_match.strftime('%d-%m-%Y')) }}"
                                                 class="btn btn-outline-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                         height="24"
@@ -250,7 +250,7 @@
                 </table>
             {% endif %}
             {% if current_user.is_authenticated %}
-                <center><a href="{{ url_for('participant_equipe_add', id_championnat=championnat.id) }}"
+                <center><a href="{{ url_for('participant_add', id_championnat=championnat.id) }}"
                     class="btn btn-primary">Ajouter une équipe</a></center>
             {% endif %}
         {% endif %} 

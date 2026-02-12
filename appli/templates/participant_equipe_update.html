@@ -2,7 +2,7 @@
 
 {% block main %}
     <h1>Modification de l'équipe {{ equipe.nom }} pour {{ championnat.titre }}</h1>
-    <form action="{{ url_for('participant_equipe_update', id_championnat=championnat.id, id_equipe=equipe.id) }}"
+    <form action="{{ url_for('participant_update', id_championnat=championnat.id, id_participant=equipe.id) }}"
           method="post"
           class="form-horizontal mb-3">
         {{ form.hidden_tag() }}

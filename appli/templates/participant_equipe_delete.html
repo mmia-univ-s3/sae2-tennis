@@ -4,7 +4,7 @@
     <h1>Suppression d'une équipe pour {{ championnat.titre }}</h1>
     <p>Vous allez supprimer une équipe du tournoi. Cette action est irréversible.
         Voulez-vous continuer ?</p>
-    <form action="{{ url_for('participant_equipe_delete', id_championnat=championnat.id, id_equipe=equipe.id) }}"
+    <form action="{{ url_for('participant_delete', id_championnat=championnat.id, id_participant=equipe.id) }}"
           method="post"
           class="form-horizontal mb-3">
         {{ form.hidden_tag() }}

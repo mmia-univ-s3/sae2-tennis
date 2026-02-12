@@ -2,7 +2,7 @@
 
 {% block main %}
     <h1>Suppression du match {{ equipe.nom }} contre {{ adversaire }} dans le {{ championnat.titre }} le {{ date_match }}</h1>
-    <form action="{{ url_for('affronter_delete', id_championnat=championnat.id, id_equipe=equipe.id, date_match=date_match) }}" method="post" class="form-horizontal mb-3"
+    <form action="{{ url_for('affronter_delete', id_championnat=championnat.id, id_participant=equipe.id, date_match=date_match) }}" method="post" class="form-horizontal mb-3"
           enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="form-group mb-3">
