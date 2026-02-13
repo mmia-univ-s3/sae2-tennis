@@ -11,6 +11,7 @@ def login(client, callback):
 def test_partenaires(client):
     response = client.get('/partenaires/', follow_redirects=True)
     assert b"Partenaires" in response.data
+    assert b"https://example.com/part10" in response.data
 
 def test_partenaires_delete_confirm(client, testapp):
     with testapp.app_context():
