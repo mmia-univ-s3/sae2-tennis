@@ -197,7 +197,7 @@
                             </tr>
                             {% for date_match in dates[participant.equipe.id] %}
                                 <tr>
-                                    <th class="bg-warning-subtle table-bordered border-success-subtle" scope="row"><center>{{ date_match.strftime("%d/%m/%Y") }}{% if matchs[classement.joueur.id][date_match].mise_avant %} - <em>Important</em>{% endif %}</center></th>
+                                    <th class="bg-warning-subtle table-bordered border-success-subtle" scope="row"><center>{{ date_match.strftime("%d/%m/%Y") }}{% if matchs[participant.equipe.id][date_match].mise_avant %} - <em>Important</em>{% endif %}</center></th>
                                     {% if matchs[participant.equipe.id][date_match].domicile %}
                                         <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{{ matchs[participant.equipe.id][date_match].adversaire }}</center></td>
                                         <td class="bg-primary-subtle table-bordered border-success-subtle"><center>{% if matchs[participant.equipe.id][date_match].resultat != None %}{{ matchs[participant.equipe.id][date_match].resultat }} {{ matchs[participant.equipe.id][date_match].score }}{% else %} - {% endif %}</center></td>

@@ -378,7 +378,8 @@ def _exporter_championnats_equipes(filepath):
 
     liste_matchs = Affronter.query.all()
     with open(f"{filepath}/affronter.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCha", "idE", "nomAdv", "resultat", "score", "estDomicile", "dateMatch", "miseAvant"]
+        colonnes = ["idCha", "idE", "nomAdv", "resultat", "score", "estDomicile", "dateMatch",
+                    "miseAvant"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for match in liste_matchs:
@@ -431,7 +432,8 @@ def _exporter_championnats_individuels(filepath):
 
     liste_oppositions = Opposer.query.all()
     with open(f"{filepath}/opposer.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCha", "idJ", "nomAdv", "resultat", "score", "estDomicile", "dateMatch", "miseAvant"]
+        colonnes = ["idCha", "idJ", "nomAdv", "resultat", "score", "estDomicile", "dateMatch",
+                    "miseAvant"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for opposition in liste_oppositions:

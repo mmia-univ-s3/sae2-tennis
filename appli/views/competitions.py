@@ -389,7 +389,7 @@ def affronter_update(id_championnat: int, id_participant: int, date_match: str):
             return render_template('opposer_update.html', title="Modifier un match",
                                    form=form, championnat=opposer.championnat,
                                    joueur=opposer.joueur,
-                                   adversaire=opposer.adversaire, date_match=date_match)
+                                   adversaire=opposer.adversaire, date_match=date_str)
         date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
         affronter = Affronter.query.get((id_championnat, id_participant, date_str))
         form = FormAffronter(date=date_str, score=affronter.score,
@@ -407,7 +407,7 @@ def affronter_update(id_championnat: int, id_participant: int, date_match: str):
         return render_template('affronter_update.html', title="Modifier un match",
                                 form=form, championnat=affronter.championnat,
                                 equipe=affronter.equipe,
-                                adversaire=affronter.adversaire, date_match=date_match)
+                                adversaire=affronter.adversaire, date_match=date_str)
     except IntegrityError:
         db.session.rollback()
         if championnat.type_championnat == "individuel":
