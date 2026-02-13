@@ -1,14 +1,17 @@
-ARTICLE[<u>idArt</u>, titreArt, contenu, nbClics, dateArt, typeArt]  
-HISTOIRE[<u>idH</u>, annee, trivia]  
-PARTENAIRE[<u>idP</u>, nomP, logo, important]  
-UTILISATEUR[<u>idU</u>, mdp, role]  
+IMAGE[<u>nom_fichier</u>, largeur, description]  
+ARTICLE[<u>idArt</u>, titreArt, contenu, nbClics, dateArt, typeArt, #nom_fichier]  
+HISTOIRE[<u>idH</u>, annee, trivia, #idArt]  
+PARTENAIRE[<u>idP</u>, nomP, logo, important, #nom_fichier]  
 
-CHAMP_INTER[<u>idCha</u>, dateCha, titreCha]  
+UTILISATEUR[<u>idU</u>, mdp, role]  
+  
 CHAMP_INDIV[<u>idCha</u>, dateCha, titreCha, categorieSport, serie, niveau]  
 JOUEUR[<u>idJ</u>, nomJ, prenomJ, #idE]  
-INSCRIRE[<u>#idCha, #idJ</u>]  
-JOUER[<u>#idCha, #idJ1, #idJ2</u>, setsGagnants, score1, score2]  
+OPPOSER[<u>#idCha, #idJ, nomAdv, dateMatch</u>, resultat, score estDomicile]  
 CLASSER[<u>#idCha, #idJ</u>, rang]  
+  
+CHAMP_INTER[<u>idCha</u>, dateCha, titreCha]  
+JOUER[<u>#idCha, #idJ1, #idJ2</u>, setsGagnants, score1, score2]  
 
 DIVISION[<u>idDiv</u>, intituleDiv]  
 CHAMP_EQUIPE[<u>idCha</u>, dateCha, titreCha, categorieSport, serie]  

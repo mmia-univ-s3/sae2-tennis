@@ -7,7 +7,7 @@ import click
 from .app import app, db
 from .models import Article, Histoire, Partenaire, Utilisateur, CategorieTarif, Reservation, \
     Reduction, Division, ChampionnatEquipe, ChampionnatIndividuel, ChampionnatInterne, Equipe, \
-    Participer, Affronter, Joueur, Classer, Sport, Jouer, Inscrire, Image, Opposer
+    Participer, Affronter, Joueur, Classer, Sport, Jouer, Image, Opposer
 
 
 def _importer_articles(filename):
@@ -199,12 +199,6 @@ def _importer_championnats_internes(filepath):
                                        titre=ligne["titreCha"])
             champ.id = int(ligne["idCha"])
             db.session.add(champ)
-
-    with open(filepath + "/inscrire.csv", newline="", encoding="utf-8") as csvfile:
-        lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
-        for ligne in lecture:
-            inscrire = Inscrire(id_championnat=int(ligne["idCha"]), id_j=int(ligne["idJ"]))
-            db.session.add(inscrire)
 
     with open(filepath + "/jouer.csv", newline="", encoding="utf-8") as csvfile:
         lecture: csv.DictReader = csv.DictReader(csvfile, delimiter=';')
@@ -457,15 +451,6 @@ def _exporter_championnats_internes(filepath):
             ecriture.writerow({"idCha" : str(championnat.id),
                                "dateCha" : championnat.date_championnat.strftime("%Y-%m-%d"),
                                "titreCha" : championnat.titre})
-
-    liste_inscriptions = Inscrire.query.all()
-    with open(f"{filepath}/inscrire.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCha", "idJ"]
-        ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
-        ecriture.writeheader()
-        for inscription in liste_inscriptions:
-            ecriture.writerow({"idCha" : str(inscription._id_championnat),
-                               "idJ" : str(inscription._id_j)})
 
     liste_jeux = Jouer.query.all()
     with open(f"{filepath}/jouer.csv", 'w', newline="", encoding="utf-8") as csvfile:

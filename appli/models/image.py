@@ -1,6 +1,6 @@
 from appli.app import db
 
-class Image (db.Model):
+class Image(db.Model):
     """Contient des informations d'une image"""
     __tablename__ = "IMAGE"
 

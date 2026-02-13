@@ -17,7 +17,6 @@ from .categorie_tarif import CategorieTarif
 from .tarif import Tarif, Reservation, Reduction
 from .sport import Sport
 from .jouer import Jouer
-from .inscrire import Inscrire
 from .image import Image
 from .opposer import Opposer
 
