@@ -63,7 +63,8 @@ def test_participant_indiv_update(client, testapp):
         response = login(client, "/competitions/tournoi/12/1/update/")
         response = client.get('/competitions/tournoi/12/1/update/',
                               follow_redirects=True)
-        assert b"Modification du participant Jean Claude pour Championnat individuel 1" in response.data
+        assert b"Modification du participant Jean Claude pour Championnat individuel 1" \
+               in response.data
 
 def test_participant_indiv_add(client, testapp):
     with testapp.app_context():
@@ -99,7 +100,8 @@ def test_affronter_delete(client, testapp):
         response = login(client, "/competitions/tournoi/1/1/05-10-2025/delete/")
         response = client.get('/competitions/tournoi/1/1/05-10-2025/delete/',
                               follow_redirects=True)
-        assert b"Suppression du match equipe 1 contre equipe 10 dans le championnat equipe 1 le 05-10-2025" in response.data
+        assert (b"Suppression du match equipe 1 contre equipe 10 dans le championnat "
+                b"equipe 1 le 05-10-2025") in response.data
         assert b"equipe 10" in response.data
 
 def test_affronter_update(client, testapp):
@@ -107,7 +109,8 @@ def test_affronter_update(client, testapp):
         response = login(client, "/competitions/tournoi/1/1/05-10-2025/update/")
         response = client.get('/competitions/tournoi/1/1/05-10-2025/update/',
                               follow_redirects=True)
-        assert b"Modification du match equipe 1 contre equipe 10 dans le championnat equipe 1 le 05-10-2025" in response.data
+        assert (b"Modification du match equipe 1 contre equipe 10 dans le championnat "
+                b"equipe 1 le 05-10-2025") in response.data
         assert b"equipe 10" in response.data
 
 def test_affronter_add(client, testapp):
