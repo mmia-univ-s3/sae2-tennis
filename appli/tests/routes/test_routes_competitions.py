@@ -101,7 +101,7 @@ def test_affronter_delete(client, testapp):
         response = client.get('/competitions/tournoi/1/1/05-10-2025/delete/',
                               follow_redirects=True)
         assert (b"Suppression du match equipe 1 contre equipe 10 dans le championnat "
-                b"equipe 1 le 05-10-2025") in response.data
+                b"equipe 1 le 05/10/2025") in response.data
         assert b"equipe 10" in response.data
 
 def test_affronter_update(client, testapp):
@@ -110,7 +110,7 @@ def test_affronter_update(client, testapp):
         response = client.get('/competitions/tournoi/1/1/05-10-2025/update/',
                               follow_redirects=True)
         assert (b"Modification du match equipe 1 contre equipe 10 dans le championnat "
-                b"equipe 1 le 05-10-2025") in response.data
+                b"equipe 1 le 05/10/2025") in response.data
         assert b"equipe 10" in response.data
 
 def test_affronter_add(client, testapp):
