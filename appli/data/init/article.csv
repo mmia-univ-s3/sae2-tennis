@@ -13,3 +13,4 @@ idArt;titreArt;contenu;nbClics;dateArt;typeArt;nom_fichier
 12;_mail;contact@example.com;0;2025-01-01;pages;
 13;_adresse;123 Rue du Test, 75001 Paris;0;2025-01-01;pages;
 14;_reseaux;"<a href=""https://example.com/"">Facebook</a> / <a href=""https://example.com/"">Twitter</a> / <a href=""https://example.com/"">Instagram</a>";0;2025-01-01;pages;
+15;_management;<p>banane</p>;0;2026-02-13;pages;
