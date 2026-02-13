@@ -297,6 +297,7 @@ class FormAffronter(FlaskForm):
     domicile = RadioField("Lieu du match",
                           choices=[('True', "Réception"), ('False', "Déplacement")],
                           coerce=str, validators=[DataRequired()])
+    mise_avant = BooleanField("Mettre en avant ?")
 
 class FormOpposer(FlaskForm):
     """Formulaire de création et de mise à jour d'affrontement entre 2 joueurs."""
@@ -309,6 +310,8 @@ class FormOpposer(FlaskForm):
     domicile = RadioField("Lieu du match",
                           choices=[('True', "Réception"), ('False', "Déplacement")],
                           coerce=str, validators=[DataRequired()])
+    mise_avant = BooleanField("Mettre en avant ?")
+
 
 class FormFichierAdd(FlaskForm):
     """Formulaire de l'ajout d'un fichier"""

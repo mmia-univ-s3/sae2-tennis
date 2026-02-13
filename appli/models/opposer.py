@@ -16,6 +16,7 @@ class Opposer(db.Model):
     resultat: str = db.Column("resultat", db.Text)
     score: int = db.Column("score", db.Text)
     domicile: bool = db.Column("estDomicile", db.Boolean)
+    mise_avant: bool = db.Column("miseAvant", db.Boolean)
 
     championnat = db.relationship("ChampionnatIndividuel", backref=db.backref("opposer",
                                   lazy="dynamic", cascade="all, delete-orphan"))
@@ -24,8 +25,8 @@ class Opposer(db.Model):
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, id_championnat: int, id_joueur: int, adversaire: str,
-                 resultat: str, score: str,
-                 domicile: bool, date_match: date):
+                 resultat: str, score: str, domicile: bool, date_match: date,
+                 mise_avant: bool):
         self._id_championnat = id_championnat
         self._id_joueur = id_joueur
         self.adversaire = adversaire
@@ -33,6 +34,7 @@ class Opposer(db.Model):
         self.score = score
         self.domicile = domicile
         self.date_match = date_match
+        self.mise_avant = mise_avant
 
     def __str__(self):
         texte = f"<Opposer({self._id_championnat}) {self.joueur.nom} vs " + \

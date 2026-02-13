@@ -146,7 +146,8 @@ def _importer_championnats_equipes(filepath):
                                   adversaire=ligne["nomAdv"],
                                   resultat=ligne["resultat"], score=ligne["score"],
                                   domicile=ligne["estDomicile"] == "True",
-                                  date_match=date.fromisoformat(ligne["dateMatch"]))
+                                  date_match=date.fromisoformat(ligne["dateMatch"]),
+                                  mise_avant=ligne["miseAvant"] == "True")
             db.session.add(affronter)
     db.session.commit()
 
@@ -183,7 +184,8 @@ def _importer_championnats_individuels(filepath):
             opposition = Opposer(id_championnat=int(ligne["idCha"]), id_joueur=int(ligne["idJ"]),
                                  adversaire=ligne["nomAdv"], resultat=ligne["resultat"],
                                  score=ligne["score"], domicile=ligne["estDomicile"] == "True",
-                                 date_match=date.fromisoformat(ligne["dateMatch"]))
+                                 date_match=date.fromisoformat(ligne["dateMatch"]),
+                                 mise_avant=ligne["miseAvant"] == "True")
             db.session.add(opposition)
     db.session.commit()
 
@@ -376,7 +378,7 @@ def _exporter_championnats_equipes(filepath):
 
     liste_matchs = Affronter.query.all()
     with open(f"{filepath}/affronter.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCha", "idE", "nomAdv", "resultat", "score", "estDomicile", "dateMatch"]
+        colonnes = ["idCha", "idE", "nomAdv", "resultat", "score", "estDomicile", "dateMatch", "miseAvant"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for match in liste_matchs:
@@ -386,7 +388,8 @@ def _exporter_championnats_equipes(filepath):
                                "resultat" : match.resultat,
                                "score" : match.score,
                                "estDomicile" : str(match.domicile),
-                               "dateMatch" : match.date_match.strftime("%Y-%m-%d")})
+                               "dateMatch" : match.date_match.strftime("%Y-%m-%d"),
+                               "miseAvant" : match.mise_avant})
 
 # pylint: disable=protected-access
 def _exporter_championnats_individuels(filepath):
@@ -428,7 +431,7 @@ def _exporter_championnats_individuels(filepath):
 
     liste_oppositions = Opposer.query.all()
     with open(f"{filepath}/opposer.csv", 'w', newline="", encoding="utf-8") as csvfile:
-        colonnes = ["idCha", "idJ", "nomAdv", "resultat", "score", "estDomicile", "dateMatch"]
+        colonnes = ["idCha", "idJ", "nomAdv", "resultat", "score", "estDomicile", "dateMatch", "miseAvant"]
         ecriture : csv.DictWriter = csv.DictWriter(csvfile, fieldnames=colonnes, delimiter=';')
         ecriture.writeheader()
         for opposition in liste_oppositions:
@@ -437,7 +440,8 @@ def _exporter_championnats_individuels(filepath):
                                "nomAdv" : opposition.adversaire,
                                "resultat" : opposition.resultat,
                                "score" : opposition.score, "estDomicile" : opposition.domicile,
-                               "dateMatch" : opposition.date_match.strftime("%Y-%m-%d")})
+                               "dateMatch" : opposition.date_match.strftime("%Y-%m-%d"),
+                               "miseAvant" : opposition.mise_avant})
 
 # pylint: disable=protected-access
 def _exporter_championnats_internes(filepath):

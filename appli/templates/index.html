@@ -11,6 +11,21 @@
             </p>
             {{ article.contenu|safe }}
 
+            <h3>Futurs matchs à ne pas manquer</h3>
+            <div class="list-group list-group-flush">
+                {% if matchs == [] %}
+                    <p>Aucun match important n'est prévu pour le moment.</p>
+                {% endif %}
+                {% for i in range(3 if matchs|length >= 3 else
+                matchs|length) %}
+                    <a class="list-group-item list-group-item-action"
+                       href="{{ url_for('tournoi',
+                       id_championnat=matchs[i][1].championnat.id) }}">
+                        {{ matchs[i][1].date_match.strftime("%d/%m/%Y") }} - {{ matchs[i][1].championnat.titre }} - {% if matchs[i][0] == "indiv" %}{{matchs[i][1].joueur.prenom}} {{matchs[i][1].joueur.nom}}{% else %}{{matchs[i][1].equipe.nom}}{% endif %} vs. {{matchs[i][1].adversaire}}
+                    </a>
+                {% endfor %}
+            </div>
+
             <h3>Futurs championnats</h3>
             <div class="list-group list-group-flush">
                 {% if championnats_futur == [] %}
