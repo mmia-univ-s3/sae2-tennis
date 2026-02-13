@@ -342,7 +342,7 @@ def affronter_delete(id_championnat: int, id_participant: int, date_match: str):
             return redirect(url_for("tournoi", id_championnat=id_championnat))
         return render_template('opposer_delete.html', title="Supprimer un match",
                             form=form, championnat=opposer.championnat, joueur=opposer.joueur,
-                            adversaire=opposer.adversaire, date_match=date_match)
+                            adversaire=opposer.adversaire, date_match=date_str)
     date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
     affronter = Affronter.query.get((id_championnat, id_participant, date_str))
     form = FormAffronter()
@@ -357,7 +357,7 @@ def affronter_delete(id_championnat: int, id_participant: int, date_match: str):
         return redirect(url_for("tournoi", id_championnat=id_championnat))
     return render_template('affronter_delete.html', title="Supprimer un match",
                         form=form, championnat=affronter.championnat, equipe=affronter.equipe,
-                        adversaire=affronter.adversaire, date_match=date_match)
+                        adversaire=affronter.adversaire, date_match=date_str)
 
 
 @app.route('/competitions/tournoi/<int:id_championnat>/<int:id_participant>/<date_match>/'\
@@ -376,19 +376,20 @@ def affronter_update(id_championnat: int, id_participant: int, date_match: str):
             date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
             opposer = Opposer.query.get((id_championnat, id_participant, date_str))
             form = FormOpposer(date=date_str, score=opposer.score, domicile=str(opposer.domicile),
-                                resultat=opposer.resultat)
+                                resultat=opposer.resultat, mise_avant=opposer.mise_avant)
             form.adversaire.data = opposer.adversaire
             if form.validate_on_submit():
                 opposer.date_match = form.date.data
                 opposer.resultat = form.resultat.data
                 opposer.score = form.score.data
                 opposer.domicile = form.domicile.data == 'True'
+                opposer.mise_avant = form.mise_avant.data
                 db.session.commit()
                 return redirect(url_for("tournoi", id_championnat=id_championnat))
             return render_template('opposer_update.html', title="Modifier un match",
                                    form=form, championnat=opposer.championnat,
                                    joueur=opposer.joueur,
-                                   adversaire=opposer.adversaire, date_match=date_match)
+                                   adversaire=opposer.adversaire, date_match=date_str)
         date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
         affronter = Affronter.query.get((id_championnat, id_participant, date_str))
         form = FormAffronter(date=date_str, score=affronter.score,
@@ -400,23 +401,24 @@ def affronter_update(id_championnat: int, id_participant: int, date_match: str):
             affronter.resultat = form.resultat.data
             affronter.score = form.score.data
             affronter.domicile = form.domicile.data == 'True'
+            affronter.mise_avant = form.mise_avant.data
             db.session.commit()
             return redirect(url_for("tournoi", id_championnat=id_championnat))
         return render_template('affronter_update.html', title="Modifier un match",
                                 form=form, championnat=affronter.championnat,
                                 equipe=affronter.equipe,
-                                adversaire=affronter.adversaire, date_match=date_match)
+                                adversaire=affronter.adversaire, date_match=date_str)
     except IntegrityError:
         db.session.rollback()
         if championnat.type_championnat == "individuel":
             return render_template('opposer_update.html', title="Modifier un match",
                                    form=form, championnat=opposer.championnat,
                                    joueur=opposer.joueur, adversaire=opposer.adversaire,
-                                   date_match=date_match)
+                                   date_match=date_str)
         return render_template('affronter_update.html', title="Modifier un match",
                                form=form, championnat=affronter.championnat,
                                equipe=affronter.equipe,
-                               adversaire=affronter.adversaire, date_match=date_match)
+                               adversaire=affronter.adversaire, date_match=date_str)
 
 
 @app.route('/competitions/tournoi/<int:id_championnat>/<int:id_participant>/add/',
@@ -437,7 +439,7 @@ def affronter_add(id_championnat: int, id_participant: int):
                 opposer = Opposer(id_championnat=id_championnat, id_joueur=id_participant,
                                     adversaire=form.adversaire.data, resultat=form.resultat.data,
                                     score=form.score.data, domicile=form.domicile.data == 'True',
-                                    date_match=form.date.data)
+                                    date_match=form.date.data, mise_avant=form.mise_avant.data)
                 db.session.add(opposer)
                 db.session.commit()
                 return redirect(url_for("tournoi", id_championnat=id_championnat))
@@ -449,7 +451,7 @@ def affronter_add(id_championnat: int, id_participant: int):
             affronter = Affronter(id_championnat=id_championnat, id_equipe=id_participant,
                                 adversaire=form.adversaire.data, resultat=form.resultat.data,
                                 score=form.score.data, domicile=form.domicile.data == 'True',
-                                date_match=form.date.data)
+                                date_match=form.date.data, mise_avant=form.mise_avant.data)
             db.session.add(affronter)
             db.session.commit()
             return redirect(url_for("tournoi", id_championnat=id_championnat))
