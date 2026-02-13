@@ -62,6 +62,23 @@ flask run
 
 Vous pouvez aussi utiliser `sqlite:///chemin/vers/la/base/de/donnees.db` pour utiliser SQLite au lieu de MySQL.
 
+## Ajout d'images/fichiers à une page
+
+Pour ajouter une image ou un fichier à une page :
+
+* Accédez à Plus > Gestion des fichiers > Téléverser un fichier
+* Choisissez le fichier, la taille n'est pas utilisée pour ces images, puis Téléverser
+* Cliquez sur Annuler, trouvez le fichier et cliquez sur l'icône pour ouvrir
+* Accédez à la page à modifier
+* Pour les images : 
+  * Cliquez sur l'icône d'image
+  * Collez le lien
+  * L'image s'ajoute
+* Pour les fichiers :
+  * Sélectionnez le texte auquel ajouter le lien vers le fichier
+  * Collez le lien avec Ctrl+V (ou Cmd+V sur Mac) ou utilisez l'option lien
+  * Le lien s'ajoute
+
 ## Description générale du projet
 
 Le projet consiste à créer un site web pour un club sportif. Il y a donc un acteur **visiteur**, c'est-à-dire une personne du public qui visite le site pour y consulter des informations, ainsi qu'un acteur **administrateur** qui permet de gérer le site et son contenu.
