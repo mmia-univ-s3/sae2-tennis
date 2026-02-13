@@ -92,11 +92,11 @@ def test_form_participant_indiv_update(client, testapp):
     with testapp.app_context():
         response = login(client, "/competitions/tournoi/12/1/update/")
         response = client.post('/competitions/tournoi/12/1/update/',
-            follow_redirects=True, data={"joueur" : 1, "rang" : "1er"})
+            follow_redirects=True, data={"joueur" : 1, "rang" : "16"})
 
         assert response.status_code == 200
         assert "/competitions/tournoi/12/" in response.request.path
-        assert b"1er" in response.data
+        assert "Huitième de finale".encode("utf-8") in response.data
 
 
 def test_form_participant_indiv_add(client, testapp):
