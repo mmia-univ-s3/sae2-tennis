@@ -625,12 +625,13 @@ def match_delete(id_interne, id_j1, id_j2):
 
 def nb_victoires_by_player(id_interne):
     """Méthode pour réaliser le classement"""
+    # pylint: disable=protected-access
     matchs = Jouer.query.filter(Jouer._id_championnat == id_interne).all()
-    nb_victoires_joueurs = dict()
+    nb_victoires_joueurs = {}
     for match in matchs:
-        if match.joueur1 not in nb_victoires_joueurs.keys():
+        if match.joueur1 not in nb_victoires_joueurs:
             nb_victoires_joueurs[f"{match.joueur1.prenom} {match.joueur1.nom}"] = 0
-        if match.joueur2 not in nb_victoires_joueurs.keys():
+        if match.joueur2 not in nb_victoires_joueurs:
             nb_victoires_joueurs[f"{match.joueur2.prenom} {match.joueur2.nom}"] = 0
         if match.score1 > match.score2:
             nb_victoires_joueurs[f"{match.joueur1.prenom} {match.joueur1.nom}"] = (
