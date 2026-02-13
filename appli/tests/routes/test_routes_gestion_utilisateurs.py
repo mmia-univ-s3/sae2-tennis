@@ -7,7 +7,7 @@ def login(client, callback):
         "password": "1",
         "next": callback
     }, follow_redirects=True)
-    
+
 def test_gestion_utilisateurs(client, testapp):
     with testapp.app_context():
         response = login(client, "/utilisateurs/")
