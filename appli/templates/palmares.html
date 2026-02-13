@@ -20,7 +20,7 @@
                             </th>
                             {% for championnat in indiv[niveau][categorie] %}
                                 <tr>
-                                    <th class="bg-primary-subtle"><center><a href="{{ url_for('tournoi', type_tournoi='individuel', id_championnat=championnat.id) }}">{{ championnat.titre }}</a></center></th>
+                                    <th class="bg-primary-subtle"><center><a href="{{ url_for('tournoi', id_championnat=championnat.id) }}">{{ championnat.titre }}</a></center></th>
                                     <td><center>{{ championnat.vainqueur() }}</center></td>
                                     <td><center>{{ championnat.finaliste() }}</center></td>
                                 </tr>
@@ -40,7 +40,7 @@
                         </tr>
                         {% for championnat in equipe[categorie] %}
                             <tr>
-                                <th class="bg-primary-subtle" style="width: 400px;"><center><a href="{{ url_for('tournoi', type_tournoi='equipe', id_championnat=championnat.id) }}" {% if championnat.en_cours() %}style="font-style: italic;"{% endif %}">{{ championnat.titre }}{% if championnat.en_cours() %} (en cours){% endif %}</a></center></th>
+                                <th class="bg-primary-subtle" style="width: 400px;"><center><a href="{{ url_for('tournoi', id_championnat=championnat.id) }}" {% if championnat.en_cours() %}style="font-style: italic;"{% endif %}">{{ championnat.titre }}{% if championnat.en_cours() %} (en cours){% endif %}</a></center></th>
                                 <th class="bg-secondary-subtle" style="width: 300px;"><center>Catégorie</center></th>
                                 <th class="bg-secondary-subtle" style="width: 250px;"><center>Poule</center></th>
                                 <th class="bg-secondary-subtle"><center>Division</center></th>

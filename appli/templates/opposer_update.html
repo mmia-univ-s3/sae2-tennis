@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <h1>Ajout d'un match de {{ equipe.nom }} dans le {{ championnat.titre }}</h1>
-    <form action="{{ url_for('affronter_add', id_championnat=championnat.id, id_participant=equipe.id) }}" method="post" class="form-horizontal mb-3"
+    <h1>Modification du match {{ joueur.prenom }} {{ joueur.nom }} contre {{ adversaire }} dans le {{ championnat.titre }} le {{ date_match }}</h1>
+    <form action="{{ url_for('affronter_update', id_championnat=championnat.id, id_participant=joueur.id, date_match=date_match) }}" method="post" class="form-horizontal mb-3"
           enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="form-group mb-3">
             <label for="adversaire" class="col-sm-2 control-label">{{ form.adversaire.label }}</label>
             <div class="col-sm-10">
-                {{ form.adversaire(size=50, class_="form-control") }}
+                {{ form.adversaire(disabled=True, size=50, class_="form-control") }}
             </div>
         </div>
         <div class="form-group mb-3">
@@ -37,7 +37,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <input type="submit" value="Ajouter" class="btn btn-success">
+                <input type="submit" value="Modifier" class="btn btn-warning">
                 <a href="{{ url_for('tournoi', id_championnat=championnat.id) }}" class="btn btn-secondary">Annuler</a>
             </div>
         </div>

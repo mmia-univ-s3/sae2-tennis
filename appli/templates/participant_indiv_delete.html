@@ -4,7 +4,7 @@
     <h1>Suppression d'un participant pour {{ championnat.titre }}</h1>
     <p>Vous allez supprimer un participant. Cette action est irréversible.
         Voulez-vous continuer ?</p>
-    <form action="{{ url_for('participant_indiv_delete', id_championnat=championnat.id, id_joueur=joueur.id) }}"
+    <form action="{{ url_for('participant_delete', id_championnat=championnat.id, id_participant=joueur.id) }}"
           method="post"
           class="form-horizontal mb-3">
         {{ form.hidden_tag() }}
@@ -23,7 +23,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <input type="submit" value="Supprimer" class="btn btn-danger">
-                <a href="{{ url_for('tournoi', type_tournoi='individuel', id_championnat=championnat.id) }}" class="btn btn-secondary">Annuler</a>
+                <a href="{{ url_for('tournoi', id_championnat=championnat.id) }}" class="btn btn-secondary">Annuler</a>
             </div>
         </div>
     </form>

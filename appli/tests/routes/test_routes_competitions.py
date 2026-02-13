@@ -14,20 +14,20 @@ def test_calendrier(client):
 
 def test_tournoi_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/12/delete/")
-        response = client.get('/competitions/tournoi/individuel/12/delete/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/12/delete/")
+        response = client.get('/competitions/tournoi/12/delete/', follow_redirects=True)
         assert b"Suppression du tournoi" in response.data
-        response = login(client, "/competitions/tournoi/equipe/1/delete/")
-        response = client.get('/competitions/tournoi/equipe/1/delete/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/1/delete/")
+        response = client.get('/competitions/tournoi/1/delete/', follow_redirects=True)
         assert b"Suppression du tournoi" in response.data
 
 def test_tournoi_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/12/update/")
-        response = client.get('/competitions/tournoi/individuel/12/update/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/12/update/")
+        response = client.get('/competitions/tournoi/12/update/', follow_redirects=True)
         assert b"Modification du tournoi" in response.data
-        response = login(client, "/competitions/tournoi/equipe/1/update/")
-        response = client.get('/competitions/tournoi/equipe/1/update/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/1/update/")
+        response = client.get('/competitions/tournoi/1/update/', follow_redirects=True)
         assert b"Modification du tournoi" in response.data
 
 def test_tournoi_add(client, testapp):
@@ -41,67 +41,67 @@ def test_tournoi_add(client, testapp):
 
 def test_tournoi(client, testapp):
     with testapp.app_context():
-        response = client.get('/competitions/tournoi/individuel/12/', follow_redirects=True)
+        response = client.get('/competitions/tournoi/12/', follow_redirects=True)
         assert b"Championnnat individuel" in response.data
-        response = client.get('/competitions/tournoi/equipe/1/', follow_redirects=True)
+        response = client.get('/competitions/tournoi/1/', follow_redirects=True)
         assert "Championnat par équipe".encode("utf-8") in response.data
 
 def test_participant_indiv_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/12/1/delete/")
-        response = client.get('/competitions/tournoi/individuel/12/1/delete/',
+        response = login(client, "/competitions/tournoi/12/1/delete/")
+        response = client.get('/competitions/tournoi/12/1/delete/',
                               follow_redirects=True)
         assert "Suppression d'un participant".encode("utf-8") in response.data
 
 def test_participant_indiv_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/12/1/update/")
-        response = client.get('/competitions/tournoi/individuel/12/1/update/',
+        response = login(client, "/competitions/tournoi/12/1/update/")
+        response = client.get('/competitions/tournoi/12/1/update/',
                               follow_redirects=True)
         assert b"Modification du participant" in response.data
 
 def test_participant_indiv_add(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/individuel/12/add/")
-        response = client.get('/competitions/tournoi/individuel/12/add/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/12/add/")
+        response = client.get('/competitions/tournoi/12/add/', follow_redirects=True)
         assert "Ajout d'un participant".encode("utf-8") in response.data
 
 def test_participant_equipe_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/equipe/1/1/delete/")
-        response = client.get('/competitions/tournoi/equipe/1/1/delete/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/1/1/delete/")
+        response = client.get('/competitions/tournoi/1/1/delete/', follow_redirects=True)
         assert "Suppression d'une équipe".encode("utf-8") in response.data
 
 def test_participant_equipe_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/equipe/1/1/update/")
-        response = client.get('/competitions/tournoi/equipe/1/1/update/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/1/1/update/")
+        response = client.get('/competitions/tournoi/1/1/update/', follow_redirects=True)
         assert "Modification de l'équipe".encode("utf-8") in response.data
 
 def test_participant_equipe_add(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/equipe/1/add/")
-        response = client.get('/competitions/tournoi/equipe/1/add/', follow_redirects=True)
+        response = login(client, "/competitions/tournoi/1/add/")
+        response = client.get('/competitions/tournoi/1/add/', follow_redirects=True)
         assert "Ajout d'une équipe".encode("utf-8") in response.data
 
 def test_affronter_delete(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/equipe/1/1/05-10-2025/delete/")
-        response = client.get('/competitions/tournoi/equipe/1/1/05-10-2025/delete/',
+        response = login(client, "/competitions/tournoi/1/1/05-10-2025/delete/")
+        response = client.get('/competitions/tournoi/1/1/05-10-2025/delete/',
                               follow_redirects=True)
         assert b"Suppression du match" in response.data
 
 def test_affronter_update(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/equipe/1/1/05-10-2025/update/")
-        response = client.get('/competitions/tournoi/equipe/1/1/05-10-2025/update/',
+        response = login(client, "/competitions/tournoi/1/1/05-10-2025/update/")
+        response = client.get('/competitions/tournoi/1/1/05-10-2025/update/',
                               follow_redirects=True)
         assert b"Modification du match" in response.data
 
 def test_affronter_add(client, testapp):
     with testapp.app_context():
-        response = login(client, "/competitions/tournoi/equipe/1/1/add/")
-        response = client.get('/competitions/tournoi/equipe/1/1/add/',
+        response = login(client, "/competitions/tournoi/1/1/add/")
+        response = client.get('/competitions/tournoi/1/1/add/',
                               follow_redirects=True)
         assert b"Ajout d'un match" in response.data
 

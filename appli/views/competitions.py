@@ -4,9 +4,10 @@ from sqlalchemy.exc import IntegrityError
 
 from appli.app import app, db, required_permission_lvl
 from appli.models import ChampionnatIndividuel, ChampionnatEquipe, Affronter, Joueur, Classer,\
-Equipe, Participer, ChampionnatInterne, Jouer, Championnat
+Equipe, Participer, ChampionnatInterne, Jouer, Championnat, Opposer
 from appli.forms import FormChampionnatEquipe, FormChampionnatIndividuel, FormClasser, \
-    FormParticiper, FormAffronter, FormInternes, FormConfirm, FormMatch, FormMatchUpdate
+    FormParticiper, FormAffronter, FormInternes, FormConfirm, FormMatch, FormMatchUpdate, \
+    FormOpposer
 
 
 @app.route('/competitions/calendrier/')
@@ -74,24 +75,22 @@ def calendrier_annee(annee):
                            calendrier={}, dates=[], annees=list_annees, annee=annee)
 
 
-@app.route('/competitions/tournoi/<type_tournoi>/<int:id_championnat>/delete/',
+@app.route('/competitions/tournoi/<int:id_championnat>/delete/',
            methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
-def tournoi_delete(type_tournoi: str, id_championnat: int):
+def tournoi_delete(id_championnat: int):
     """Permet de supprimer un tournoi de la base de données
 
     Args:
-        type_tournoi (str): Indique si le tournoi est "individuel" ou en "equipe"
         id_championnat (int): L'identifiant du tournoi dans la base de données
     """
-    if type_tournoi == "individuel":
-        championnat = ChampionnatIndividuel.query.get(id_championnat)
+    championnat = Championnat.query.get(id_championnat)
+    if championnat.type_championnat == "individuel":
         form = FormChampionnatIndividuel(titre=championnat.titre,
                                          date_championnat=championnat.date_championnat,
                                          categorie=championnat.categorie, serie=championnat.serie,
                                          niveau=championnat.niveau)
     else:
-        championnat = ChampionnatEquipe.query.get(id_championnat)
         form = FormChampionnatEquipe(titre=championnat.titre,
                                      date_championnat=championnat.date_championnat,
                                      categorie=championnat.categorie, serie=championnat.serie)
@@ -100,27 +99,25 @@ def tournoi_delete(type_tournoi: str, id_championnat: int):
         db.session.commit()
         return redirect(url_for("calendrier"))
     return render_template('tournoi_delete.html', title="Supprimer un tournoi", form=form,
-                           type_tournoi=type_tournoi, championnat=championnat)
+                           type_tournoi=championnat.type_championnat, championnat=championnat)
 
 
-@app.route('/competitions/tournoi/<type_tournoi>/<int:id_championnat>/update/',
+@app.route('/competitions/tournoi/<int:id_championnat>/update/',
            methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
-def tournoi_update(type_tournoi: str, id_championnat: int):
+def tournoi_update(id_championnat: int):
     """Permet de modifier un tournoi de la base de données
 
     Args:
-        type_tournoi (str): Indique si le tournoi est "individuel" ou en "equipe"
         id_championnat (int): L'identifiant du tournoi dans la base de données
     """
-    if type_tournoi == "individuel":
-        championnat = ChampionnatIndividuel.query.get(id_championnat)
+    championnat = Championnat.query.get(id_championnat)
+    if championnat.type_championnat == "individuel":
         form = FormChampionnatIndividuel(titre=championnat.titre,
                                          date_championnat=championnat.date_championnat,
                                          categorie=championnat.categorie, serie=championnat.serie,
                                          niveau=championnat.niveau)
     else:
-        championnat = ChampionnatEquipe.query.get(id_championnat)
         form = FormChampionnatEquipe(titre=championnat.titre,
                                      date_championnat=championnat.date_championnat,
                                      categorie=championnat.categorie, serie=championnat.serie)
@@ -129,12 +126,12 @@ def tournoi_update(type_tournoi: str, id_championnat: int):
         championnat.date_championnat = form.date_championnat.data
         championnat.categorie = form.categorie.data
         championnat.serie = form.serie.data
-        if type_tournoi == "individuel":
+        if championnat.type_championnat == "individuel":
             championnat.niveau = form.niveau.data
         db.session.commit()
         return redirect(url_for("calendrier"))
     return render_template('tournoi_update.html', title="Modifier un tournoi", form=form,
-                           type_tournoi=type_tournoi, championnat=championnat)
+                           type_tournoi=championnat.type_championnat, championnat=championnat)
 
 
 @app.route('/competitions/tournoi/<type_tournoi>/add/', methods=('GET', 'POST'))
@@ -164,22 +161,29 @@ def tournoi_add(type_tournoi: str):
                            type_tournoi=type_tournoi, championnat=championnat)
 
 
-@app.route('/competitions/tournoi/<type_tournoi>/<int:id_championnat>/')
-def tournoi(type_tournoi: str, id_championnat: int):
+@app.route('/competitions/tournoi/<int:id_championnat>/')
+def tournoi(id_championnat: int):
     """Permet d'afficher la page d'un tournoi
 
     Args:
-        type_tournoi (str): Indique si le tournoi est "individuel" ou en "equipe"
         id_championnat (int): L'identifiant du tournoi dans la base de données
     """
-    if type_tournoi == "individuel":
-        champ = ChampionnatIndividuel.query.get(id_championnat)
-        liste_dates = {}
-        donnees = {}
+    liste_dates = {}
+    donnees = {}
+    champ = Championnat.query.get(id_championnat)
+    if champ.type_championnat == "individuel":
+        for classement in champ.classer:
+            id_joueur = classement.joueur.id
+            donnees[id_joueur] = {}
+            liste_dates[id_joueur] = []
+            for match in Opposer.query.filter(Opposer.championnat == champ,
+                                              Opposer.joueur == classement.joueur):
+                if match.date_match not in donnees[id_joueur]:
+                    donnees[id_joueur][match.date_match] = match
+                    if match.date_match not in liste_dates[id_joueur]:
+                        liste_dates[id_joueur].append(match.date_match)
+            liste_dates[id_joueur].sort()
     else:
-        champ = ChampionnatEquipe.query.get(id_championnat)
-        liste_dates = {}
-        donnees = {}
         for participant in champ.participer:
             id_equipe = participant.equipe.id
             donnees[id_equipe] = {}
@@ -192,144 +196,105 @@ def tournoi(type_tournoi: str, id_championnat: int):
                         liste_dates[id_equipe].append(match.date_match)
             liste_dates[id_equipe].sort()
     return render_template('tournoi.html', title="Tournoi - Competitions", championnat=champ,
-                           type_champ=type_tournoi, matchs=donnees, dates=liste_dates)
+                           type_champ=champ.type_championnat, matchs=donnees, dates=liste_dates)
 
 
-@app.route('/competitions/tournoi/individuel/<int:id_championnat>/<int:id_joueur>/delete/',
+@app.route('/competitions/tournoi/<int:id_championnat>/<int:id_participant>/delete/',
            methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
-def participant_indiv_delete(id_championnat: int, id_joueur: int):
-    """Permet de supprimer un participant d'un tournoi individuel
+def participant_delete(id_championnat: int, id_participant: int):
+    """Permet de supprimer un participant d'un tournoi
 
     Args:
         id_championnat (int): L'identifiant du tournoi dans la base de données
-        id_joueur (int): L'identifiant d'un joueur dans la base de données
+        id_participant (int): L'identifiant d'un joueur ou d'une équipe dans la base de données
     """
-    joueur = Joueur.query.get(id_joueur)
-    championnat = ChampionnatIndividuel.query.get(id_championnat)
-    classer = Classer.query.get((id_championnat, id_joueur))
-    form = FormClasser(joueur=id_joueur, rang=classer.rang)
-    form.joueur.choices = [(joueur.id, f"{joueur.prenom} {joueur.nom}")]
-    form.joueur.data = joueur.id
-    if form.validate_on_submit():
-        db.session.delete(classer)
-        db.session.commit()
-        return redirect(url_for("tournoi", type_tournoi="individuel",
-                                id_championnat=id_championnat))
-    return render_template('participant_indiv_delete.html', title="Supprimer un participant",
-                           form=form, championnat=championnat, joueur=joueur)
-
-
-@app.route('/competitions/tournoi/individuel/<int:id_championnat>/<int:id_joueur>/update/',
-           methods=('GET', 'POST'))
-@required_permission_lvl("publicateur")
-def participant_indiv_update(id_championnat: int, id_joueur: int):
-    """Permet de modifier le résultat d'un participant lors d'un championnat individuel
-
-    Args:
-        id_championnat (int): L'identifiant du tournoi dans la base de données
-        id_joueur (int): L'identifiant d'un joueur dans la base de données
-    """
-    joueur = Joueur.query.get(id_joueur)
-    championnat = ChampionnatIndividuel.query.get(id_championnat)
-    classer = Classer.query.get((id_championnat, id_joueur))
-    form = FormClasser(joueur=id_joueur, rang=classer.rang)
-    form.joueur.choices = [(joueur.id, f"{joueur.prenom} {joueur.nom}")]
-    if form.validate_on_submit():
-        classer.rang = form.rang.data
-        db.session.commit()
-        return redirect(url_for("tournoi", type_tournoi="individuel",
-                                id_championnat=id_championnat))
-    return render_template('participant_indiv_update.html', title="Modifier un participant",
-                           form=form, championnat=championnat, joueur=joueur)
-
-
-@app.route('/competitions/tournoi/individuel/<int:id_championnat>/add/', methods=('GET', 'POST'))
-@required_permission_lvl("publicateur")
-def participant_indiv_add(id_championnat: int):
-    """Permet d'ajouter un participant à un tournoi individuel
-
-    Args:
-        id_championnat (int): L'identifiant du tournoi dans la base de données
-    """
-    championnat = ChampionnatIndividuel.query.get(id_championnat)
-    les_joueurs = Joueur.query.filter(~Joueur.classer.any(\
-        Classer.championnat.has(ChampionnatIndividuel.id == id_championnat)))
-    choix = []
-    for donnee in les_joueurs:
-        choix.append((donnee.id, f"{donnee.prenom} {donnee.nom}"))
-    form = FormClasser()
-    form.joueur.choices = choix
-    if form.validate_on_submit():
-        classer = Classer(id_championnat=id_championnat, id_j=form.joueur.data,
-                          rang=form.rang.data)
-        db.session.add(classer)
-        db.session.commit()
-        return redirect(url_for("tournoi", type_tournoi="individuel",
-                                id_championnat=id_championnat))
-    return render_template('participant_indiv_add.html', title="Ajouter un participant",
-                           form=form, championnat=championnat)
-
-
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/delete/',
-           methods=('GET', 'POST'))
-@required_permission_lvl("publicateur")
-def participant_equipe_delete(id_championnat: int, id_equipe: int):
-    """Permet de supprimer une équipe d'un tournoi par équipe
-
-    Args:
-        id_championnat (int): L'identifiant du tournoi dans la base de données
-        id_equipe (int): L'identifiant d'une équipe dans la base de données
-    """
-    equipe = Equipe.query.get(id_equipe)
-    championnat = ChampionnatEquipe.query.get(id_championnat)
-    participer = Participer.query.get((id_championnat, id_equipe))
-    form = FormParticiper(joueur=id_equipe, rang=participer.rang, poule=participer.poule)
+    championnat = Championnat.query.get(id_championnat)
+    if championnat.type_championnat == "individuel":
+        joueur = Joueur.query.get(id_participant)
+        classer = Classer.query.get((id_championnat, id_participant))
+        form = FormClasser(joueur=id_participant, rang=classer.rang)
+        form.joueur.choices = [(joueur.id, f"{joueur.prenom} {joueur.nom}")]
+        form.joueur.data = joueur.id
+        if form.validate_on_submit():
+            db.session.delete(classer)
+            db.session.commit()
+            return redirect(url_for("tournoi", id_championnat=id_championnat))
+        return render_template('participant_indiv_delete.html', title="Supprimer un participant",
+                               form=form, championnat=championnat, joueur=joueur)
+    equipe = Equipe.query.get(id_participant)
+    participer = Participer.query.get((id_championnat, id_participant))
+    form = FormParticiper(joueur=id_participant, rang=participer.rang, poule=participer.poule)
     form.equipe.choices = [(equipe.id, equipe.nom)]
     form.equipe.data = equipe.id
     if form.validate_on_submit():
         db.session.delete(participer)
         db.session.commit()
-        return redirect(url_for("tournoi", type_tournoi="equipe",
-                                id_championnat=id_championnat))
+        return redirect(url_for("tournoi", id_championnat=id_championnat))
     return render_template('participant_equipe_delete.html', title="Supprimer une équipe",
-                           form=form, championnat=championnat, equipe=equipe)
+                            form=form, championnat=championnat, equipe=equipe)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/update/',
+@app.route('/competitions/tournoi/<int:id_championnat>/<int:id_participant>/update/',
            methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
-def participant_equipe_update(id_championnat: int, id_equipe: int):
-    """Permet de modifier le résultat d'une équipe lors d'un championnat par équipe
+def participant_update(id_championnat: int, id_participant: int):
+    """Permet de modifier le résultat d'un participant lors d'un championnat
 
     Args:
         id_championnat (int): L'identifiant du tournoi dans la base de données
-        id_equipe (int): L'identifiant d'une équipe dans la base de données
+        id_participant (int): L'identifiant d'un joueur ou d'une équipe dans la base de données
     """
-    equipe = Equipe.query.get(id_equipe)
-    championnat = ChampionnatEquipe.query.get(id_championnat)
-    participer = Participer.query.get((id_championnat, id_equipe))
-    form = FormParticiper(equipe=id_equipe, rang=participer.rang, poule=participer.poule)
+    championnat = Championnat.query.get(id_championnat)
+    if championnat.type_championnat == "individuel":
+        joueur = Joueur.query.get(id_participant)
+        classer = Classer.query.get((id_championnat, id_participant))
+        form = FormClasser(joueur=id_participant, rang=classer.rang)
+        form.joueur.choices = [(joueur.id, f"{joueur.prenom} {joueur.nom}")]
+        if form.validate_on_submit():
+            classer.rang = form.rang.data
+            db.session.commit()
+            return redirect(url_for("tournoi", id_championnat=id_championnat))
+        return render_template('participant_indiv_update.html', title="Modifier un participant",
+                              form=form, championnat=championnat, joueur=joueur)
+    equipe = Equipe.query.get(id_participant)
+    participer = Participer.query.get((id_championnat, id_participant))
+    form = FormParticiper(equipe=id_participant, rang=participer.rang, poule=participer.poule)
     form.equipe.choices = [(equipe.id, equipe.nom)]
     if form.validate_on_submit():
         participer.rang = form.rang.data
         participer.poule = form.poule.data
         db.session.commit()
-        return redirect(url_for("tournoi", type_tournoi="equipe",
-                                id_championnat=id_championnat))
+        return redirect(url_for("tournoi", id_championnat=id_championnat))
     return render_template('participant_equipe_update.html', title="Modifier une équipe",
-                           form=form, championnat=championnat, equipe=equipe)
+                        form=form, championnat=championnat, equipe=equipe)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/add/', methods=('GET', 'POST'))
+@app.route('/competitions/tournoi/<int:id_championnat>/add/', methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
-def participant_equipe_add(id_championnat: int):
-    """Permet d'ajouter une équipe à un tournoi par équipe
+def participant_add(id_championnat: int):
+    """Permet d'ajouter un participant à un tournoi
 
     Args:
         id_championnat (int): L'identifiant du tournoi dans la base de données
     """
-    championnat = ChampionnatEquipe.query.get(id_championnat)
+    championnat = Championnat.query.get(id_championnat)
+    if championnat.type_championnat == "individuel":
+        les_joueurs = Joueur.query.filter(~Joueur.classer.any(\
+            Classer.championnat.has(ChampionnatIndividuel.id == id_championnat)))
+        choix = []
+        for donnee in les_joueurs:
+            choix.append((donnee.id, f"{donnee.prenom} {donnee.nom}"))
+        form = FormClasser()
+        form.joueur.choices = choix
+        if form.validate_on_submit():
+            classer = Classer(id_championnat=id_championnat, id_j=form.joueur.data,
+                            rang=form.rang.data)
+            db.session.add(classer)
+            db.session.commit()
+            return redirect(url_for("tournoi", id_championnat=id_championnat))
+        return render_template('participant_indiv_add.html', title="Ajouter un participant",
+                               form=form, championnat=championnat)
     les_equipes = Equipe.query.filter(~Equipe.participer.any(\
         Participer.championnat.has(ChampionnatEquipe.id == id_championnat)),
         Equipe.saison == championnat.date_championnat.year)
@@ -343,25 +308,41 @@ def participant_equipe_add(id_championnat: int):
                                 rang=form.rang.data, poule=form.poule.data)
         db.session.add(participer)
         db.session.commit()
-        return redirect(url_for("tournoi", type_tournoi="equipe",
-                                id_championnat=id_championnat))
+        return redirect(url_for("tournoi", id_championnat=id_championnat))
     return render_template('participant_equipe_add.html', title="Ajouter une équipe",
-                           form=form, championnat=championnat)
+                        form=form, championnat=championnat)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<date_match>/'\
+@app.route('/competitions/tournoi/<int:id_championnat>/<int:id_participant>/<date_match>/'\
            + 'delete/', methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
-def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
-    """Supprime un affrontement entre 2 équipes.
+def affronter_delete(id_championnat: int, id_participant: int, date_match: str):
+    """Supprime un affrontement entre 2 participants d'un championnat.
 
     Args :
         id_championnat (int): L'identifiant du championnat.
-        id_equipe (int): L'identifiant de l'équipe.
+        id_participant (int): L'identifiant du participant.
         date_match (str): La date du match.
     """
+    championnat = Championnat.query.get(id_championnat)
+    if championnat.type_championnat == "individuel":
+        date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
+        opposer = Opposer.query.get((id_championnat, id_participant, date_str))
+        form = FormOpposer()
+        form.adversaire.data = opposer.adversaire
+        form.date.data = date_str
+        form.resultat.data = opposer.resultat
+        form.score.data = opposer.score
+        form.domicile.data = str(opposer.domicile)
+        if form.validate_on_submit():
+            db.session.delete(opposer)
+            db.session.commit()
+            return redirect(url_for("tournoi", id_championnat=id_championnat))
+        return render_template('opposer_delete.html', title="Supprimer un match",
+                            form=form, championnat=opposer.championnat, joueur=opposer.joueur,
+                            adversaire=opposer.adversaire, date_match=date_match)
     date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
-    affronter = Affronter.query.get((id_championnat, id_equipe, date_str))
+    affronter = Affronter.query.get((id_championnat, id_participant, date_str))
     form = FormAffronter()
     form.adversaire.data = affronter.adversaire
     form.date.data = date_str
@@ -371,28 +352,46 @@ def affronter_delete(id_championnat: int, id_equipe: int, date_match: str):
     if form.validate_on_submit():
         db.session.delete(affronter)
         db.session.commit()
-        return redirect(url_for("tournoi", type_tournoi="equipe",
-                                id_championnat=id_championnat))
+        return redirect(url_for("tournoi", id_championnat=id_championnat))
     return render_template('affronter_delete.html', title="Supprimer un match",
-                           form=form, championnat=affronter.championnat, equipe=affronter.equipe,
-                           adversaire=affronter.adversaire, date_match=date_match)
+                        form=form, championnat=affronter.championnat, equipe=affronter.equipe,
+                        adversaire=affronter.adversaire, date_match=date_match)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/<date_match>/'\
+@app.route('/competitions/tournoi/<int:id_championnat>/<int:id_participant>/<date_match>/'\
            + 'update/', methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
-def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
+def affronter_update(id_championnat: int, id_participant: int, date_match: str):
     """Met à jour un affrontement entre 2 équipes.
     Args :
         id_championnat (int): L'identifiant du championnat.
-        id_equipe (int): L'identifiant de l'équipe.
+        id_participant (int): L'identifiant de l'équipe.
         date_match (str): La date du match.
     """
+    championnat = Championnat.query.get(id_championnat)
     try:
+        if championnat.type_championnat == "individuel":
+            date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
+            opposer = Opposer.query.get((id_championnat, id_participant, date_str))
+            form = FormOpposer(date=date_str, score=opposer.score, domicile=str(opposer.domicile),
+                                resultat=opposer.resultat)
+            form.adversaire.data = opposer.adversaire
+            if form.validate_on_submit():
+                opposer.date_match = form.date.data
+                opposer.resultat = form.resultat.data
+                opposer.score = form.score.data
+                opposer.domicile = form.domicile.data == 'True'
+                db.session.commit()
+                return redirect(url_for("tournoi", id_championnat=id_championnat))
+            return render_template('opposer_update.html', title="Modifier un match",
+                                   form=form, championnat=opposer.championnat,
+                                   joueur=opposer.joueur,
+                                   adversaire=opposer.adversaire, date_match=date_match)
         date_str = datetime.strptime(date_match, "%d-%m-%Y").date()
-        affronter = Affronter.query.get((id_championnat, id_equipe, date_str))
-        form = FormAffronter(date=date_str, score=affronter.score, domicile=str(affronter.domicile),
-                             resultat=affronter.resultat)
+        affronter = Affronter.query.get((id_championnat, id_participant, date_str))
+        form = FormAffronter(date=date_str, score=affronter.score,
+                                domicile=str(affronter.domicile),
+                                resultat=affronter.resultat)
         form.adversaire.data = affronter.adversaire
         if form.validate_on_submit():
             affronter.date_match = form.date.data
@@ -400,46 +399,65 @@ def affronter_update(id_championnat: int, id_equipe: int, date_match: str):
             affronter.score = form.score.data
             affronter.domicile = form.domicile.data == 'True'
             db.session.commit()
-            return redirect(url_for("tournoi", type_tournoi="equipe",
-                                    id_championnat=id_championnat))
+            return redirect(url_for("tournoi", id_championnat=id_championnat))
         return render_template('affronter_update.html', title="Modifier un match",
-                               form=form, championnat=affronter.championnat,
-                               equipe=affronter.equipe,
-                               adversaire=affronter.adversaire, date_match=date_match)
+                                form=form, championnat=affronter.championnat,
+                                equipe=affronter.equipe,
+                                adversaire=affronter.adversaire, date_match=date_match)
     except IntegrityError:
         db.session.rollback()
+        if championnat.type_championnat == "individuel":
+            return render_template('opposer_update.html', title="Modifier un match",
+                                   form=form, championnat=opposer.championnat,
+                                   joueur=opposer.joueur, adversaire=opposer.adversaire,
+                                   date_match=date_match)
         return render_template('affronter_update.html', title="Modifier un match",
                                form=form, championnat=affronter.championnat,
                                equipe=affronter.equipe,
                                adversaire=affronter.adversaire, date_match=date_match)
 
 
-@app.route('/competitions/tournoi/equipe/<int:id_championnat>/<int:id_equipe>/add/',
+@app.route('/competitions/tournoi/<int:id_championnat>/<int:id_participant>/add/',
            methods=('GET', 'POST'))
 @required_permission_lvl("publicateur")
-def affronter_add(id_championnat: int, id_equipe: int):
+def affronter_add(id_championnat: int, id_participant: int):
     """Ajoute un affrontement.
 
     Args:
         id_championnat (int): L'identifiant du championnat.
         id_equipe (int): L'identifiant de l'équipe."""
+    championnat = Championnat.query.get(id_championnat)
     try:
-        championnat = ChampionnatEquipe.query.get(id_championnat)
-        equipe = Equipe.query.get(id_equipe)
+        if championnat.type_championnat == "individuel":
+            joueur = Joueur.query.get(id_participant)
+            form = FormOpposer()
+            if form.validate_on_submit():
+                opposer = Opposer(id_championnat=id_championnat, id_joueur=id_participant,
+                                    adversaire=form.adversaire.data, resultat=form.resultat.data,
+                                    score=form.score.data, domicile=form.domicile.data == 'True',
+                                    date_match=form.date.data)
+                db.session.add(opposer)
+                db.session.commit()
+                return redirect(url_for("tournoi", id_championnat=id_championnat))
+            return render_template('opposer_add.html', title="Ajouter un match",
+                                form=form, championnat=championnat, joueur=joueur)
+        equipe = Equipe.query.get(id_participant)
         form = FormAffronter()
         if form.validate_on_submit():
-            affronter = Affronter(id_championnat=id_championnat, id_equipe=id_equipe,
-                                  adversaire=form.adversaire.data, resultat=form.resultat.data,
-                                  score=form.score.data, domicile=form.domicile.data == 'True',
-                                  date_match=form.date.data)
+            affronter = Affronter(id_championnat=id_championnat, id_equipe=id_participant,
+                                adversaire=form.adversaire.data, resultat=form.resultat.data,
+                                score=form.score.data, domicile=form.domicile.data == 'True',
+                                date_match=form.date.data)
             db.session.add(affronter)
             db.session.commit()
-            return redirect(url_for("tournoi", type_tournoi="equipe",
-                                    id_championnat=id_championnat))
+            return redirect(url_for("tournoi", id_championnat=id_championnat))
         return render_template('affronter_add.html', title="Ajouter un match",
-                               form=form, championnat=championnat, equipe=equipe)
+                            form=form, championnat=championnat, equipe=equipe)
     except IntegrityError:
         db.session.rollback()
+        if championnat.type_championnat == "individuel":
+            return render_template('opposer_add.html', title="Ajouter un match",
+                                   form=form, championnat=championnat, joueur=joueur)
         return render_template('affronter_add.html', title="Ajouter un match",
                                form=form, championnat=championnat, equipe=equipe)
 
