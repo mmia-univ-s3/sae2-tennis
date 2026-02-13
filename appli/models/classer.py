@@ -27,19 +27,20 @@ class Classer(db.Model):
         """
         match self.rang:
             case "1":
-                return "Vainqueur"
+                classement_texte = "Vainqueur"
             case "2":
-                return "Finaliste"
+                classement_texte =  "Finaliste"
             case "4":
-                return "Demi-finaliste"
+                classement_texte =  "Demi-finaliste"
             case "8":
-                return "Quart de finale"
+                classement_texte =  "Quart de finale"
             case "16":
-                return "Huitième de finale"
+                classement_texte =  "Huitième de finale"
             case "32":
-                return "Seizième de finale"
+                classement_texte =  "Seizième de finale"
             case _:
-                return "Poule"
+                classement_texte =  "Poule"
+        return classement_texte
 
     def __str__(self):
         return f"<Classer({self._id_championnat}, {self._id_j}) {self.rang}>"
