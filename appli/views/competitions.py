@@ -1,4 +1,6 @@
 from datetime import datetime, date, timedelta
+from operator import itemgetter
+
 from flask import render_template, redirect, url_for
 from sqlalchemy.exc import IntegrityError
 
@@ -553,6 +555,13 @@ def interne_view(id_interne):
         score1 = match.sets_gagnees_j1()
         score2 = match.sets_gagnees_j2()
         matchs.append((tournoi_interne, joueur1, score1, joueur2, score2))
+
+    classer = []
+    nb_victoires = nb_victoires_by_player(id_interne)
+    for joueur, wins in nb_victoires.items():
+        classer.append((joueur,wins))
+    classement = sorted(classer, key=itemgetter(1), reverse=True)
+
     form = FormInternes(date=tournoi_interne.date_championnat, titre=tournoi_interne.titre)
     if form.validate_on_submit():
         tournoi_interne.date = form.date.data
@@ -561,7 +570,7 @@ def interne_view(id_interne):
         return redirect(url_for("internes", id_interne=id_interne))
     return render_template("interne_view.html", title="Tournoi interne",
                            interne=tournoi_interne, form=form, matchs=matchs,
-                           id_interne=id_interne)
+                           id_interne=id_interne, classement=classement)
 
 @app.route('/competitions/tournois-internes/<int:id_interne>/<int:id_j1>/<int:id_j2>/',
            methods=['GET', 'POST'])
@@ -630,3 +639,22 @@ def match_delete(id_interne, id_j1, id_j2):
     return render_template('interne_match_delete.html',
                            title="Suppression d'un match d'un tournoi interne", form=form,
                            match=match, id_joueurs=id_joueurs)
+
+
+def nb_victoires_by_player(id_interne):
+    """Méthode pour réaliser le classement"""
+    # pylint: disable=protected-access
+    matchs = Jouer.query.filter(Jouer._id_championnat == id_interne).all()
+    nb_victoires_joueurs = {}
+    for match in matchs:
+        if match.joueur1 not in nb_victoires_joueurs:
+            nb_victoires_joueurs[f"{match.joueur1.prenom} {match.joueur1.nom}"] = 0
+        if match.joueur2 not in nb_victoires_joueurs:
+            nb_victoires_joueurs[f"{match.joueur2.prenom} {match.joueur2.nom}"] = 0
+        if match.score1 > match.score2:
+            nb_victoires_joueurs[f"{match.joueur1.prenom} {match.joueur1.nom}"] = (
+                    nb_victoires_joueurs.get(f"{match.joueur1.prenom} {match.joueur1.nom}") + 1)
+        if match.score2 > match.score1:
+            nb_victoires_joueurs[f"{match.joueur2.prenom} {match.joueur2.nom}"] = (
+                    nb_victoires_joueurs.get(f"{match.joueur2.prenom} {match.joueur2.nom}") + 1)
+    return nb_victoires_joueurs
