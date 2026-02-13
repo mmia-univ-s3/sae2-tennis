@@ -277,7 +277,7 @@ class FormClasser(FlaskForm):
     """Formulaire de création et de mise à jour d'un classement d'un joueur."""
     joueur = SelectField("Joueur", validators=[DataRequired()], default=1, coerce=int,
                          choices=[])
-    rang = StringField("Rang")
+    rang = StringField("Rang (1 pour Vainqueur, 2 pour Finaliste, 4 pour Demi-Finaliste, etc.)")
 
 class FormParticiper(FlaskForm):
     """Formulaire de création et de mise à jour d'inscription d'une équipe."""

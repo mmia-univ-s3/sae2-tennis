@@ -21,7 +21,7 @@
                         <tbody>
                             <tr class="table-bordered border-success-subtle">
                                 <th scope="col" class="bg-success-subtle" style="width: 400px;"><center>Joueur : {{ classement.joueur.prenom }} {{ classement.joueur.nom }}</center></th>
-                                <th scope="col" class="bg-success-info" style="width: 250px;" colspan="2"><center>Classement : {% if classement.rang | length > 0 %}{{ classement.rang }}{% else %}-{% endif %}</center></th>
+                                <th scope="col" class="bg-success-info" style="width: 250px;" colspan="2"><center>Classement : {% if classement.rang | length > 0 %}{{ classement.classement() }}{% else %}-{% endif %}</center></th>
                                 {% if current_user.is_authenticated %}
                                     <th scope="col" class="bg-success-warning" style="width: 200px;"><center>Options</center></th>
                                 {% endif %}
