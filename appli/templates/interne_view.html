@@ -24,6 +24,31 @@
             <h4>Se déroule le {{ interne.date_championnat.strftime("%d/%m/%Y") }}. </h4>
         {% endif %}
         <hr>
+
+        <h2 class="mt-5">Classement</h2>
+        <div class="form-group mb-3">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Place</th>
+                    <th>Joueur</th>
+                    <th>Nombre de victoires</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(classement|length) %}
+                        {% set place = i + 1 %}
+                        <tr>
+                            <td>{{ place }}</td>
+                            <td>{{ classement[i][0] }}</td>
+                            <td>{{ classement[i][1] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
         <h2 class="mt-5">Matchs
         {% if current_user.is_authenticated %}
             <a href="{{ url_for('match_add', id_interne=id_interne) }}"
