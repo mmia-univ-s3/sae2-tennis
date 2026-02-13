@@ -21,7 +21,7 @@ pip install -r requirements.txt
 ## Initialisation de la base de données
 
 ```
-flask loaddb appli/data
+flask loaddb appli/data/init
 ```
 
 Ou si vous devez modifier l'URL de la base de données pour utiliser MySQL au lieu de SQLite :
