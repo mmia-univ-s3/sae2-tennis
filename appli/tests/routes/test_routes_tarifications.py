@@ -11,6 +11,9 @@ def login(client, callback):
 def test_tarifications(client):
     response = client.get('/formation/tarifications/', follow_redirects=True)
     assert b"230.00" in response.data
+    assert b"Abonnement" in response.data
+    assert b"Cartes membres" in response.data
+    assert b"Classique Jeune" in response.data
 
 def test_reservation_create(client, testapp):
     with testapp.app_context():
